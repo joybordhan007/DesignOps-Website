@@ -1,4 +1,4 @@
-const assetPathPrefix = "/assets/exact/1-2301";
+const assetPathPrefix = "/assets/contact";
 const imgArrowSubdirectoryForward = `${assetPathPrefix}/14d8d.svg`;
 const imgProperty1View = `${assetPathPrefix}/3cb68.png`;
 const imgProperty1View1 = `${assetPathPrefix}/a3a9a.png`;
@@ -242,9 +242,9 @@ function Footer({ className }: { className?: string }) {
       <div className="absolute content-stretch flex h-[222px] items-start justify-between left-[156px] right-[156px] top-[40px]" data-node-id="1:433" data-name="Frame">
         <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 w-[523px]" data-node-id="1:434" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:435" data-name="Frame">
-            <div className="h-[40px] relative shrink-0 w-[175px]" data-node-id="1:436" data-name="Update Logo">
+            <a href="/" className="block h-[40px] relative shrink-0 w-[175px]" data-node-id="1:436" data-name="Update Logo">
               <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo} />
-            </div>
+            </a>
             <div className="[word-break:break-word] flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#dfdfdf] text-[20px] w-[min-content] whitespace-pre-wrap" data-node-id="1:444">
               <p className="leading-[1.3] mb-0">{`We design & build software that sells. Full-stack `}</p>
               <p className="leading-[1.3]">digital product agency for ambitious brands.</p>
@@ -262,21 +262,21 @@ function Footer({ className }: { className?: string }) {
             </div>
           </div>
           <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#dfdfdf] text-[18px] w-full whitespace-nowrap" data-node-id="1:451" data-name="Frame">
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:452">
+            <a href="/" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:452">
               <p className="leading-[1.2]">Home</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:453">
+            </a>
+            <a href="/services" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:453">
               <p className="leading-[1.2]">Services</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:454">
+            </a>
+            <a href="/work" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:454">
               <p className="leading-[1.2]">Work</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:455">
+            </a>
+            <a href="/company" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:455">
               <p className="leading-[1.2]">Company</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:456">
+            </a>
+            <a href="/blog" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:456">
               <p className="leading-[1.2]">Blog</p>
-            </div>
+            </a>
           </div>
         </div>
         <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:457" data-name="Frame">
@@ -286,12 +286,12 @@ function Footer({ className }: { className?: string }) {
             </div>
           </div>
           <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#dfdfdf] text-[18px] w-full whitespace-nowrap" data-node-id="1:460" data-name="Frame">
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:461">
+            <a href="/contact" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:461">
               <p className="leading-[1.2]">Contact Us</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:462">
+            </a>
+            <a href="/contact#faq" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:462">
               <p className="leading-[1.2]">FAQ</p>
-            </div>
+            </a>
           </div>
         </div>
         <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0" data-node-id="1:463" data-name="Frame">
@@ -301,18 +301,18 @@ function Footer({ className }: { className?: string }) {
             </div>
           </div>
           <div className="[word-break:break-word] content-stretch flex flex-col font-['Inter:Medium'] font-medium gap-[16px] items-start leading-[0] not-italic relative shrink-0 text-[#dfdfdf] text-[18px] w-full whitespace-nowrap" data-node-id="1:466" data-name="Frame">
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:467">
+            <a href="/services" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:467">
               <p className="leading-[1.2]">Full-stack Development</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:468">
+            </a>
+            <a href="/services/ui-ux-design" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:468">
               <p className="leading-[1.2]">UI/UX Design</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:469">
+            </a>
+            <a href="/services" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:469">
               <p className="leading-[1.2]">Brand Design</p>
-            </div>
-            <div className="flex flex-col justify-center relative shrink-0" data-node-id="1:470">
+            </a>
+            <a href="/services" className="flex flex-col justify-center relative shrink-0 hover:text-[#00b6ca]" data-node-id="1:470">
               <p className="leading-[1.2]">Digital Marketing</p>
-            </div>
+            </a>
           </div>
         </div>
         <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[306px]" data-node-id="1:471" data-name="Frame">
@@ -327,7 +327,7 @@ function Footer({ className }: { className?: string }) {
                 <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame} />
               </div>
               <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#dfdfdf] text-[18px] w-[245px]" data-node-id="1:478">
-                <p className="leading-[1.2]">+880 1568 295845</p>
+                <a href="tel:+8801568295845" className="block leading-[1.2] hover:text-[#00b6ca]">+880 1568 295845</a>
               </div>
             </div>
             <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-[273px]" data-node-id="1:479" data-name="Frame">
@@ -335,7 +335,7 @@ function Footer({ className }: { className?: string }) {
                 <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame1} />
               </div>
               <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#dfdfdf] text-[18px] w-[245px]" data-node-id="1:483">
-                <p className="leading-[1.2]">joybordhan223@gmail.com</p>
+                <a href="mailto:joybordhan223@gmail.com" className="block leading-[1.2] hover:text-[#00b6ca]">joybordhan223@gmail.com</a>
               </div>
             </div>
             <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:484" data-name="Frame">
@@ -372,7 +372,7 @@ function Footer({ className }: { className?: string }) {
   );
 }
 
-export default function ContactUs() {
+export default function Contact() {
   return (
     <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[5003px]" data-node-id="1:2301" data-name="Contact Us">
       <Footer className="-translate-x-1/2 absolute bg-[#191919] bottom-[18px] h-[764px] left-1/2 overflow-clip rounded-[8px] w-[1872px]" />
@@ -548,7 +548,7 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[64px] items-start left-1/2 px-[180px] py-[100px] top-[1473px] w-[1920px]" data-node-id="1:2362" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[64px] items-start left-1/2 px-[180px] py-[100px] top-[1473px] w-[1920px]" data-node-id="1:2362" data-name="Frame" id="faq">
         <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[1474px] whitespace-pre-wrap" data-node-id="1:2363">
           <p className="mb-0">
             <span className="leading-[1.2] text-white">Our Most Frequently Asked</span>
@@ -773,25 +773,23 @@ export default function ContactUs() {
         </div>
       </div>
       <div className="-translate-x-1/2 absolute bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[24px] w-[1560px]" data-node-id="1:2464" data-name="Nav">
-        <a className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:2465" data-name="Update Logo">
+        <a href="/" className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:2465" data-name="Update Logo">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
         </a>
         <div className="[word-break:break-word] content-stretch flex gap-[32px] items-center justify-center not-italic relative shrink-0 text-[#f6f6f6] text-[16px] uppercase whitespace-nowrap" data-node-id="1:2473" data-name="Frame">
-          <a className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2474">
+          <a href="/services" className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2474">
             <p className="leading-[1.2]">Services</p>
           </a>
-          <a className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2475">
+          <a href="/work" className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2475">
             <p className="leading-[1.2]">Work</p>
           </a>
-          <a className="block cursor-pointer font-['Inter:Semi_Bold'] font-semibold leading-[0] relative shrink-0" data-node-id="1:2476">
+          <a href="/blog" className="block cursor-pointer font-['Inter:Semi_Bold'] font-semibold leading-[0] relative shrink-0" data-node-id="1:2476">
             <p className="leading-[1.2]">blog</p>
           </a>
-          <a className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2477">
+          <a href="/company" className="block cursor-pointer font-['Inter:Medium'] font-medium leading-[0] relative shrink-0" data-node-id="1:2477">
             <p className="leading-[1.2]">Company</p>
           </a>
-          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] relative shrink-0" data-node-id="1:2478">
-            Contact Us
-          </p>
+          <a href="/contact" className="block font-['Inter:Semi_Bold'] font-semibold leading-[1.2] relative shrink-0" data-node-id="1:2478" aria-current="page">Contact Us</a>
         </div>
         <Component64 className="bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" />
       </div>

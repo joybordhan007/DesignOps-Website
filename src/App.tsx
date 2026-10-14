@@ -1,13 +1,13 @@
-import { MouseEvent, useEffect, useLayoutEffect, useState } from "react";
-import Home from "./generated/Page1_976";
-import Services from "./generated/Page1_1235";
-import UiUxDesign from "./generated/Page1_1368";
-import Work from "./generated/Page1_1533";
-import CaseStudy from "./generated/Page1_1803";
-import Blog from "./generated/Page1_2050";
-import Article from "./generated/Page1_2097";
-import Company from "./generated/Page1_2170";
-import Contact from "./generated/Page1_2301";
+import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Home from "./generated/Home";
+import Services from "./generated/Services";
+import UiUxDesign from "./generated/UiUxDesign";
+import Work from "./generated/Work";
+import CaseStudy from "./generated/CaseStudy";
+import Blog from "./generated/Blog";
+import BlogArticle from "./generated/BlogArticle";
+import Company from "./generated/Company";
+import Contact from "./generated/Contact";
 
 type Route = keyof typeof pages;
 
@@ -18,13 +18,21 @@ const pages = {
   "/work": { component: Work, height: 8769 },
   "/work/case-study": { component: CaseStudy, height: 8007 },
   "/blog": { component: Blog, height: 4008 },
-  "/blog/design-system": { component: Article, height: 4940 },
+  "/blog/design-system": { component: BlogArticle, height: 4940 },
   "/company": { component: Company, height: 4523 },
   "/contact": { component: Contact, height: 5003 },
 } as const;
 
 function currentRoute(): Route {
   return (window.location.pathname in pages ? window.location.pathname : "/") as Route;
+}
+
+function isRoute(path: string): path is Route {
+  return path in pages;
+}
+
+function scrollToId(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
 function routeForLabel(label: string): Route | undefined {
@@ -61,13 +69,38 @@ export default function App() {
     return () => window.removeEventListener("popstate", update);
   }, []);
 
-  const navigate = (next: Route) => {
-    window.history.pushState({}, "", next);
+  const pendingHash = useRef(window.location.hash.slice(1));
+
+  useEffect(() => {
+    const hash = pendingHash.current;
+    pendingHash.current = "";
+    if (hash) scrollToId(hash);
+  }, [route]);
+
+  const navigate = (next: Route, hash = "") => {
+    window.history.pushState({}, "", hash ? `${next}#${hash}` : next);
+    if (next === route) {
+      if (hash) scrollToId(hash);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    pendingHash.current = hash;
+    if (!hash) window.scrollTo({ top: 0 });
     setRoute(next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    const anchor = (event.target as HTMLElement).closest<HTMLAnchorElement>("a[href]");
+    if (anchor && event.currentTarget.contains(anchor)) {
+      const [path, hash = ""] = (anchor.getAttribute("href") || "").split("#");
+      const modified = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0;
+      if (isRoute(path) && !modified && anchor.target !== "_blank") {
+        event.preventDefault();
+        navigate(path, hash);
+      }
+      return;
+    }
+
     let element = event.target as HTMLElement | null;
     for (let depth = 0; element && element !== event.currentTarget && depth < 7; depth += 1) {
       const label = element.textContent || "";
