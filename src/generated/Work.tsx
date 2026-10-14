@@ -1,3 +1,5 @@
+import HeroVideo from "@/components/HeroVideo";
+
 const assetPathPrefix = "/assets/work";
 const imgArrowForwardLong = `${assetPathPrefix}/5f243.svg`;
 const imgGroup = `${assetPathPrefix}/937ae.svg`;
@@ -388,7 +390,9 @@ export default function Work() {
     <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[8769px]" data-node-id="1:1533" data-name="Work">
       <div className="-translate-x-1/2 absolute bg-[#2b2b2b] h-[870px] left-1/2 overflow-clip rounded-[8px] top-[24px] w-[1872px]" data-node-id="1:1534" data-name="Hero">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute contents left-[calc(54.17%-66px)] top-[calc(50%+27.5px)]" data-node-id="1:1535" data-name="image">
-          <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]" data-node-id="1:1536" data-name="Video" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]" data-node-id="1:1536" data-name="Video">
+            <HeroVideo name="work.mp4" />
+          </div>
           <div className="absolute bg-gradient-to-r from-[16.438%] from-[rgba(0,0,0,0.74)] h-[980px] left-0 to-[rgba(0,0,0,0.2)] top-0 w-[1920px]" data-node-id="1:1537" data-name="Effects" />
         </div>
         <div className="absolute content-stretch flex flex-col gap-[56px] items-start justify-center left-[156px] top-[306px]" data-node-id="1:1538" data-name="Frame">

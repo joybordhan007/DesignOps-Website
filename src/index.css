@@ -1308,18 +1308,6 @@ footer {
   overflow: hidden;
 }
 
-.figma-canvas [data-node-id="1:977"],
-.figma-canvas [data-node-id="1:1335"],
-.figma-canvas [data-node-id="1:1534"],
-.figma-canvas [data-node-id="1:2051"],
-.figma-canvas [data-node-id="1:2171"] {
-  background-image:
-    linear-gradient(90deg, rgba(2, 14, 23, 0.74), rgba(2, 14, 23, 0.18)),
-    url("/assets/home/1fe35.png");
-  background-position: center;
-  background-size: cover;
-}
-
 .figma-canvas a,
 .figma-canvas [class*="cursor-pointer"] {
   cursor: pointer;
