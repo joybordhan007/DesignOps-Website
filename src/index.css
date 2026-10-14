@@ -1312,3 +1312,132 @@ footer {
 .figma-canvas [class*="cursor-pointer"] {
   cursor: pointer;
 }
+
+.client-logo-carousel {
+  width: 1560px;
+  height: 140px;
+  overflow: hidden;
+}
+
+.client-logo-track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  animation: client-logo-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.client-logo-set {
+  display: flex;
+  flex: none;
+  gap: 24px;
+  padding-right: 24px;
+}
+
+.client-logo-item {
+  display: flex;
+  flex: none;
+  width: 240px;
+  height: 140px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.client-logo-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+@keyframes client-logo-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+[data-name="Nav"] [data-name="Component 57"] > div:first-child > div,
+[data-name="Nav"] [data-name="Component 57"] > div:nth-child(2) > div,
+[data-name="Nav"] [data-node-id="1:681"] > div:first-child > div,
+[data-name="Nav"] [data-node-id="1:681"] > div:nth-child(2) > div {
+  transition: transform 380ms cubic-bezier(0.2, 0.75, 0.3, 1);
+}
+
+[data-name="Nav"] [data-name="Component 57"]:hover > div:first-child > div,
+[data-name="Nav"] [data-name="Component 57"]:focus-visible > div:first-child > div {
+  transform: translateY(-20px);
+}
+
+[data-name="Nav"] [data-name="Component 57"]:hover > div:nth-child(2) > div,
+[data-name="Nav"] [data-name="Component 57"]:focus-visible > div:nth-child(2) > div {
+  transform: translateY(-20px);
+}
+
+[data-name="Nav"] [data-node-id="1:681"]:hover > div:first-child > div,
+[data-name="Nav"] [data-node-id="1:681"]:focus-visible > div:first-child > div {
+  transform: translateY(-20px);
+}
+
+[data-name="Nav"] [data-node-id="1:681"]:hover > div:nth-child(2) > div,
+[data-name="Nav"] [data-node-id="1:681"]:focus-visible > div:nth-child(2) > div {
+  transform: translateY(-20px);
+}
+
+[data-node-id="1:10"] > div:first-child > div,
+[data-node-id="1:10"] > div:nth-child(2) > div {
+  transition: transform 380ms cubic-bezier(0.2, 0.75, 0.3, 1);
+}
+
+[data-node-id="1:10"]:hover > div:first-child > div,
+[data-node-id="1:10"]:focus-visible > div:first-child > div {
+  transform: translateY(-20px);
+}
+
+[data-node-id="1:10"]:hover > div:nth-child(2) > div,
+[data-node-id="1:10"]:focus-visible > div:nth-child(2) > div {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+.scroll-cue-icon {
+  animation: scroll-cue-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes scroll-cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.science-orbit {
+  transition: transform 100ms linear;
+}
+
+.science-orbit-one {
+  transform: translate3d(var(--science-shift, 0px), 0, 0) rotate(var(--science-rotation, 0deg));
+}
+
+.science-orbit-two {
+  transform: translate3d(var(--science-shift-reverse, 0px), 0, 0)
+    rotate(var(--science-rotation-reverse, 0deg));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .client-logo-track,
+  .scroll-cue-icon {
+    animation: none;
+  }
+
+  [data-name="Nav"] [data-name="Component 57"] > div:first-child > div,
+  [data-name="Nav"] [data-name="Component 57"] > div:nth-child(2) > div,
+  [data-name="Nav"] [data-node-id="1:681"] > div:first-child > div,
+  [data-name="Nav"] [data-node-id="1:681"] > div:nth-child(2) > div,
+  [data-node-id="1:10"] > div:first-child > div,
+  [data-node-id="1:10"] > div:nth-child(2) > div,
+  .science-orbit {
+    transition: none;
+  }
+}

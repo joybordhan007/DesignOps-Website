@@ -101,7 +101,15 @@ export default function App() {
       return;
     }
 
-    let element = event.target as HTMLElement | null;
+    const target = event.target as HTMLElement;
+    if (
+      target.closest('[data-name="Nav"]') &&
+      !target.closest('[data-name="Component 57"], [data-node-id="1:681"]')
+    ) {
+      return;
+    }
+
+    let element: HTMLElement | null = target;
     for (let depth = 0; element && element !== event.currentTarget && depth < 7; depth += 1) {
       const label = element.textContent || "";
       if (label.trim().length <= 100) {
@@ -115,6 +123,17 @@ export default function App() {
       element = element.parentElement;
     }
   };
+
+  useLayoutEffect(() => {
+    const pageRoot = document.querySelector(".figma-canvas");
+    if (!pageRoot) return;
+
+    pageRoot.querySelectorAll("p").forEach((label) => {
+      if (label.textContent?.trim() === "Scroll Down") {
+        label.nextElementSibling?.classList.add("scroll-cue-icon");
+      }
+    });
+  }, [route]);
 
   const page = pages[route];
   const Page = page.component;

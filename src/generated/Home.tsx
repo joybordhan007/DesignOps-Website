@@ -1,12 +1,9 @@
+import { useEffect } from "react";
+import ClientLogoCarousel from "@/components/ClientLogoCarousel";
+import CountUp from "@/components/CountUp";
 import HeroVideo from "@/components/HeroVideo";
 
 const assetPathPrefix = "/assets/home";
-const imgImage6 = "/assets/home/9d595.png";
-const imgImage7 = "/assets/home/b8d87.png";
-const imgImage8 = "/assets/home/38f14.png";
-const imgImage9 = "/assets/home/6ee00.png";
-const imgImage10 = "/assets/home/54140.png";
-const imgLayer1 = `${assetPathPrefix}/84bc4.svg`;
 const imgGroup = `${assetPathPrefix}/937ae.svg`;
 const imgGroup1 = `${assetPathPrefix}/c25f8.svg`;
 const imgSwitzerlandTourismDestinationShowcasingEuropeanTravelBeauty1 = `${assetPathPrefix}/1fe35.png`;
@@ -52,76 +49,7 @@ type FrameProps = {
 
 function Frame({ className, property1 = "Default" }: FrameProps) {
   return (
-    <div className={className || "h-[140px] overflow-clip relative w-[1560px]"} data-node-id="1:498">
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-0 p-[10px] top-0 w-[240px]" data-node-id="1:499" data-name="Frame">
-        <div className="aspect-[786/265] relative shrink-0 w-full" data-node-id="1:500" data-name="image 6">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage6} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[264px] p-[10px] top-0 w-[240px]" data-node-id="1:501" data-name="Frame">
-        <div className="aspect-[219/73] relative shrink-0 w-full" data-node-id="1:502" data-name="image 7">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage7} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[528px] p-[10px] top-0 w-[240px]" data-node-id="1:503" data-name="Frame">
-        <div className="relative shrink-0 size-[120px]" data-node-id="1:504" data-name="image 8">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage8} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[792px] p-[10px] top-0 w-[240px]" data-node-id="1:505" data-name="Frame">
-        <div className="h-[57px] relative shrink-0 w-[220px]" data-node-id="1:506" data-name="image 9">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <img alt="" className="absolute h-[125.86%] left-[-4.52%] max-w-none top-[-11.35%] w-[109.51%]" src={imgImage9} />
-          </div>
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[1056px] p-[10px] top-0 w-[240px]" data-node-id="1:507" data-name="Frame">
-        <div className="h-[51px] relative shrink-0 w-[220px]" data-node-id="1:508" data-name="image 10">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage10} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[1320px] p-[10px] top-0 w-[240px]" data-node-id="1:509" data-name="Frame">
-        <div className="h-[76px] overflow-clip relative shrink-0 w-[220px]" data-node-id="1:510" data-name="Logo_-_Blucheez_-_Black 1">
-          <div className="absolute contents inset-0" data-node-id="1:511" data-name="Layer 1">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayer1} />
-          </div>
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[1584px] p-[10px] top-0 w-[240px]" data-node-id="1:521" data-name="Frame">
-        <div className="aspect-[786/265] relative shrink-0 w-full" data-node-id="1:522" data-name="image 6">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage6} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[1848px] p-[10px] top-0 w-[240px]" data-node-id="1:523" data-name="Frame">
-        <div className="aspect-[219/73] relative shrink-0 w-full" data-node-id="1:524" data-name="image 7">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage7} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[2112px] p-[10px] top-0 w-[240px]" data-node-id="1:525" data-name="Frame">
-        <div className="relative shrink-0 size-[120px]" data-node-id="1:526" data-name="image 8">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage8} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[2376px] p-[10px] top-0 w-[240px]" data-node-id="1:527" data-name="Frame">
-        <div className="h-[57px] relative shrink-0 w-[220px]" data-node-id="1:528" data-name="image 9">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <img alt="" className="absolute h-[125.86%] left-[-4.52%] max-w-none top-[-11.35%] w-[109.51%]" src={imgImage9} />
-          </div>
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[2640px] p-[10px] top-0 w-[240px]" data-node-id="1:529" data-name="Frame">
-        <div className="h-[51px] relative shrink-0 w-[220px]" data-node-id="1:530" data-name="image 10">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage10} />
-        </div>
-      </div>
-      <div className="absolute content-stretch flex flex-col h-[140px] items-center justify-center left-[2904px] p-[10px] top-0 w-[240px]" data-node-id="1:531" data-name="Frame">
-        <div className="h-[76px] overflow-clip relative shrink-0 w-[220px]" data-node-id="1:532" data-name="Logo_-_Blucheez_-_Black 1">
-          <div className="absolute contents inset-0" data-node-id="1:533" data-name="Layer 1">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayer1} />
-          </div>
-        </div>
-      </div>
-    </div>
+    <ClientLogoCarousel />
   );
 }
 
@@ -555,6 +483,38 @@ function Component58({ className, property1 = "vIEW" }: Component58Props) {
 }
 
 export default function Home() {
+  useEffect(() => {
+    const section = document.querySelector<HTMLElement>(".science-tech-design");
+    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let frame = 0;
+    const updateParallax = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const bounds = section.getBoundingClientRect();
+        const progress = Math.max(
+          0,
+          Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)),
+        );
+        const offset = (progress - 0.5) * 180;
+        const rotation = (progress - 0.5) * 36;
+        section.style.setProperty("--science-shift", `${offset}px`);
+        section.style.setProperty("--science-shift-reverse", `${-offset}px`);
+        section.style.setProperty("--science-rotation", `${rotation}deg`);
+        section.style.setProperty("--science-rotation-reverse", `${-rotation}deg`);
+      });
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    window.addEventListener("resize", updateParallax);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateParallax);
+      window.removeEventListener("resize", updateParallax);
+    };
+  }, []);
+
   return (
     <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[12078px]" data-node-id="1:976" data-name="Home">
       <div className="-translate-x-1/2 absolute bg-[#2b2b2b] h-[870px] left-1/2 overflow-clip rounded-[8px] top-[24px] w-[1872px]" data-node-id="1:977" data-name="Hero">
@@ -648,7 +608,7 @@ export default function Home() {
               </div>
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1011" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1012">
-                  <p className="leading-[1.2]">92%</p>
+                  <p className="leading-[1.2]"><CountUp value={92} suffix="%" /></p>
                 </div>
                 <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1013">
                   <p className="leading-[1.2] mb-0">{`client satisfaction `}</p>
@@ -662,7 +622,7 @@ export default function Home() {
               </div>
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1016" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1017">
-                  <p className="leading-[1.2]">$10B+</p>
+                  <p className="leading-[1.2]"><CountUp value={10} prefix="$" suffix="B+" /></p>
                 </div>
                 <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1018">
                   <p className="leading-[1.2] mb-0">{`valuation influenced `}</p>
@@ -676,7 +636,7 @@ export default function Home() {
               </div>
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1021" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1022">
-                  <p className="leading-[1.2]">2019</p>
+                  <p className="leading-[1.2]"><CountUp value={2019} useGrouping={false} /></p>
                 </div>
                 <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1023">
                   <p className="leading-[1.2] mb-0">{`Founded, 6 years `}</p>
@@ -692,7 +652,7 @@ export default function Home() {
               </div>
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1027" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1028">
-                  <p className="leading-[1.2]">25M+</p>
+                  <p className="leading-[1.2]"><CountUp value={25} suffix="M+" /></p>
                 </div>
                 <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1029">
                   <p className="leading-[1.2] mb-0">{`monthly visits `}</p>
@@ -706,10 +666,10 @@ export default function Home() {
               </div>
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1032" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1033">
-                  <p className="leading-[1.2]">500+ global project</p>
+                  <p className="leading-[1.2]"><CountUp value={500} suffix="+" /> global projects</p>
                 </div>
                 <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1034">
-                  <p className="leading-[1.2] mb-0">{`250+ testimonial with `}</p>
+                  <p className="leading-[1.2] mb-0"><CountUp value={250} suffix="+" /> testimonials with</p>
                   <p className="leading-[1.2]">trusted by google</p>
                 </div>
               </div>
@@ -717,12 +677,12 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#171717] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[3058px] w-[1872px]" data-node-id="1:1035" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#171717] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[3058px] w-[1872px] science-tech-design" data-node-id="1:1035" data-name="Frame">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[900px] left-1/2 overflow-clip top-1/2 w-[1560px]" data-node-id="1:1036" data-name="Frame">
-          <div className="absolute left-[342px] size-[585px] top-[157px]" data-node-id="1:1037">
+          <div className="absolute left-[342px] size-[585px] top-[157px] science-orbit science-orbit-one" data-node-id="1:1037">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEllipse1} />
           </div>
-          <div className="absolute left-[635px] size-[585px] top-[157px]" data-node-id="1:1038">
+          <div className="absolute left-[635px] size-[585px] top-[157px] science-orbit science-orbit-two" data-node-id="1:1038">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEllipse2} />
           </div>
           <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[357px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1039">
