@@ -1413,16 +1413,45 @@ footer {
 }
 
 .science-orbit {
-  transition: transform 100ms linear;
+  transform-origin: center;
+  opacity: var(--scene-orbit-opacity, 1);
+  will-change: transform;
 }
 
 .science-orbit-one {
-  transform: translate3d(var(--science-shift, 0px), 0, 0) rotate(var(--science-rotation, 0deg));
+  transform: translate3d(var(--scene-left-x, 0px), var(--scene-left-y, 0px), 0)
+    rotate(var(--scene-left-angle, 0deg)) scale(var(--scene-scale, 1));
 }
 
 .science-orbit-two {
-  transform: translate3d(var(--science-shift-reverse, 0px), 0, 0)
-    rotate(var(--science-rotation-reverse, 0deg));
+  transform: translate3d(var(--scene-right-x, 0px), var(--scene-right-y, 0px), 0)
+    rotate(var(--scene-right-angle, 0deg)) scale(var(--scene-scale, 1));
+}
+
+.science-scroll-stage {
+  z-index: 2;
+}
+
+.science-tech-design {
+  isolation: isolate;
+}
+
+.science-scene-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.science-tech-design [data-science-label],
+.science-scroll-cue {
+  will-change: transform, opacity;
+}
+
+.science-tech-design [data-science-label] {
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1438,6 +1467,11 @@ footer {
   [data-node-id="1:10"] > div:first-child > div,
   [data-node-id="1:10"] > div:nth-child(2) > div,
   .science-orbit {
-    transition: none;
+    will-change: auto;
   }
+}
+
+.figma-page-viewport:has(.science-scroll-stage),
+.figma-page-viewport:has(.science-scroll-stage) .figma-canvas {
+  overflow: visible;
 }

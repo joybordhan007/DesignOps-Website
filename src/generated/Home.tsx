@@ -1,7 +1,7 @@
-import { useEffect } from "react";
 import ClientLogoCarousel from "@/components/ClientLogoCarousel";
 import CountUp from "@/components/CountUp";
 import HeroVideo from "@/components/HeroVideo";
+import ScienceScrollCanvas from "@/components/ScienceScrollCanvas";
 
 const assetPathPrefix = "/assets/home";
 const imgGroup = `${assetPathPrefix}/937ae.svg`;
@@ -483,40 +483,8 @@ function Component58({ className, property1 = "vIEW" }: Component58Props) {
 }
 
 export default function Home() {
-  useEffect(() => {
-    const section = document.querySelector<HTMLElement>(".science-tech-design");
-    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    let frame = 0;
-    const updateParallax = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const bounds = section.getBoundingClientRect();
-        const progress = Math.max(
-          0,
-          Math.min(1, (window.innerHeight - bounds.top) / (window.innerHeight + bounds.height)),
-        );
-        const offset = (progress - 0.5) * 180;
-        const rotation = (progress - 0.5) * 36;
-        section.style.setProperty("--science-shift", `${offset}px`);
-        section.style.setProperty("--science-shift-reverse", `${-offset}px`);
-        section.style.setProperty("--science-rotation", `${rotation}deg`);
-        section.style.setProperty("--science-rotation-reverse", `${-rotation}deg`);
-      });
-    };
-
-    updateParallax();
-    window.addEventListener("scroll", updateParallax, { passive: true });
-    window.addEventListener("resize", updateParallax);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateParallax);
-      window.removeEventListener("resize", updateParallax);
-    };
-  }, []);
-
   return (
-    <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[12078px]" data-node-id="1:976" data-name="Home">
+    <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[13878px]" data-node-id="1:976" data-name="Home">
       <div className="-translate-x-1/2 absolute bg-[#2b2b2b] h-[870px] left-1/2 overflow-clip rounded-[8px] top-[24px] w-[1872px]" data-node-id="1:977" data-name="Hero">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute contents left-[calc(54.17%-66px)] top-[calc(50%+27.5px)]" data-node-id="1:978" data-name="image">
           <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]" data-node-id="1:979" data-name="Video">
@@ -677,51 +645,54 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#171717] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[3058px] w-[1872px] science-tech-design" data-node-id="1:1035" data-name="Frame">
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[900px] left-1/2 overflow-clip top-1/2 w-[1560px]" data-node-id="1:1036" data-name="Frame">
+      <div className="-translate-x-1/2 absolute h-[3000px] left-1/2 top-[3058px] w-[1872px] science-scroll-stage">
+        <div className="relative h-[1080px] w-[1872px]">
+        <div className="-translate-x-1/2 absolute bg-[#171717] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-0 w-[1872px] science-tech-design" data-node-id="1:1035" data-name="Frame">
+        <ScienceScrollCanvas />
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[900px] left-1/2 overflow-clip top-1/2 w-[1560px] z-[1]" data-node-id="1:1036" data-name="Frame">
           <div className="absolute left-[342px] size-[585px] top-[157px] science-orbit science-orbit-one" data-node-id="1:1037">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEllipse1} />
           </div>
           <div className="absolute left-[635px] size-[585px] top-[157px] science-orbit science-orbit-two" data-node-id="1:1038">
             <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEllipse2} />
           </div>
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[357px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1039">
+          <div data-science-label="0.08" data-direction="left" className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[357px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1039">
             <p className="leading-[1.2]">Science</p>
           </div>
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[667px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1040">
+          <div data-science-label="0.14" data-direction="right" className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[667px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1040">
             <p className="leading-[1.2]">Technology</p>
           </div>
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[1069px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1041">
+          <div data-science-label="0.2" data-direction="right" className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[1069px] not-italic text-[44px] text-white top-[437.5px] tracking-[-1.76px] whitespace-nowrap" data-node-id="1:1041">
             <p className="leading-[1.2]">Design</p>
           </div>
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[79px] not-italic text-[24px] text-white top-[664px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1042">
+          <div data-science-label="0.34" data-direction="left" className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[79px] not-italic text-[24px] text-white top-[664px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1042">
             <p className="leading-[1.2] mb-0 whitespace-pre">{`Research, Experience, `}</p>
             <p className="leading-[1.2] whitespace-pre">Development (RDX)</p>
           </div>
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[886px] not-italic text-[24px] text-white top-[113.5px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1043">
+          <div data-science-label="0.4" data-direction="right" className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[886px] not-italic text-[24px] text-white top-[113.5px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1043">
             <p className="leading-[1.2]">Digital Transformation (DX)</p>
           </div>
-          <div className="-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[1376px] not-italic text-[24px] text-center text-white top-[308px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1044">
+          <div data-science-label="0.5" data-direction="right" className="-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Regular'] font-normal justify-center leading-[0] left-[1376px] not-italic text-[24px] text-center text-white top-[308px] tracking-[-0.96px] whitespace-nowrap" data-node-id="1:1044">
             <p className="leading-[1.2] mb-0 whitespace-pre">{`Customer Experience `}</p>
             <p className="leading-[1.2] whitespace-pre">Transformation (CX)</p>
           </div>
-          <div className="absolute h-[23.5px] left-[324px] top-[627.5px] w-[60.5px]" data-node-id="1:1045" data-name="Vector">
+          <div data-science-label="0.34" data-direction="left" className="absolute h-[23.5px] left-[324px] top-[627.5px] w-[60.5px]" data-node-id="1:1045" data-name="Vector">
             <div className="absolute inset-[-3.01%_-1.17%_-4.26%_0]">
               <img alt="" className="block max-w-none size-full" src={imgVector} />
             </div>
           </div>
-          <div className="absolute h-[24.5px] left-[802.5px] top-[111.5px] w-[73.5px]" data-node-id="1:1046">
+          <div data-science-label="0.4" data-direction="right" className="absolute h-[24.5px] left-[802.5px] top-[111.5px] w-[73.5px]" data-node-id="1:1046">
             <div className="absolute inset-[-4.08%_0_-2.73%_-1.01%]">
               <img alt="" className="block max-w-none size-full" src={imgVector1} />
             </div>
           </div>
-          <div className="absolute h-[11.5px] left-[1205px] top-[293.5px] w-[48px]" data-node-id="1:1047">
+          <div data-science-label="0.5" data-direction="right" className="absolute h-[11.5px] left-[1205px] top-[293.5px] w-[48px]" data-node-id="1:1047">
             <div className="absolute inset-[-8.7%_0_-6.28%_-1.44%]">
               <img alt="" className="block max-w-none size-full" src={imgVector2} />
             </div>
           </div>
         </div>
-        <div className="-translate-x-1/2 absolute content-stretch flex gap-[16px] items-center left-1/2 top-[974px]" data-node-id="1:1048" data-name="Frame">
+        <div className="-translate-x-1/2 absolute content-stretch flex gap-[16px] items-center left-1/2 top-[974px] science-scroll-cue" data-node-id="1:1048" data-name="Frame">
           <p className="[word-break:break-word] font-['Noto_Sans:Light'] font-light leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[3.52px] uppercase whitespace-nowrap" data-node-id="1:1049" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
             Scroll Down
           </p>
@@ -730,7 +701,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="absolute content-stretch flex flex-col gap-[64px] items-center left-[180px] top-[4298px] w-[1560px]" data-node-id="1:1051" data-name="Frame">
+        </div>
+      </div>
+      <div className="absolute content-stretch flex flex-col gap-[64px] items-center left-[180px] top-[6098px] w-[1560px]" data-node-id="1:1051" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1052">
           <p className="mb-0">
             <span className="leading-[1.2]">{`Our Services Focused on Strategy, `}</span>
@@ -740,7 +713,7 @@ export default function Home() {
         </div>
         <Frame3 className="h-[650px] relative shrink-0 w-[1560px]" />
       </div>
-      <a className="absolute block cursor-pointer h-[2539px] left-[180px] pointer-events-none top-[5268px] w-[1560px]" data-node-id="1:1054" data-name="Frame">
+      <a className="absolute block cursor-pointer h-[2539px] left-[180px] pointer-events-none top-[7068px] w-[1560px]" data-node-id="1:1054" data-name="Frame">
         <div className="absolute bottom-0 h-[2539px] left-0 top-0" data-node-id="1:1055">
           <div className="content-stretch flex flex-col gap-[64px] items-start pointer-events-auto pt-[60px] sticky top-0 w-[1560px]" data-name="Frame">
             <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] text-left tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1056">
@@ -929,7 +902,7 @@ export default function Home() {
           </div>
         </div>
       </a>
-      <div className="-translate-x-1/2 absolute bg-[#191919] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[7967px] w-[1872px]" data-node-id="1:1128" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[9767px] w-[1872px]" data-node-id="1:1128" data-name="Frame">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[854px] left-1/2 top-1/2 w-[1560px]" data-node-id="I1:1128;40141:756" data-name="Frame">
           <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] left-0 not-italic text-[#f9f9f9] text-[40px] top-[48px] tracking-[0.8px] w-[1560px] whitespace-pre-wrap" data-node-id="I1:1128;40141:757">
             <p className="mb-0">
@@ -1036,7 +1009,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[9207px] w-[1560px]" data-node-id="1:1129" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[11007px] w-[1560px]" data-node-id="1:1129" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1130">
           <p className="mb-0">
             <span className="leading-[1.2]">{`Growth Insights That Drive `}</span>
@@ -1051,7 +1024,7 @@ export default function Home() {
         </div>
         <Component63 className="bg-[#00b6ca] content-stretch flex gap-[10px] items-center pl-[18px] pr-[12px] py-[12px] relative rounded-[4px] shrink-0" />
       </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[9999px] w-[1560px]" data-node-id="1:1136" data-name="Frame">
+      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[11799px] w-[1560px]" data-node-id="1:1136" data-name="Frame">
         <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1137">
           <p className="mb-0">
             <span className="leading-[1.2]">{`Find your best design into us. `}</span>
@@ -1226,7 +1199,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[78px] rounded-[8px] top-[10832px] w-[1560px]" data-node-id="1:1222" data-name="Frame">
+      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[78px] rounded-[8px] top-[12632px] w-[1560px]" data-node-id="1:1222" data-name="Frame">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1223" data-name="Frame">
           <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content] whitespace-pre-wrap" data-node-id="1:1224">
             <p className="mb-0">
