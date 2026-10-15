@@ -1,5 +1,9 @@
 {
-  "description": "Create stunning websites effortlessly with customizable templates and user-friendly tools, perfect for businesses and individuals looking to establish an online presence.",
+  "title": "DesignOps | Software Development, UI/UX Design & AI Solutions",
+  "description": "DesignOps delivers full-stack development, UI/UX design, brand identity, digital marketing, custom ERP software, and AI solutions to help businesses grow.",
+  "icons": {
+    "icon": "/favicon.svg?v=2"
+  },
   "robots": {
     "index": false
   },

@@ -1,42 +1,67 @@
-import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Home from "./websitepages/Home";
-import Services from "./websitepages/Services";
-import UiUxDesign from "./websitepages/UiUxDesign";
-import Work from "./websitepages/Work";
-import CaseStudy from "./websitepages/CaseStudy";
-import Blog from "./websitepages/Blog";
-import BlogDetails from "./websitepages/BlogDetails";
-import Company from "./websitepages/Company";
-import Contact from "./websitepages/Contact";
-import NotFound from "./websitepages/NotFound";
+import { ComponentType, MouseEvent, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { findPost, latestPosts, postUrl } from "./data/blogPosts";
 import useScaledSticky from "./lib/useScaledSticky";
+import useMediaQuery from "./lib/useMediaQuery";
+import DesktopNav from "./components/DesktopNav";
+import MobileNav from "./mobile/MobileNav";
+
+// Phones and tablets (below 1024px) get the responsive pages in src/mobile;
+// larger screens get the 1920px Figma artboards in src/websitepages, scaled to fit.
+const MOBILE_QUERY = "(max-width: 1023.98px)"
+
+type PageModule = { default: ComponentType }
+
+// Pages are split into their own chunks and loaded on demand, so a phone never
+// downloads the desktop pages (and vice versa). `preload` fetches a chunk early.
+function lazyPage(load: () => Promise<PageModule>) {
+  let loaded: ComponentType | undefined
+
+  const preload = () => load().then((module) => (loaded = module.default))
+
+  const Lazy = lazy(() => preload().then((component) => ({ default: component })))
+
+  function Page() {
+    const Loaded = loaded
+
+    return Loaded ? <Loaded /> : <Lazy />
+  }
+
+  return { Page, preload }
+}
+
+function page(desktop: () => Promise<PageModule>, mobile: () => Promise<PageModule>, height: number) {
+  return { desktop: lazyPage(desktop), mobile: lazyPage(mobile), height }
+}
 
 type Route = keyof typeof pages
 
-// `height` is only the first-paint estimate; the real height is measured
-// from the rendered page (see the ResizeObserver below).
+// `height` is only the first-paint estimate of a desktop page; the real height
+// is measured from the rendered page (see onReady below).
 const pages = {
-  "/": { component: Home, height: 13878 },
+  "/": page(() => import("./websitepages/Home"), () => import("./mobile/pages/Home"), 13878),
 
-  "/services": { component: Services, height: 6085 },
+  "/services": page(() => import("./websitepages/Services"), () => import("./mobile/pages/Services"), 6085),
 
-  "/services/ui-ux-design": { component: UiUxDesign, height: 6457 },
+  "/services/ui-ux-design": page(() => import("./websitepages/UiUxDesign"), () => import("./mobile/pages/UiUxDesign"), 6457),
 
-  "/work": { component: Work, height: 8769 },
+  "/work": page(() => import("./websitepages/Work"), () => import("./mobile/pages/Work"), 8769),
 
-  "/work/case-study": { component: CaseStudy, height: 8007 },
+  "/work/case-study": page(() => import("./websitepages/CaseStudy"), () => import("./mobile/pages/CaseStudy"), 8007),
 
-  "/blog": { component: Blog, height: 4008 },
+  "/blog": page(() => import("./websitepages/Blog"), () => import("./mobile/pages/Blog"), 4008),
 
-  "/blog/:slug": { component: BlogDetails, height: 4940 },
+  "/blog/:slug": page(() => import("./websitepages/BlogDetails"), () => import("./mobile/pages/BlogDetails"), 4940),
 
-  "/company": { component: Company, height: 4523 },
+  "/company": page(() => import("./websitepages/Company"), () => import("./mobile/pages/Company"), 4523),
 
-  "/contact": { component: Contact, height: 5003 },
+  "/contact": page(() => import("./websitepages/Contact"), () => import("./mobile/pages/Contact"), 5003),
 
-  "/404": { component: NotFound, height: 1960 },
-} as const;
+  "/404": page(() => import("./websitepages/NotFound"), () => import("./mobile/pages/NotFound"), 1960),
+}
+
+// Pages without a video hero use the cyan navbar.
+const brandRoutes = new Set<Route>(["/services/ui-ux-design", "/work/case-study", "/blog/:slug", "/contact"])
 
 function matchRoute(path: string): Route {
   if (path in pages && path !== "/blog/:slug") return path as Route
@@ -83,19 +108,35 @@ function routeForLabel(label: string): string | undefined {
   if (text === "home") return "/"
 }
 
+/** Rendered next to the page inside Suspense, so it only mounts once the page has loaded. */
+function Ready({ onReady }: { onReady: () => void }) {
+  useLayoutEffect(onReady, [onReady])
+
+  return null
+}
+
 export default function App() {
   const [path, setPath] = useState(window.location.pathname)
 
   const route = matchRoute(path)
 
+  const isMobile = useMediaQuery(MOBILE_QUERY)
+
   const [scale, setScale] = useState(1)
 
   const [height, setHeight] = useState<number>(pages[route].height)
 
+  // Bumped every time a page finishes rendering; DOM-dependent effects key off it.
+  const [readyCount, setReadyCount] = useState(0)
+
+  const onReady = useRef(() => setReadyCount((count) => count + 1)).current
+
   const pageRef = useRef<HTMLDivElement>(null)
 
+  const pendingHash = useRef(window.location.hash.slice(1))
+
   useLayoutEffect(() => {
-    const resize = () => setScale(Math.min(1, window.innerWidth / 1920))
+    const resize = () => setScale(Math.min(1, document.documentElement.clientWidth / 1920))
 
     resize()
 
@@ -104,20 +145,45 @@ export default function App() {
     return () => window.removeEventListener("resize", resize)
   }, [])
 
+  // Swaps to another page: waits for its code, then cross-fades to it at the
+  // top of the page (no blank frame, no visible scroll jump).
+  const showPage = (next: string, hash: string) => {
+    pendingHash.current = hash
+
+    const entry = pages[matchRoute(next)][isMobileRef.current ? "mobile" : "desktop"]
+
+    const swap = () => {
+      flushSync(() => setPath(next))
+
+      if (!hash) window.scrollTo({ top: 0, behavior: "instant" })
+    }
+
+    entry.preload().then(() => {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+      if (document.startViewTransition && !reduceMotion) document.startViewTransition(swap)
+      else swap()
+    })
+  }
+
+  const isMobileRef = useRef(isMobile)
+
+  isMobileRef.current = isMobile
+
   useEffect(() => {
-    const update = () => setPath(window.location.pathname)
+    const update = () => showPage(window.location.pathname, "")
 
     window.addEventListener("popstate", update)
 
     return () => window.removeEventListener("popstate", update)
   }, [])
 
-  // Measure the rendered page so the viewport height follows the content,
-  // e.g. when the Blog page grows with new posts.
+  // Measure the rendered desktop page so the viewport height follows the
+  // content, e.g. when the Blog page grows with new posts.
   useLayoutEffect(() => {
     const pageRoot = pageRef.current?.firstElementChild as HTMLElement | null
 
-    if (!pageRoot) return
+    if (isMobile || !pageRoot) return
 
     const measure = () => setHeight(pageRoot.offsetHeight || pages[route].height)
 
@@ -128,19 +194,31 @@ export default function App() {
     observer.observe(pageRoot)
 
     return () => observer.disconnect()
-  }, [path, route])
+  }, [readyCount, isMobile, route])
 
-  useScaledSticky(path)
-
-  const pendingHash = useRef(window.location.hash.slice(1))
+  useScaledSticky(`${readyCount}-${isMobile}`)
 
   useEffect(() => {
+    if (!readyCount) return
+
     const hash = pendingHash.current
 
     pendingHash.current = ""
 
     if (hash) scrollToId(hash)
-  }, [path])
+  }, [readyCount])
+
+  // Once the first page is up, fetch the other pages in the background so
+  // later navigation is instant.
+  useEffect(() => {
+    if (readyCount !== 1) return
+
+    const preloadAll = () => Object.values(pages).forEach((entry) => (isMobile ? entry.mobile : entry.desktop).preload())
+
+    const idle = window.requestIdleCallback?.(preloadAll, { timeout: 4000 }) ?? window.setTimeout(preloadAll, 2500)
+
+    return () => (window.cancelIdleCallback ? window.cancelIdleCallback(idle) : window.clearTimeout(idle))
+  }, [readyCount, isMobile])
 
   const navigate = (next: string, hash = "") => {
     window.history.pushState({}, "", hash ? `${next}#${hash}` : next)
@@ -152,11 +230,7 @@ export default function App() {
       return
     }
 
-    pendingHash.current = hash
-
-    if (!hash) window.scrollTo({ top: 0 })
-
-    setPath(next)
+    showPage(next, hash)
   }
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -186,7 +260,7 @@ export default function App() {
     const target = event.target as HTMLElement
 
     // Interactive controls (form fields, FAQ toggles) handle their own clicks.
-    if (target.closest("button, input, select, textarea, label, form")) return
+    if (target.closest("button, input, select, textarea, label, form, summary")) return
 
     if (
       target.closest('[data-name="Nav"]') &&
@@ -230,9 +304,23 @@ export default function App() {
         label.nextElementSibling?.classList.add("scroll-cue-icon")
       }
     })
-  }, [path])
+  }, [readyCount])
 
-  const Page = pages[route].component
+  if (isMobile) {
+    const { Page } = pages[route].mobile
+
+    return (
+      <div className="bg-[#f5f5f5] min-h-svh overflow-x-clip" onClick={handleClick}>
+        <MobileNav path={path} brand={brandRoutes.has(route)} />
+        <Suspense fallback={<div className="min-h-svh" />}>
+          <Page key={path} />
+          <Ready key={`ready-${path}`} onReady={onReady} />
+        </Suspense>
+      </div>
+    )
+  }
+
+  const { Page } = pages[route].desktop
 
   return (
     <div
@@ -240,6 +328,7 @@ export default function App() {
       style={{ height: height * scale }}
       onClick={handleClick}
     >
+      <DesktopNav path={path} brand={brandRoutes.has(route)} scale={scale} />
       <div
         ref={pageRef}
         className="figma-page-scale"
@@ -251,7 +340,10 @@ export default function App() {
           width: 1920,
         }}
       >
-        <Page />
+        <Suspense fallback={null}>
+          <Page />
+          <Ready key={`ready-${path}`} onReady={onReady} />
+        </Suspense>
       </div>
     </div>
   )

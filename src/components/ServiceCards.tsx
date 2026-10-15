@@ -2,7 +2,7 @@
 // hovered (or keyboard-focused) card grows from 372px to 570px wide while the
 // others shrink to 306px, and swaps its vertical title for a description.
 
-const services = [
+export const services = [
   {
     title: "Full-stack Development",
     description:

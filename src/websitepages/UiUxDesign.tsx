@@ -4,9 +4,8 @@ import Footer from "@/components/Footer";
 import ArrowButton from "@/components/ArrowButton";
 
 const assetPathPrefix = "/assets/ui-ux-design";
-const imgArrowSubdirectoryForward = "/assets/shared/icons/arrow-subdirectory-dark.svg";
 const imgRectangle17 = "/assets/shared/images/reviewer-avatar.jpg";
-const imgRectangle24 = `${assetPathPrefix}/894da.png`;
+const imgRectangle24 = `${assetPathPrefix}/894da.webp`;
 const imgUpworkLogo1 = "/assets/shared/logos/upwork.svg";
 const imgGroup2 = "/assets/shared/logos/fiverr-grey.svg";
 const imgGoogleGLogo1 = "/assets/shared/logos/google.svg";
@@ -16,33 +15,6 @@ const imgGroup4 = "/assets/shared/logos/fiverr.svg";
 const imgArrowSubdirectoryForward1 = "/assets/shared/icons/arrow-subdirectory-light.svg";
 const imgArrow1 = `${assetPathPrefix}/0d95e.svg`;
 const imgCheckDouble = `${assetPathPrefix}/9e1bc.svg`;
-const imgUpdateLogo1 = "/assets/shared/logos/designops-logo-light.svg";
-
-type Component64Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component64({ className, property1 = "View" }: Component64Props) {
-  return (
-    <div className={className || "bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px]"} data-node-id="1:681">
-      <div className="h-[18px] overflow-clip relative shrink-0 w-[86px]" data-node-id="1:682" data-name="Frame">
-        <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#171717] text-[16px] top-0 whitespace-nowrap" data-node-id="1:683">
-          <p className="leading-[1.2] mb-0">LET’S TALK</p>
-          <p className="leading-[1.2]">LET’S TALK</p>
-        </div>
-      </div>
-      <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="1:684" data-name="Frame">
-        <div className="absolute left-0 size-[18px] top-0" data-node-id="1:685" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-        <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="1:686" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 type FrameProps = {
   className?: string;
@@ -92,13 +64,13 @@ export default function UiUxDesign() {
 <div className="bg-white z-[1] border-[rgba(0,0,0,0.1)] border-r border-solid content-stretch flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1379" data-name="Frame">
             <div className="content-stretch flex items-center justify-between opacity-0 relative shrink-0 w-full" data-node-id="1:1380" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1381" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1384" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1389" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
             <div className="content-stretch flex flex-col gap-[24px] items-center relative shrink-0 w-[200px]" data-node-id="1:1395" data-name="Frame">
@@ -109,26 +81,26 @@ export default function UiUxDesign() {
                 <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="1:1398" data-name="Star">
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1399">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1400">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1401">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1402">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1403">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
+                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
                   </div>
                 </div>
                 <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#424242] text-[28px] text-center w-full" data-node-id="1:1406">
@@ -138,13 +110,13 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1:1407" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1408" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1411" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1416" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
           </div>
@@ -160,7 +132,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1425" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1426">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1427" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1428">
@@ -181,7 +153,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1433" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1434">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1435" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1436">
@@ -202,7 +174,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1441" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1442">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1443" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1444">
@@ -223,7 +195,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1449" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1450">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1451" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1452">
@@ -244,7 +216,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1457" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1458">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1459" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1460">
@@ -267,7 +239,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1425" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1426">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1427" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1428">
@@ -288,7 +260,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1433" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1434">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1435" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1436">
@@ -309,7 +281,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1441" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1442">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1443" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1444">
@@ -330,7 +302,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1449" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1450">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1451" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1452">
@@ -351,7 +323,7 @@ export default function UiUxDesign() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1457" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1458">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1459" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1460">
@@ -393,10 +365,10 @@ export default function UiUxDesign() {
           </div>
           <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:1466;40959:5020" data-name="Frame">
             <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:1466;40959:5021" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
             </div>
             <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:1466;40959:5022" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
             </div>
           </div>
         </div>
@@ -424,7 +396,7 @@ export default function UiUxDesign() {
           <div className="flex-none rotate-[-41.58deg]">
             <div className="h-0 relative w-[40px]">
               <div className="absolute inset-[-14.73px_-5%_-14.73px_0]">
-                <img alt="" className="block max-w-none size-full" src={imgArrow1} />
+                <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgArrow1} />
               </div>
             </div>
           </div>
@@ -434,7 +406,7 @@ export default function UiUxDesign() {
         <div className="-translate-x-1/2 absolute bg-[#efece5] h-[800px] left-1/2 rounded-[24px] top-[488px] w-[1560px]" data-node-id="1:1473" />
         <div className="-translate-x-1/2 absolute h-[800px] left-1/2 rounded-[24px] top-[488px] w-[1560px]" data-node-id="1:1474">
           <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[24px]">
-            <img alt="" className="absolute h-[129.97%] left-[-0.02%] max-w-none top-[-15.04%] w-full" src={imgRectangle24} />
+            <img alt="" loading="lazy" decoding="async" className="absolute h-[129.97%] left-[-0.02%] max-w-none top-[-15.04%] w-full" src={imgRectangle24} />
           </div>
         </div>
       </div>
@@ -458,13 +430,13 @@ export default function UiUxDesign() {
             <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:1480" data-name="Frame">
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1481" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1482" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1483">{`User research & testing`}</p>
               </div>
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1484" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1485" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1486">{`Information architecture `}</p>
               </div>
@@ -472,13 +444,13 @@ export default function UiUxDesign() {
             <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1487" data-name="Frame">
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1488" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1489" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1490">{`Wireframing & prototyping `}</p>
               </div>
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1491" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1492" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1493">{`Visual design & branding `}</p>
               </div>
@@ -486,13 +458,13 @@ export default function UiUxDesign() {
             <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:1494" data-name="Frame">
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1495" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1496" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1497">{`Design systems `}</p>
               </div>
               <div className="bg-[rgba(255,255,255,0.1)] content-stretch flex gap-[8px] items-center px-[24px] py-[13px] relative rounded-[999px] shrink-0" data-node-id="1:1498" data-name="Frame">
                 <div className="relative shrink-0 size-[24px]" data-node-id="1:1499" data-name="check-double">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgCheckDouble} />
                 </div>
                 <p className="[word-break:break-word] font-['Inter:Medium'] font-medium leading-[1.3] not-italic relative shrink-0 text-[#2f2f2f] text-[18px] whitespace-nowrap" data-node-id="1:1500">{`Accessibility audits `}</p>
               </div>
@@ -508,7 +480,7 @@ export default function UiUxDesign() {
         </p>
         <div className="content-stretch flex flex-col gap-[24px] items-start justify-center relative shrink-0 w-[900px]" data-node-id="1:1503" data-name="Frame">
           <div className="content-stretch flex flex-col gap-[6px] h-[58px] items-start relative shrink-0 w-full" data-node-id="1:1504" data-name="Frame">
-            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1505" start="1">
+            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1505" start={1}>
               <li className="ms-[36px]">
                 <span className="leading-[1.3]">{`Research Report `}</span>
               </li>
@@ -516,7 +488,7 @@ export default function UiUxDesign() {
             <p className="font-['Inter:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[18px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1506">{`       User interviews, competitive analysis, and actionable insights.`}</p>
           </div>
           <div className="content-stretch flex flex-col gap-[6px] h-[58px] items-start relative shrink-0 w-full" data-node-id="1:1507" data-name="Frame">
-            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1508" start="2">
+            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1508" start={2}>
               <li className="ms-[36px]">
                 <span className="leading-[1.3]">Figma Design Files</span>
               </li>
@@ -524,7 +496,7 @@ export default function UiUxDesign() {
             <p className="font-['Inter:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[18px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1509">{`       Fully annotated, developer-ready designs for every screen and state. `}</p>
           </div>
           <div className="content-stretch flex flex-col gap-[6px] h-[58px] items-start relative shrink-0 w-full" data-node-id="1:1510" data-name="Frame">
-            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1511" start="3">
+            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1511" start={3}>
               <li className="ms-[36px]">
                 <span className="leading-[1.3]">Design System</span>
               </li>
@@ -532,7 +504,7 @@ export default function UiUxDesign() {
             <p className="font-['Inter:Regular'] font-normal leading-[1.3] min-w-full relative shrink-0 text-[18px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1512">{`       A scalable component library with tokens, patterns, and guidelines. `}</p>
           </div>
           <div className="content-stretch flex flex-col gap-[6px] h-[58px] items-start relative shrink-0 w-full" data-node-id="1:1513" data-name="Frame">
-            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1514" start="4">
+            <ol className="block font-['Inter:Medium'] font-medium leading-[0] list-decimal relative shrink-0 text-[24px] w-[503px]" data-node-id="1:1514" start={4}>
               <li className="ms-[36px]">
                 <span className="leading-[1.3]">Usability Report</span>
               </li>
@@ -542,29 +514,6 @@ export default function UiUxDesign() {
         </div>
       </div>
       <Frame className="-translate-x-1/2 absolute bg-[#191919] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[2346px] w-[1872px]" />
-      <div className="-translate-x-1/2 absolute bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[24px] w-[1560px]" data-node-id="1:1517" data-name="Nav">
-        <a href="/" className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:1518" data-name="Update Logo">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
-        </a>
-        <div className="[word-break:break-word] content-stretch cursor-pointer flex gap-[32px] items-center justify-center leading-[0] not-italic relative shrink-0 text-[#f6f6f6] text-[16px] uppercase whitespace-nowrap" data-node-id="1:1526" data-name="Frame">
-          <a href="/services" className="block font-['Inter:Semi_Bold'] font-semibold relative shrink-0" data-node-id="1:1527">
-            <p className="leading-[1.2]">Services</p>
-          </a>
-          <a href="/work" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:1528">
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <a href="/blog" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:1529">
-            <p className="leading-[1.2]">blog</p>
-          </a>
-          <a href="/company" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:1530">
-            <p className="leading-[1.2]">Company</p>
-          </a>
-          <a href="/contact" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:1531">
-            <p className="leading-[1.2]">Contact Us</p>
-          </a>
-        </div>
-        <Component64 className="bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" />
-      </div>
     </div>
   );
 }

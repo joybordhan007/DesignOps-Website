@@ -2,38 +2,10 @@ import LatestBlogCards from "@/components/LatestBlogCards";
 import Footer from "@/components/Footer";
 
 const assetPathPrefix = "/assets/blog-details";
-const imgArrowSubdirectoryForward = "/assets/shared/icons/arrow-subdirectory-dark.svg";
-const imgRectangle3463662 = `${assetPathPrefix}/dbe4b.png`;
+const imgRectangle3463662 = `${assetPathPrefix}/dbe4b.webp`;
 const imgArrowSubdirectoryForward1 = "/assets/shared/icons/arrow-subdirectory-light.svg";
 const imgGroup3 = `${assetPathPrefix}/2494e.svg`;
 const imgLine12 = `${assetPathPrefix}/7096b.svg`;
-const imgUpdateLogo1 = "/assets/shared/logos/designops-logo-light.svg";
-
-type Component64Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component64({ className, property1 = "View" }: Component64Props) {
-  return (
-    <div className={className || "bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px]"} data-node-id="1:681">
-      <div className="h-[18px] overflow-clip relative shrink-0 w-[86px]" data-node-id="1:682" data-name="Frame">
-        <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#171717] text-[16px] top-0 whitespace-nowrap" data-node-id="1:683">
-          <p className="leading-[1.2] mb-0">LET’S TALK</p>
-          <p className="leading-[1.2]">LET’S TALK</p>
-        </div>
-      </div>
-      <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="1:684" data-name="Frame">
-        <div className="absolute left-0 size-[18px] top-0" data-node-id="1:685" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-        <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="1:686" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function BlogDetails() {
   return (
@@ -63,15 +35,15 @@ export default function BlogDetails() {
               </div>
               <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:2106;40959:5020" data-name="Frame">
                 <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:2106;40959:5021" data-name="arrow-subdirectory-forward">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
                 </div>
                 <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:2106;40959:5022" data-name="arrow-subdirectory-forward">
-                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
                 </div>
               </div>
             </div>
             <div className="absolute h-[183.999px] left-[254px] top-[108px] w-[175.562px]" data-node-id="1:2107">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
             </div>
           </div>
         </div>
@@ -82,7 +54,7 @@ export default function BlogDetails() {
                 <div className="content-stretch flex gap-[4px] items-center relative shrink-0" data-node-id="1:2114" data-name="Frame">
                   <div className="h-0 relative shrink-0 w-[38.118px]" data-node-id="1:2115">
                     <div className="absolute inset-[-1.5px_0_0_0]">
-                      <img alt="" className="block max-w-none size-full" src={imgLine12} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgLine12} />
                     </div>
                   </div>
                   <p className="[word-break:break-word] font-['Inter:Regular'] font-normal leading-[1.2] not-italic relative shrink-0 text-[#222] text-[18px] whitespace-nowrap" data-node-id="1:2116">
@@ -95,7 +67,7 @@ export default function BlogDetails() {
               </p>
             </div>
             <div className="h-[432px] relative rounded-[8px] shrink-0 w-full" data-node-id="1:2118">
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle3463662} />
+              <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle3463662} />
             </div>
           </div>
           <div className="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 w-full" data-node-id="1:2119" data-name="Frame">
@@ -115,7 +87,7 @@ export default function BlogDetails() {
               </div>
             </div>
             <div className="h-[387px] relative rounded-[8px] shrink-0 w-full" data-node-id="1:2124">
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle3463662} />
+              <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle3463662} />
             </div>
             <div className="[word-break:break-word] content-stretch flex flex-col gap-[32px] items-start not-italic relative shrink-0 w-full" data-node-id="1:2125" data-name="Frame">
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:2126" data-name="=">
@@ -135,28 +107,28 @@ export default function BlogDetails() {
               <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:2129" data-name="Frame">
                 <p className="font-['Aileron:SemiBold'] leading-[1.2] relative shrink-0 text-[#222] text-[24px] w-full" data-node-id="1:2130">{`Lorem ipsum dolor sit amet, consectetur. `}</p>
                 <div className="font-['Aileron:Regular'] leading-[0] relative shrink-0 text-[0px] text-black w-full" data-node-id="1:2131">
-                  <ol className="list-decimal mb-0" start="1">
+                  <ol className="list-decimal mb-0" start={1}>
                     <li className="ms-[calc(var(--list-marker-font-size,0)*1.5*1)]">
                       <span className="[word-break:break-word] font-['Aileron:SemiBold'] leading-[1.5] not-italic text-[#131313] text-[18px]">{`Lorem ipsum dolor sit amet, consectetur. `}</span>
                     </li>
                   </ol>
                   <p className="leading-[1.5] mb-0 text-[#595959] text-[18px] whitespace-pre-wrap">Financial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.</p>
                   <p className="leading-[1.5] mb-0 text-[18px] whitespace-pre-wrap">​</p>
-                  <ol className="list-decimal mb-0" start="1">
+                  <ol className="list-decimal mb-0" start={1}>
                     <li className="ms-[calc(var(--list-marker-font-size,0)*1.5*1)]">
                       <span className="[word-break:break-word] font-['Aileron:SemiBold'] leading-[1.5] not-italic text-[#272727] text-[18px]">{`Lorem ipsum dolor sit amet, consectetur. `}</span>
                     </li>
                   </ol>
                   <p className="leading-[1.5] mb-0 text-[#595959] text-[18px] whitespace-pre-wrap">Knowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.</p>
                   <p className="leading-[1.5] mb-0 text-[18px] whitespace-pre-wrap">​</p>
-                  <ol className="list-decimal mb-0" start="1">
+                  <ol className="list-decimal mb-0" start={1}>
                     <li className="ms-[calc(var(--list-marker-font-size,0)*1.5*1)]">
                       <span className="[word-break:break-word] font-['Aileron:SemiBold'] leading-[1.5] not-italic text-[#272727] text-[18px]">{`Lorem ipsum dolor sit amet, consectetur. `}</span>
                     </li>
                   </ol>
                   <p className="leading-[1.5] mb-0 text-[#595959] text-[18px] whitespace-pre-wrap">Financial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.</p>
                   <p className="leading-[1.5] mb-0 text-[18px] whitespace-pre-wrap">​</p>
-                  <ol className="list-decimal mb-0" start="1">
+                  <ol className="list-decimal mb-0" start={1}>
                     <li className="ms-[calc(var(--list-marker-font-size,0)*1.5*1)]">
                       <span className="[word-break:break-word] font-['Aileron:SemiBold'] leading-[1.5] not-italic text-[#272727] text-[18px]">{`Lorem ipsum dolor sit amet, consectetur. `}</span>
                     </li>
@@ -222,29 +194,6 @@ export default function BlogDetails() {
           <p className="leading-[1.2] text-[#707070]">{`Business Success `}</p>
         </div>
         <LatestBlogCards />
-      </div>
-      <div className="-translate-x-1/2 absolute bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[24px] w-[1560px]" data-node-id="1:2154" data-name="Nav">
-        <a href="/" className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:2155" data-name="Update Logo">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
-        </a>
-        <div className="[word-break:break-word] content-stretch cursor-pointer flex gap-[32px] items-center justify-center leading-[0] not-italic relative shrink-0 text-[#f6f6f6] text-[16px] uppercase whitespace-nowrap" data-node-id="1:2163" data-name="Frame">
-          <a href="/services" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2164">
-            <p className="leading-[1.2]">Services</p>
-          </a>
-          <a href="/work" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2165">
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <a href="/blog" className="block font-['Inter:Semi_Bold'] font-semibold relative shrink-0" data-node-id="1:2166">
-            <p className="leading-[1.2]">blog</p>
-          </a>
-          <a href="/company" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2167">
-            <p className="leading-[1.2]">Company</p>
-          </a>
-          <a href="/contact" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2168">
-            <p className="leading-[1.2]">Contact Us</p>
-          </a>
-        </div>
-        <Component64 className="bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" />
       </div>
     </div>
   );

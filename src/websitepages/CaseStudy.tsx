@@ -3,11 +3,10 @@ import Footer from "@/components/Footer";
 import ArrowButton from "@/components/ArrowButton";
 
 const assetPathPrefix = "/assets/case-study";
-const imgArrowSubdirectoryForward = "/assets/shared/icons/arrow-subdirectory-dark.svg";
 const imgRectangle17 = "/assets/shared/images/reviewer-avatar.jpg";
-const imgProductImage = `${assetPathPrefix}/4bc93.png`;
-const imgRoundedRectangle = `${assetPathPrefix}/0ecaf.png`;
-const imgRoundedRectangle1 = `${assetPathPrefix}/9a514.png`;
+const imgProductImage = `${assetPathPrefix}/4bc93.webp`;
+const imgRoundedRectangle = `${assetPathPrefix}/0ecaf.webp`;
+const imgRoundedRectangle1 = `${assetPathPrefix}/9a514.webp`;
 const imgUpworkLogo1 = "/assets/shared/logos/upwork.svg";
 const imgGroup2 = "/assets/shared/logos/fiverr-grey.svg";
 const imgGoogleGLogo1 = "/assets/shared/logos/google.svg";
@@ -19,33 +18,6 @@ const imgFrame3 = `${assetPathPrefix}/9a55c.svg`;
 const imgFrame4 = `${assetPathPrefix}/1f314.svg`;
 const imgFrame5 = `${assetPathPrefix}/9bb03.svg`;
 const imgFrame6 = `${assetPathPrefix}/01dfe.svg`;
-const imgUpdateLogo1 = "/assets/shared/logos/designops-logo-light.svg";
-
-type Component64Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component64({ className, property1 = "View" }: Component64Props) {
-  return (
-    <div className={className || "bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px]"} data-node-id="1:681">
-      <div className="h-[18px] overflow-clip relative shrink-0 w-[86px]" data-node-id="1:682" data-name="Frame">
-        <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#171717] text-[16px] top-0 whitespace-nowrap" data-node-id="1:683">
-          <p className="leading-[1.2] mb-0">LET’S TALK</p>
-          <p className="leading-[1.2]">LET’S TALK</p>
-        </div>
-      </div>
-      <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="1:684" data-name="Frame">
-        <div className="absolute left-0 size-[18px] top-0" data-node-id="1:685" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-        <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="1:686" data-name="arrow-subdirectory-forward">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function CaseStudy() {
   return (
@@ -73,13 +45,13 @@ export default function CaseStudy() {
 <div className="bg-white z-[1] border-[rgba(0,0,0,0.1)] border-r border-solid content-stretch flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1814" data-name="Frame">
             <div className="content-stretch flex items-center justify-between opacity-0 relative shrink-0 w-full" data-node-id="1:1815" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1816" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1819" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1824" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
             <div className="content-stretch flex flex-col gap-[24px] items-center relative shrink-0 w-[200px]" data-node-id="1:1830" data-name="Frame">
@@ -90,26 +62,26 @@ export default function CaseStudy() {
                 <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="1:1833" data-name="Star">
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1834">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1835">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1836">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1837">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1838">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
+                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
                   </div>
                 </div>
                 <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#424242] text-[28px] text-center w-full" data-node-id="1:1841">
@@ -119,13 +91,13 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1:1842" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1843" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1846" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1851" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
           </div>
@@ -141,7 +113,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1860" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1861">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1862" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1863">
@@ -162,7 +134,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1868" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1869">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1870" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1871">
@@ -183,7 +155,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1876" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1877">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1878" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1879">
@@ -204,7 +176,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1884" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1885">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1886" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1887">
@@ -225,7 +197,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1892" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1893">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1894" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1895">
@@ -248,7 +220,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1860" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1861">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1862" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1863">
@@ -269,7 +241,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1868" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1869">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1870" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1871">
@@ -290,7 +262,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1876" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1877">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1878" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1879">
@@ -311,7 +283,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1884" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1885">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1886" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1887">
@@ -332,7 +304,7 @@ export default function CaseStudy() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1892" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1893">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1894" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1895">
@@ -374,10 +346,10 @@ export default function CaseStudy() {
           </div>
           <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:1901;40959:5020" data-name="Frame">
             <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:1901;40959:5021" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
             </div>
             <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:1901;40959:5022" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward1} />
             </div>
           </div>
         </div>
@@ -388,7 +360,7 @@ export default function CaseStudy() {
           Lorem ipsum is a dummy or placeholder text commonly.
         </p>
         <div className="h-[780px] relative rounded-[24px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] shrink-0 w-full" data-node-id="1:1905" data-name="Product Image">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgProductImage} />
+          <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgProductImage} />
         </div>
       </div>
       <div className="-translate-x-1/2 [word-break:break-word] absolute content-stretch flex flex-col gap-[56px] items-start left-1/2 not-italic text-[20px] top-[1142px] w-[1560px]" data-node-id="1:1906" data-name="Frame">
@@ -481,7 +453,7 @@ export default function CaseStudy() {
           </div>
         </div>
         <div className="flex-[1_0_0] h-full min-w-px relative rounded-[24px]" data-node-id="1:1940" data-name="Rounded rectangle">
-          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRoundedRectangle} />
+          <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[24px] size-full" src={imgRoundedRectangle} />
         </div>
       </div>
       <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-start left-1/2 px-[180px] py-[64px] top-[2697px] w-[1920px]" data-node-id="1:1941" data-name="Frame">
@@ -505,7 +477,7 @@ export default function CaseStudy() {
             <div className="drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] h-[538px] overflow-clip relative rounded-[8px] shrink-0 w-[1035px]" data-node-id="1:1950" data-name="Frame">
               <div className="absolute h-[538px] left-0 rounded-[8px] shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1)] top-0 w-[1035px]" data-node-id="1:1951" data-name="Rounded rectangle">
                 <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-[8px]">
-                  <img alt="" className="absolute h-[128.32%] left-0 max-w-none top-[-8.58%] w-full" src={imgRoundedRectangle1} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute h-[128.32%] left-0 max-w-none top-[-8.58%] w-full" src={imgRoundedRectangle1} />
                 </div>
               </div>
               <div className="-translate-x-1/2 absolute bottom-0 h-[171px] left-1/2 w-[1035px]" data-node-id="1:1952" style={{ backgroundImage: "linear-gradient(179.82734328363773deg, rgba(0, 0, 0, 0) 0.84529%, rgb(0, 0, 0) 99.056%)" }} data-name="Rectangle" />
@@ -524,7 +496,7 @@ export default function CaseStudy() {
                   <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:1958" data-name="Frame">
                     <div className="bg-[rgba(214,140,19,0.1)] content-stretch flex items-center px-[15px] py-[14px] relative rounded-[6px] shrink-0" data-node-id="1:1959" data-name="Frame">
                       <div className="relative shrink-0 size-[28px]" data-node-id="1:1960" data-name="Frame">
-                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame3} />
+                        <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgFrame3} />
                       </div>
                     </div>
                     <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 text-[#2f2f2f] w-full" data-node-id="1:1964" data-name="Frame">
@@ -541,7 +513,7 @@ export default function CaseStudy() {
                   <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:1968" data-name="Frame">
                     <div className="bg-[rgba(214,140,19,0.1)] content-stretch flex items-center px-[15px] py-[14px] relative rounded-[6px] shrink-0" data-node-id="1:1969" data-name="Frame">
                       <div className="relative shrink-0 size-[28px]" data-node-id="1:1970" data-name="Frame">
-                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame4} />
+                        <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgFrame4} />
                       </div>
                     </div>
                     <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 text-[#2f2f2f] w-full" data-node-id="1:1984" data-name="Frame">
@@ -562,7 +534,7 @@ export default function CaseStudy() {
               <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-[1_0_0] flex-col gap-[24px] h-full items-start min-w-px p-[40px] relative rounded-[8px]" data-name="Frame">
                 <div className="bg-[rgba(214,140,19,0.1)] content-stretch flex items-center px-[15px] py-[14px] relative rounded-[6px] shrink-0" data-node-id="1:1989" data-name="Frame">
                   <div className="relative shrink-0 size-[28px]" data-node-id="1:1990" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame5} />
+                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgFrame5} />
                   </div>
                 </div>
                 <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 text-[#2f2f2f] w-full" data-node-id="1:1992" data-name="Frame">
@@ -579,7 +551,7 @@ export default function CaseStudy() {
               <div className="bg-[#f5f5f5] content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-[1_0_0] flex-col gap-[24px] h-full items-start min-w-px p-[40px] relative rounded-[8px]" data-name="Frame">
                 <div className="bg-[rgba(214,140,19,0.1)] content-stretch flex items-center px-[15px] py-[14px] relative rounded-[6px] shrink-0" data-node-id="1:1996" data-name="Frame">
                   <div className="relative shrink-0 size-[28px]" data-node-id="1:1997" data-name="Frame">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFrame6} />
+                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgFrame6} />
                   </div>
                 </div>
                 <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 text-[#2f2f2f] w-full" data-node-id="1:2000" data-name="Frame">
@@ -689,29 +661,6 @@ export default function CaseStudy() {
             </p>
           </div>
         </div>
-      </div>
-      <div className="-translate-x-1/2 absolute bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_4px_rgba(0,0,0,0.1)] flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[24px] w-[1560px]" data-node-id="1:2034" data-name="Nav">
-        <a href="/" className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:2035" data-name="Update Logo">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
-        </a>
-        <div className="[word-break:break-word] content-stretch cursor-pointer flex gap-[32px] items-center justify-center leading-[0] not-italic relative shrink-0 text-[#f6f6f6] text-[16px] uppercase whitespace-nowrap" data-node-id="1:2043" data-name="Frame">
-          <a href="/services" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2044">
-            <p className="leading-[1.2]">Services</p>
-          </a>
-          <a href="/work" className="block font-['Inter:Semi_Bold'] font-semibold relative shrink-0" data-node-id="1:2045">
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <a href="/blog" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2046">
-            <p className="leading-[1.2]">blog</p>
-          </a>
-          <a href="/company" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2047">
-            <p className="leading-[1.2]">Company</p>
-          </a>
-          <a href="/contact" className="block font-['Inter:Medium'] font-medium relative shrink-0" data-node-id="1:2048">
-            <p className="leading-[1.2]">Contact Us</p>
-          </a>
-        </div>
-        <Component64 className="bg-[#f6f6f6] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" />
       </div>
     </div>
   );

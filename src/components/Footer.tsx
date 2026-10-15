@@ -1,7 +1,7 @@
 // Site-wide footer, shared by every page. Edit the lists below to change
 // links, contact details or social profiles everywhere at once.
 
-const quickLinks = [
+export const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
@@ -9,25 +9,25 @@ const quickLinks = [
   { label: "Blog", href: "/blog" },
 ];
 
-const supportLinks = [
+export const supportLinks = [
   { label: "Contact Us", href: "/contact" },
   { label: "FAQ", href: "/contact#faq" },
 ];
 
 // Every service opens the service details page (the only one that exists so far).
-const serviceLinks = [
+export const serviceLinks = [
   { label: "Full-stack Development", href: "/services/ui-ux-design" },
   { label: "UI/UX Design", href: "/services/ui-ux-design" },
   { label: "Brand Design", href: "/services/ui-ux-design" },
   { label: "Digital Marketing", href: "/services/ui-ux-design" },
 ];
 
-const socialLinks = [
+export const socialLinks = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/143894150", icon: "/assets/shared/icons/linkedin.svg", iconClass: "size-[20px]" },
   { label: "Facebook", href: "https://www.facebook.com/DesignOps.agency/", icon: "/assets/shared/icons/facebook.svg", iconClass: "h-[20px] w-[10.4px]" },
 ];
 
-const contact = {
+export const contact = {
   phone: { label: "+880 1568 295845", href: "tel:+8801568295845" },
   email: { label: "joybordhan223@gmail.com", href: "mailto:joybordhan223@gmail.com" },
   address: "Eastern Housing. Block: C, Road: W2, House: 105 Mirpur 12 Dhaka",
@@ -114,7 +114,7 @@ export default function Footer({ className }: { className?: string }) {
       </div>
 
       <div className="-translate-x-1/2 absolute h-[905px] left-1/2 pointer-events-none top-[40px] w-[1616px]" aria-hidden="true">
-        <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src="/assets/shared/images/footer-background.png" />
+        <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src="/assets/shared/images/footer-background.webp" />
       </div>
 
       <div className="absolute bottom-[68px] flex flex-col gap-[32px] items-center justify-center left-[156px] right-[156px]">

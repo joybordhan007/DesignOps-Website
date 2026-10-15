@@ -4,7 +4,7 @@ import { useState } from "react";
 // cyan and grows that step's tilted picture out of the centre of the picture
 // area, as in the Figma prototype; leaving the list shrinks it away again.
 
-const steps = [
+export const steps = [
   { title: "Discovery", image: "/assets/working-process/discovery.jpg" },
   { title: "Creative idea", image: "/assets/working-process/creative-idea.jpg" },
   { title: "Best features", image: "/assets/working-process/best-features.jpg" },

@@ -8,11 +8,12 @@ type RollingNumberProps = {
   suffix?: string;
   /** How many intermediate numbers the reel shows on its way up. */
   steps?: number;
+  /** Font size in px (48 on desktop). */
+  size?: number;
 };
 
-const LINE = 57.6; // 48px text at 1.2 line-height
-
-export default function RollingNumber({ value, suffix = "", steps = 12 }: RollingNumberProps) {
+export default function RollingNumber({ value, suffix = "", steps = 12, size = 48 }: RollingNumberProps) {
+  const line = size * 1.2;
   const ref = useRef<HTMLDivElement>(null);
   const [rolled, setRolled] = useState(false);
 
@@ -40,11 +41,11 @@ export default function RollingNumber({ value, suffix = "", steps = 12 }: Rollin
   }, []);
 
   return (
-    <div ref={ref} className="h-[60px] overflow-clip relative shrink-0 w-[160px]" aria-label={`${value}${suffix}`}>
+    <div ref={ref} className="overflow-clip relative shrink-0" style={{ height: line, width: size * 3.4 }} aria-label={`${value}${suffix}`}>
       <div
         aria-hidden="true"
-        className="absolute flex flex-col font-['Inter:Semi_Bold'] font-semibold inset-x-0 not-italic text-[#2f2f2f] text-[48px] text-center top-0 transition-transform duration-[2000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-        style={{ transform: `translateY(${rolled ? 0 : -(reel.length - 1) * LINE}px)` }}
+        className="absolute flex flex-col font-['Inter:Semi_Bold'] font-semibold inset-x-0 not-italic text-[#2f2f2f] text-center top-0 transition-transform duration-[2000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+        style={{ fontSize: size, transform: `translateY(${rolled ? 0 : -(reel.length - 1) * line}px)` }}
       >
         {reel.map((n, i) => (
           <p key={i} className="leading-[1.2] whitespace-nowrap">

@@ -10,11 +10,10 @@ import ArrowButton from "@/components/ArrowButton";
 
 const assetPathPrefix = "/assets/home";
 const imgArrowForwardLong = "/assets/shared/icons/arrow-forward-long.svg";
-const imgRectangle16 = "/assets/shared/images/case-study-cover.png";
+const imgRectangle16 = "/assets/shared/images/case-study-cover.webp";
 const imgRectangle17 = "/assets/shared/images/reviewer-avatar.jpg";
-const imgImage = `${assetPathPrefix}/e8b66.png`;
+const imgImage = `${assetPathPrefix}/e8b66.webp`;
 const imgComponent3 = `${assetPathPrefix}/a024a.svg`;
-const imgUpdateLogo1 = "/assets/shared/logos/designops-logo.svg";
 const imgArrowSubdirectoryForward = "/assets/shared/icons/arrow-subdirectory-light.svg";
 const imgUpworkLogo1 = `${assetPathPrefix}/010cd.svg`;
 const imgGroup2 = "/assets/shared/logos/fiverr-grey.svg";
@@ -50,7 +49,7 @@ function Component61({ className, property1 = "View" }: Component61Props) {
       </div>
       <div className="bg-[#f6f6f6] content-stretch flex items-center p-[6px] relative rounded-[4px] shrink-0" data-node-id="1:157" data-name="Frame">
         <div className="relative shrink-0 size-[18px]" data-node-id="1:158" data-name="arrow-forward-long">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
+          <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
         </div>
       </div>
     </a>
@@ -73,7 +72,7 @@ function Component58({ className, property1 = "vIEW" }: Component58Props) {
       </div>
       <div className="bg-[#f6f6f6] content-stretch flex items-center p-[8px] relative rounded-[4px] shrink-0" data-node-id="1:13" data-name="Frame">
         <div className="relative shrink-0 size-[18px]" data-node-id="1:14" data-name="arrow-forward-long">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
+          <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
         </div>
       </div>
     </div>
@@ -113,45 +112,7 @@ export default function Home() {
             Scroll Down
           </p>
           <div className="h-[24px] relative shrink-0 w-[12px]" data-node-id="1:988" data-name="Component 3">
-            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgComponent3} />
-          </div>
-        </div>
-      </div>
-      <div className="-translate-x-1/2 absolute bg-[#f6f6f6] content-stretch flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[56px] w-[1560px]" data-node-id="1:989" data-name="Nav">
-        <a href="/" className="block h-[40px] relative shrink-0 w-[175px]" data-node-id="1:990" data-name="Update Logo">
-          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
-        </a>
-        <div className="[word-break:break-word] content-stretch cursor-pointer flex font-['Inter:Medium'] font-medium gap-[32px] items-center justify-center leading-[0] not-italic relative shrink-0 text-[#171717] text-[16px] uppercase whitespace-nowrap" data-node-id="1:998" data-name="Frame">
-          <a href="/services" className="block relative shrink-0" data-node-id="1:999">
-            <p className="leading-[1.2]">Services</p>
-          </a>
-          <a href="/work" className="block relative shrink-0" data-node-id="1:1000">
-            <p className="leading-[1.2]">Work</p>
-          </a>
-          <a href="/blog" className="block relative shrink-0" data-node-id="1:1001">
-            <p className="leading-[1.2]">blog</p>
-          </a>
-          <a href="/company" className="block relative shrink-0" data-node-id="1:1002">
-            <p className="leading-[1.2]">Company</p>
-          </a>
-          <a href="/contact" className="block relative shrink-0" data-node-id="1:1003">
-            <p className="leading-[1.2]">Contact Us</p>
-          </a>
-        </div>
-        <div className="bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" data-node-id="1:1004" data-name="Component 57">
-          <div className="h-[18px] overflow-clip relative shrink-0 w-[86px]" data-node-id="I1:1004;40959:4952" data-name="Frame">
-            <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#f6f6f6] text-[16px] top-0 whitespace-nowrap" data-node-id="I1:1004;40959:4953">
-              <p className="leading-[1.2] mb-0">LET’S TALK</p>
-              <p className="leading-[1.2]">LET’S TALK</p>
-            </div>
-          </div>
-          <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:1004;40959:5020" data-name="Frame">
-            <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:1004;40959:5021" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-            </div>
-            <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:1004;40959:5022" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-            </div>
+            <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgComponent3} />
           </div>
         </div>
       </div>
@@ -303,7 +264,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1073">
-                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
                 </div>
               </div>
             </div>
@@ -348,7 +309,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1091">
-                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
                 </div>
               </div>
             </div>
@@ -393,7 +354,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1109">
-                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
                 </div>
               </div>
             </div>
@@ -438,7 +399,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1127">
-                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
+                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
                 </div>
               </div>
             </div>
@@ -480,13 +441,13 @@ export default function Home() {
 <div className="bg-white z-[1] border-[rgba(0,0,0,0.1)] border-r border-solid content-stretch flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1139" data-name="Frame">
             <div className="content-stretch flex items-center justify-between opacity-0 relative shrink-0 w-full" data-node-id="1:1140" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1141" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1144" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1149" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
             <div className="content-stretch flex flex-col gap-[24px] items-center relative shrink-0 w-[200px]" data-node-id="1:1155" data-name="Frame">
@@ -497,26 +458,26 @@ export default function Home() {
                 <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="1:1158" data-name="Star">
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1159">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1160">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1161">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1162">
                     <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" className="block max-w-none size-full" src={imgStar1} />
+                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
                     </div>
                   </div>
                   <div className="relative shrink-0 size-[40px]" data-node-id="1:1163">
-                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
+                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
                   </div>
                 </div>
                 <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#424242] text-[28px] text-center w-full" data-node-id="1:1166">
@@ -526,13 +487,13 @@ export default function Home() {
             </div>
             <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1:1167" data-name="Frame">
               <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1168" data-name="Upwork-logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
               </div>
               <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1171" data-name="Group">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
               </div>
               <div className="relative shrink-0 size-[24px]" data-node-id="1:1176" data-name="Google__G__logo 1">
-                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
+                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
               </div>
             </div>
           </div>
@@ -548,7 +509,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1185" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1186">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1187" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1188">
@@ -569,7 +530,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1193" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1194">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1195" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1196">
@@ -590,7 +551,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1201" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1202">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1203" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1204">
@@ -611,7 +572,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1209" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1210">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1211" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1212">
@@ -632,7 +593,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1217" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1218">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1219" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1220">
@@ -655,7 +616,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1185" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1186">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1187" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1188">
@@ -676,7 +637,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1193" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1194">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1195" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1196">
@@ -697,7 +658,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1201" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1202">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1203" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1204">
@@ -718,7 +679,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1209" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1210">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1211" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1212">
@@ -739,7 +700,7 @@ export default function Home() {
             </div>
             <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1217" data-name="Frame">
               <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1218">
-                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
+                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
               </div>
               <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1219" data-name="Frame">
                 <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1220">
@@ -781,10 +742,10 @@ export default function Home() {
           </div>
           <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:1226;40959:5020" data-name="Frame">
             <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:1226;40959:5021" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
             </div>
             <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:1226;40959:5022" data-name="arrow-subdirectory-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
+              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
             </div>
           </div>
         </div>
@@ -792,7 +753,7 @@ export default function Home() {
       <Footer className="-translate-x-1/2 absolute bg-[#191919] bottom-[18px] h-[764px] left-1/2 overflow-clip rounded-[8px] w-[1872px]" />
       <div className="-translate-x-1/2 absolute h-[900px] left-1/2 top-[974px] w-[1920px]" data-node-id="1:1228" data-name="Frame">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[846px] left-[calc(50%-2px)] top-[calc(50%+88px)] w-[1582px]" data-node-id="1:1229" data-name="Image">
-          <img alt="" className="absolute inset-0 max-w-none object-bottom opacity-15 pointer-events-none size-full" src={imgImage} />
+          <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-bottom opacity-15 pointer-events-none size-full" src={imgImage} />
         </div>
         <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col gap-[180px] items-center left-1/2 top-1/2 w-[1560px]" data-node-id="1:1230" data-name="Frame">
           <div className="[word-break:break-word] capitalize flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#2f2f2f] text-[0px] text-center tracking-[0.96px] w-[1560px] whitespace-pre-wrap" data-node-id="1:1231">
