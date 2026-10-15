@@ -87,7 +87,7 @@ function Frame2({ className, property1 = "Default" }: Frame2Props) {
   );
 }
 
-function Footer({ className }: { className?: string }) {
+export function Footer({ className }: { className?: string }) {
   return (
     <div className={className || "bg-[#191919] h-[764px] overflow-clip relative rounded-[8px] w-[1872px]"} data-node-id="1:432" data-name="Footer">
       <div className="absolute content-stretch flex h-[222px] items-start justify-between left-[156px] right-[156px] top-[40px]" data-node-id="1:433" data-name="Frame">

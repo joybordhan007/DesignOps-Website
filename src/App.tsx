@@ -1,22 +1,13 @@
-import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from "react"
-
-import Home from "./generated/Home"
-
-import Services from "./generated/Services"
-
-import UiUxDesign from "./generated/UiUxDesign"
-
-import Work from "./generated/Work"
-
-import CaseStudy from "./generated/CaseStudy"
-
-import Blog from "./generated/Blog"
-
-import BlogArticle from "./generated/BlogArticle"
-
-import Company from "./generated/Company"
-
-import Contact from "./generated/Contact"
+import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Home from "./generated/Home";
+import Services from "./generated/Services";
+import UiUxDesign from "./generated/UiUxDesign";
+import Work from "./generated/Work";
+import CaseStudy from "./generated/CaseStudy";
+import Blog from "./generated/Blog";
+import BlogArticle from "./generated/BlogArticle";
+import Company from "./generated/Company";
+import Contact from "./generated/Contact";
 
 type Route = keyof typeof pages
 
@@ -38,12 +29,10 @@ const pages = {
   "/company": { component: Company, height: 4523 },
 
   "/contact": { component: Contact, height: 5003 },
-} as const
+} as const;
 
 function currentRoute(): Route {
-  return (
-    window.location.pathname in pages ? window.location.pathname : "/"
-  ) as Route
+  return (window.location.pathname in pages ? window.location.pathname : "/") as Route;
 }
 
 function isRoute(path: string): path is Route {
