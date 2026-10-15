@@ -1,10 +1,7 @@
 import HeroVideo from "@/components/HeroVideo";
+import BlogGrid, { blogGridHeight } from "@/components/BlogGrid";
 
 const assetPathPrefix = "/assets/blog";
-const imgImage = "/assets/blog/75be0.png";
-const imgArrowForward = `${assetPathPrefix}/7bb5d.svg`;
-const imgImage1 = "/assets/blog/4bd9f.png";
-const imgImage2 = "/assets/blog/45fb6.png";
 const imgGroup = `${assetPathPrefix}/937ae.svg`;
 const imgGroup1 = `${assetPathPrefix}/c25f8.svg`;
 const imgSwitzerlandTourismDestinationShowcasingEuropeanTravelBeauty1 = `${assetPathPrefix}/1fe35.png`;
@@ -16,168 +13,6 @@ const imgProperty1Up = `${assetPathPrefix}/4798c.svg`;
 const imgArrowForwardLong = `${assetPathPrefix}/5f243.svg`;
 const imgUpdateLogo1 = `${assetPathPrefix}/944c7.svg`;
 const imgArrowSubdirectoryForward = `${assetPathPrefix}/84338.svg`;
-
-type Component45Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component45({ className, property1 = "View" }: Component45Props) {
-  return (
-    <div className={className || "bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] w-[504px]"} data-node-id="1:815">
-      <div className="h-[300px] relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-full" data-node-id="1:816" data-name="Image">
-        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[8px] rounded-tr-[8px] size-full" src={imgImage} />
-      </div>
-      <div className="content-stretch flex flex-col items-start pb-[24px] px-[24px] relative shrink-0 w-full" data-node-id="1:817" data-name="Content">
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:818" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:819" data-name="Frame">
-            <div className="content-stretch flex gap-[8px] items-start relative shrink-0" data-node-id="1:820" data-name="Frame">
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:821" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:822">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:823" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:824">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:825" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:826">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-            </div>
-            <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-full" data-node-id="1:827" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[20px] whitespace-nowrap" data-node-id="1:828">
-                <p className="leading-[1.2]">Why Your SaaS Needs a Design System</p>
-              </div>
-              <div className="flex flex-col font-['Inter:Regular'] font-normal h-[45px] justify-center min-w-full overflow-hidden relative shrink-0 text-[#4e4e4e] text-[18px] text-ellipsis w-[min-content]" data-node-id="1:829">
-                <p className="leading-[1.3]">At some point in every growing SaaS product, someone opens a pull request and notices that there are now four different shades of blue being used for primary buttons. Nobody made a decision to have four shades. It just happened, one component at a time, over 18 months of shipping.</p>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:830" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[16px] whitespace-nowrap" data-node-id="1:831">
-              <p className="leading-[1.2]">Read Now</p>
-            </div>
-            <div className="relative shrink-0 size-[20px]" data-node-id="1:832" data-name="arrow-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type Component43Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component43({ className, property1 = "View" }: Component43Props) {
-  return (
-    <div className={className || "bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] w-[504px]"} data-node-id="1:741">
-      <div className="h-[300px] relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-full" data-node-id="1:742" data-name="Image">
-        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[8px] rounded-tr-[8px] size-full" src={imgImage1} />
-      </div>
-      <div className="content-stretch flex flex-col items-start pb-[24px] px-[24px] relative shrink-0 w-full" data-node-id="1:743" data-name="Content">
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:744" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:745" data-name="Frame">
-            <div className="content-stretch flex gap-[8px] items-start relative shrink-0" data-node-id="1:746" data-name="Frame">
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:747" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:748">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:749" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:750">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:751" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:752">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-            </div>
-            <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-full" data-node-id="1:753" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[20px] whitespace-nowrap" data-node-id="1:754">
-                <p className="leading-[1.2]">Why Your SaaS Needs a Design System</p>
-              </div>
-              <div className="flex flex-col font-['Inter:Regular'] font-normal h-[45px] justify-center min-w-full overflow-hidden relative shrink-0 text-[#4e4e4e] text-[18px] text-ellipsis w-[min-content]" data-node-id="1:755">
-                <p className="leading-[1.3]">At some point in every growing SaaS product, someone opens a pull request and notices that there are now four different shades of blue being used for primary buttons. Nobody made a decision to have four shades. It just happened, one component at a time, over 18 months of shipping.</p>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:756" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[16px] whitespace-nowrap" data-node-id="1:757">
-              <p className="leading-[1.2]">Read Now</p>
-            </div>
-            <div className="relative shrink-0 size-[20px]" data-node-id="1:758" data-name="arrow-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type Component44Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component44({ className, property1 = "View" }: Component44Props) {
-  return (
-    <div className={className || "bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] w-[504px]"} data-node-id="1:778">
-      <div className="h-[300px] relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-full" data-node-id="1:779" data-name="Image">
-        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-tl-[8px] rounded-tr-[8px] size-full" src={imgImage2} />
-      </div>
-      <div className="content-stretch flex flex-col items-start pb-[24px] px-[24px] relative shrink-0 w-full" data-node-id="1:780" data-name="Content">
-        <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:781" data-name="Frame">
-          <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:782" data-name="Frame">
-            <div className="content-stretch flex gap-[8px] items-start relative shrink-0" data-node-id="1:783" data-name="Frame">
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:784" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:785">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:786" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:787">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-              <div className="bg-[rgba(214,140,19,0.1)] border border-[rgba(214,140,19,0.2)] border-solid content-stretch flex items-center justify-center px-[6px] py-[4px] relative rounded-[9999px] shrink-0" data-node-id="1:788" data-name="Frame">
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[12px] whitespace-nowrap" data-node-id="1:789">
-                  <p className="leading-[1.2]">UI Design</p>
-                </div>
-              </div>
-            </div>
-            <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-full" data-node-id="1:790" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[20px] whitespace-nowrap" data-node-id="1:791">
-                <p className="leading-[1.2]">Why Your SaaS Needs a Design System</p>
-              </div>
-              <div className="flex flex-col font-['Inter:Regular'] font-normal h-[45px] justify-center min-w-full overflow-hidden relative shrink-0 text-[#4e4e4e] text-[18px] text-ellipsis w-[min-content]" data-node-id="1:792">
-                <p className="leading-[1.3]">At some point in every growing SaaS product, someone opens a pull request and notices that there are now four different shades of blue being used for primary buttons. Nobody made a decision to have four shades. It just happened, one component at a time, over 18 months of shipping.</p>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex gap-[8px] items-start relative shrink-0 w-full" data-node-id="1:793" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#d68c13] text-[16px] whitespace-nowrap" data-node-id="1:794">
-              <p className="leading-[1.2]">Read Now</p>
-            </div>
-            <div className="relative shrink-0 size-[20px]" data-node-id="1:795" data-name="arrow-forward">
-              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowForward} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 type FrameProps = {
   className?: string;
@@ -387,7 +222,7 @@ function Component58({ className, property1 = "vIEW" }: Component58Props) {
 
 export default function Blog() {
   return (
-    <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[4008px]" data-node-id="1:2050" data-name="Blog">
+    <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px]" style={{ height: 1054 + blogGridHeight() + 64 + 782 }} data-node-id="1:2050" data-name="Blog">
       <div className="-translate-x-1/2 absolute bg-[#2b2b2b] h-[870px] left-1/2 overflow-clip rounded-[8px] top-[24px] w-[1872px]" data-node-id="1:2051" data-name="Hero">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute contents left-[calc(54.17%-66px)] top-[calc(50%+27.5px)]" data-node-id="1:2052" data-name="image">
           <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]" data-node-id="1:2053" data-name="Video">
@@ -422,28 +257,7 @@ export default function Blog() {
         </div>
       </div>
       <Footer className="-translate-x-1/2 absolute bg-[#191919] bottom-[18px] h-[764px] left-1/2 overflow-clip rounded-[8px] w-[1872px]" />
-      <a className="absolute content-stretch cursor-pointer flex flex-col gap-[32px] items-start left-[180px] top-[1054px] w-[1560px]" data-node-id="1:2064" data-name="Frame">
-        <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:2065" data-name="Frame">
-          <Component43 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component44 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component45 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-        </div>
-        <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:2069" data-name="Frame">
-          <Component44 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component43 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component45 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-        </div>
-        <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:2073" data-name="Frame">
-          <Component45 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component44 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component43 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-        </div>
-        <div className="content-stretch flex gap-[24px] items-center relative shrink-0" data-node-id="1:2077" data-name="Frame">
-          <Component44 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component43 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-          <Component45 className="bg-white content-stretch flex flex-col gap-[24px] items-center relative rounded-[8px] shrink-0 w-[504px]" />
-        </div>
-      </a>
+      <BlogGrid className="absolute left-[180px] top-[1054px]" />
       <div className="-translate-x-1/2 absolute bg-[#f6f6f6] content-stretch flex items-center justify-between left-1/2 px-[16px] py-[12px] rounded-[4px] top-[56px] w-[1560px]" data-node-id="1:2081" data-name="Nav">
         <a href="/" className="block cursor-pointer h-[40px] relative shrink-0 w-[175px]" data-node-id="1:2082" data-name="Update Logo">
           <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUpdateLogo1} />
@@ -482,4 +296,4 @@ export default function Blog() {
       </div>
     </div>
   );
-}
+}

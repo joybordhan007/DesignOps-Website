@@ -5,12 +5,17 @@ import UiUxDesign from "./generated/UiUxDesign";
 import Work from "./generated/Work";
 import CaseStudy from "./generated/CaseStudy";
 import Blog from "./generated/Blog";
-import BlogArticle from "./generated/BlogArticle";
+import BlogDetails from "./generated/BlogDetails";
 import Company from "./generated/Company";
 import Contact from "./generated/Contact";
+import NotFound from "./pages/NotFound";
+import { findPost, latestPosts, postUrl } from "./data/blogPosts";
+import useScaledSticky from "./lib/useScaledSticky";
 
 type Route = keyof typeof pages
 
+// `height` is only the first-paint estimate; the real height is measured
+// from the rendered page (see the ResizeObserver below).
 const pages = {
   "/": { component: Home, height: 13878 },
 
@@ -24,36 +29,37 @@ const pages = {
 
   "/blog": { component: Blog, height: 4008 },
 
-  "/blog/design-system": { component: BlogArticle, height: 4940 },
+  "/blog/:slug": { component: BlogDetails, height: 4940 },
 
   "/company": { component: Company, height: 4523 },
 
   "/contact": { component: Contact, height: 5003 },
+
+  "/404": { component: NotFound, height: 1960 },
 } as const;
 
-function currentRoute(): Route {
-  return (window.location.pathname in pages ? window.location.pathname : "/") as Route;
-}
+function matchRoute(path: string): Route {
+  if (path in pages && path !== "/blog/:slug") return path as Route
 
-function isRoute(path: string): path is Route {
-  return path in pages
+  const post = /^\/blog\/([^/]+)\/?$/.exec(path)
+
+  if (post && findPost(post[1])) return "/blog/:slug"
+
+  return "/404"
 }
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
 }
 
-function routeForLabel(label: string): Route | undefined {
+function routeForLabel(label: string): string | undefined {
   const text = label.replace(/\s+/g, " ").trim().toLowerCase()
 
   if (text.includes("view case study")) return "/work/case-study"
 
-  if (
-    text.includes("why your saas needs a design system") ||
-    text.includes("read now")
-  ) {
-    return "/blog/design-system"
-  }
+  if (text.includes("read now")) return postUrl(latestPosts(1)[0])
+
+  if (text.includes("all articles")) return "/blog"
 
   if (text.includes("ui/ux design") || text.includes("ui ux design"))
     return "/services/ui-ux-design"
@@ -78,9 +84,15 @@ function routeForLabel(label: string): Route | undefined {
 }
 
 export default function App() {
-  const [route, setRoute] = useState<Route>(currentRoute)
+  const [path, setPath] = useState(window.location.pathname)
+
+  const route = matchRoute(path)
 
   const [scale, setScale] = useState(1)
+
+  const [height, setHeight] = useState<number>(pages[route].height)
+
+  const pageRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const resize = () => setScale(Math.min(1, window.innerWidth / 1920))
@@ -93,12 +105,32 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const update = () => setRoute(currentRoute())
+    const update = () => setPath(window.location.pathname)
 
     window.addEventListener("popstate", update)
 
     return () => window.removeEventListener("popstate", update)
   }, [])
+
+  // Measure the rendered page so the viewport height follows the content,
+  // e.g. when the Blog page grows with new posts.
+  useLayoutEffect(() => {
+    const pageRoot = pageRef.current?.firstElementChild as HTMLElement | null
+
+    if (!pageRoot) return
+
+    const measure = () => setHeight(pageRoot.offsetHeight || pages[route].height)
+
+    measure()
+
+    const observer = new ResizeObserver(measure)
+
+    observer.observe(pageRoot)
+
+    return () => observer.disconnect()
+  }, [path, route])
+
+  useScaledSticky(path)
 
   const pendingHash = useRef(window.location.hash.slice(1))
 
@@ -108,12 +140,12 @@ export default function App() {
     pendingHash.current = ""
 
     if (hash) scrollToId(hash)
-  }, [route])
+  }, [path])
 
-  const navigate = (next: Route, hash = "") => {
+  const navigate = (next: string, hash = "") => {
     window.history.pushState({}, "", hash ? `${next}#${hash}` : next)
 
-    if (next === route) {
+    if (next === path) {
       if (hash) scrollToId(hash)
       else window.scrollTo({ top: 0, behavior: "smooth" })
 
@@ -124,7 +156,7 @@ export default function App() {
 
     if (!hash) window.scrollTo({ top: 0 })
 
-    setRoute(next)
+    setPath(next)
   }
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -133,7 +165,7 @@ export default function App() {
     )
 
     if (anchor && event.currentTarget.contains(anchor)) {
-      const [path, hash = ""] = (anchor.getAttribute("href") || "").split("#")
+      const [target, hash = ""] = (anchor.getAttribute("href") || "").split("#")
 
       const modified =
         event.metaKey ||
@@ -142,10 +174,10 @@ export default function App() {
         event.altKey ||
         event.button !== 0
 
-      if (isRoute(path) && !modified && anchor.target !== "_blank") {
+      if (target.startsWith("/") && !modified && anchor.target !== "_blank") {
         event.preventDefault()
 
-        navigate(path, hash)
+        navigate(target, hash)
       }
 
       return
@@ -195,22 +227,21 @@ export default function App() {
         label.nextElementSibling?.classList.add("scroll-cue-icon")
       }
     })
-  }, [route])
+  }, [path])
 
-  const page = pages[route]
-
-  const Page = page.component
+  const Page = pages[route].component
 
   return (
     <div
       className="figma-page-viewport"
-      style={{ height: page.height * scale }}
+      style={{ height: height * scale }}
       onClick={handleClick}
     >
       <div
+        ref={pageRef}
         className="figma-page-scale"
         style={{
-          height: page.height,
+          height,
 
           transform: `scale(${scale})`,
 
