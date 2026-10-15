@@ -1,14 +1,14 @@
 import { MouseEvent, useEffect, useLayoutEffect, useRef, useState } from "react";
-import Home from "./generated/Home";
-import Services from "./generated/Services";
-import UiUxDesign from "./generated/UiUxDesign";
-import Work from "./generated/Work";
-import CaseStudy from "./generated/CaseStudy";
-import Blog from "./generated/Blog";
-import BlogDetails from "./generated/BlogDetails";
-import Company from "./generated/Company";
-import Contact from "./generated/Contact";
-import NotFound from "./pages/NotFound";
+import Home from "./websitepages/Home";
+import Services from "./websitepages/Services";
+import UiUxDesign from "./websitepages/UiUxDesign";
+import Work from "./websitepages/Work";
+import CaseStudy from "./websitepages/CaseStudy";
+import Blog from "./websitepages/Blog";
+import BlogDetails from "./websitepages/BlogDetails";
+import Company from "./websitepages/Company";
+import Contact from "./websitepages/Contact";
+import NotFound from "./websitepages/NotFound";
 import { findPost, latestPosts, postUrl } from "./data/blogPosts";
 import useScaledSticky from "./lib/useScaledSticky";
 
@@ -184,6 +184,9 @@ export default function App() {
     }
 
     const target = event.target as HTMLElement
+
+    // Interactive controls (form fields, FAQ toggles) handle their own clicks.
+    if (target.closest("button, input, select, textarea, label, form")) return
 
     if (
       target.closest('[data-name="Nav"]') &&

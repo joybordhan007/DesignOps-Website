@@ -19,7 +19,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const GRID = { cols: 12, rows: 7 };
 const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#%&*+=<>/";
 
-const imgScrollDown = "/assets/home/3160a.svg";
+const imgScrollDown = "/assets/shared/icons/scroll-down.svg";
 
 type Line = { text: string; start: number; end: number };
 

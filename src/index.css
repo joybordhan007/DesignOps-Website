@@ -300,7 +300,7 @@ footer button:hover {
   position: relative;
   background:
     linear-gradient(90deg, rgba(4, 16, 24, 0.88), rgba(2, 18, 29, 0.35)),
-    url("/assets/1fe35.png") center/cover no-repeat;
+    url("/assets/shared/images/footer-background.png") center/cover no-repeat;
   color: white;
   display: flex;
   align-items: center;
@@ -1395,7 +1395,7 @@ footer {
 
 [data-node-id="1:10"]:hover > div:nth-child(2) > div,
 [data-node-id="1:10"]:focus-visible > div:nth-child(2) > div {
-  transform: translateY(-5px) rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .scroll-cue-icon {
