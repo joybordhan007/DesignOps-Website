@@ -17,12 +17,12 @@ import MobileFooter from "../MobileFooter";
 const flat = (text: string) => text.replace(/\s*\n\s*/g, " ");
 
 export default function Home() {
-  const { settings, achievements, projects } = useContent();
-  const stats = achievements.home;
+  const { settings, achievements, projects, process } = useContent();
+  const stats = achievements.filter((stat) => stat.showOnHome);
 
   return (
     <>
-      <MobileHero hero={settings.heroes.home} />
+      <MobileHero page="home" />
 
       <section className="flex flex-col gap-[40px] isolate mx-auto px-[20px] py-[56px] relative w-full max-w-[760px]" data-name="Vision">
         <img alt="" aria-hidden="true" className="-z-10 absolute inset-x-0 object-contain opacity-15 top-[24px] w-full" src="/assets/home/e8b66.webp" />
@@ -64,7 +64,7 @@ export default function Home() {
       <ScienceTechDesignCard />
       <ServicesList />
       <ProjectCards projects={projects.filter((project) => project.featured)} />
-      <WorkingProcess />
+      <WorkingProcess title={settings.titles.process} steps={process} />
       <GrowthInsights />
       <Reviews />
       <CtaBanner />

@@ -38,7 +38,7 @@ function useActiveHeading(ids: string[]) {
 
 // Blog post page (/blog/:slug).
 export default function BlogDetails() {
-  useContent(); // re-render when the content changes
+  const labels = useContent().settings.labels.blogDetails;
   const post = currentPost();
   const blocks = useMemo(() => parseArticle(post.body), [post.body]);
   const headings = blocks.flatMap((block) => (block.type === "h2" ? [block] : []));
@@ -50,13 +50,13 @@ export default function BlogDetails() {
       <div className="flex gap-[24px] items-start mt-[172px] shrink-0 w-[1560px]">
         <aside className="flex flex-col gap-[16px] items-end shrink-0 sticky top-[104px] w-[348px]">
           <div className="bg-[#00b6ca] flex flex-col gap-[26px] items-start px-[20px] py-[28px] rounded-[8px] text-white w-full">
-            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[24px] w-full">UI UX design Inspiration right in your inbox</p>
+            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[24px] w-full">{labels.newsletterTitle}</p>
             <p className="font-['Aileron:Regular'] leading-[1.5] text-[16px] w-full">
-              By entering your email, you are agreeing to our <span className="underline">privacy policy.</span>
+              {labels.newsletterText} <span className="underline">{labels.newsletterLink}</span>
             </p>
           </div>
           <div className="bg-black flex flex-col gap-[26px] items-start overflow-clip px-[20px] py-[28px] relative rounded-[8px] w-full">
-            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[24px] text-white w-full">Want a site that sells, Not just sits?</p>
+            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[24px] text-white w-full">{labels.ctaTitle}</p>
             <TalkButton />
             <img alt="" className="absolute h-[184px] left-[254px] max-w-none top-[108px] w-[175.5px]" src="/assets/blog-details/2494e.svg" />
           </div>
@@ -80,7 +80,7 @@ export default function BlogDetails() {
 
         {headings.length > 0 && (
           <nav aria-label="Table of contents" className="bg-white flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px p-[20px] rounded-[8px] sticky top-[104px]">
-            <p className="font-['Inter:Bold'] font-bold leading-[1.2] text-[#222] text-[24px] w-full">Table of Contents</p>
+            <p className="font-['Inter:Bold'] font-bold leading-[1.2] text-[#222] text-[24px] w-full">{labels.toc}</p>
             <div className="flex flex-col w-full">
               {headings.map((heading, i) => (
                 <a

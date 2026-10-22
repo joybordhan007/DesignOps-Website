@@ -13,7 +13,7 @@ export default function Company() {
   const { company } = settings;
   return (
     <>
-      <MobileHero hero={settings.heroes.company} />
+      <MobileHero page="company" />
 
       <section className="flex flex-col gap-[16px] items-center mx-auto px-[20px] py-[56px] text-center w-full max-w-[760px]" data-name="Quote">
         <p className="capitalize font-['Poppins:SemiBold'] font-semibold leading-[1.4] text-[#2f2f2f] text-[20px]">{flat(company.quote)}</p>
@@ -37,9 +37,9 @@ export default function Company() {
 
       <section className="mx-auto px-[20px] py-[40px] w-full max-w-[760px]" data-name="Achievements">
         <div className="gap-y-[32px] grid grid-cols-2 md:grid-cols-4">
-          {achievements.company.map((item) => (
+          {achievements.filter((stat) => stat.showOnCompany).map((item) => (
             <div key={item.id} className="flex flex-col gap-[8px] items-center">
-              <RollingNumber value={item.value} suffix={item.suffix} size={20} />
+              <RollingNumber value={item.value} prefix={item.prefix} suffix={item.suffix} size={20} />
               <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#707070] text-[14px] text-center">{item.label}</p>
             </div>
           ))}

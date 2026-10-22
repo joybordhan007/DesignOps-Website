@@ -1,4 +1,6 @@
+import ArrowButton from "@/components/ArrowButton";
 import { useContent } from "@/content/store";
+import { ReviewAvatar } from "@/components/ReviewBits";
 import type { Review } from "@/content/types";
 import Heading from "./Heading";
 
@@ -42,13 +44,13 @@ function Logos({ hidden = false }: { hidden?: boolean }) {
 function ReviewCard({ review }: { review: Review }) {
   return (
     <div className="flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]">
-      <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[18px]">{review.company}</p>
-      <p className="font-['Inter:Medium'] font-medium leading-[1.3] text-[#222] text-[24px]">{review.quote}</p>
+      {review.company && <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[18px]">{review.company}</p>}
+      {review.quote && <p className="font-['Inter:Medium'] font-medium leading-[1.3] text-[#222] text-[24px]">{review.quote}</p>}
       <div className="flex gap-[12px] items-start shrink-0">
-        <img alt="" className="block object-cover rounded-[999px] shrink-0 size-[50px]" src={review.avatar} loading="lazy" decoding="async" />
+        <ReviewAvatar review={review} className="size-[50px] text-[18px]" />
         <div className="flex flex-col gap-[8px] items-start w-[160px]">
           <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[18px]">{review.name}</p>
-          <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#505050] text-[16px]">{review.role}</p>
+          {review.role && <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#505050] text-[16px]">{review.role}</p>}
         </div>
       </div>
     </div>
@@ -63,7 +65,10 @@ export default function ReviewsSection({ className = "mt-[160px]" }: { className
 
   return (
     <div className={`flex flex-col gap-[64px] items-center shrink-0 w-[1560px] ${className}`} data-name="Reviews">
-      <Heading title={settings.titles.reviews} />
+      <div className="flex gap-[40px] items-end w-full">
+        <Heading title={settings.titles.reviews} className="flex-1" />
+        <ArrowButton href="/reviews" label={settings.labels.buttons.allReviews} />
+      </div>
       <div className="bg-white flex h-[513px] items-center overflow-clip relative shadow-[0px_1px_6px_0px_rgba(0,0,0,0.1)] shrink-0 w-[1560px]">
         <div className="bg-white border-[rgba(0,0,0,0.1)] border-r border-solid flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px] z-[1]">
           <Logos hidden />

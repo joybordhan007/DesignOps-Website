@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { getContent, useContent } from "@/content/store";
 import type { Message } from "@/content/types";
 import type { PageProps } from "../AdminApp";
 import { api } from "../api";
-import { card, ObjectEditor, PageHeader, secondaryButton, toast } from "../editor";
+import { card, PageHeader, secondaryButton, toast } from "../editor";
 import { MailIcon, TrashIcon } from "../icons";
 
-// Contact Management: messages sent through the contact form, plus the
-// contact details and texts shown on the Contact page and in the footer.
+// Messages sent through the contact form. (The contact details shown on the
+// website are edited in Website Settings → Contact info.)
 
 const when = (iso: string) => new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
@@ -110,51 +109,12 @@ function Inbox({ messages, reloadMessages, focusId }: PageProps) {
   );
 }
 
-export default function ContactPage(props: PageProps) {
-  const { settings } = useContent();
-  const [tab, setTab] = useState<"messages" | "info">("messages");
+export default function MessagesPage(props: PageProps) {
   const unread = props.messages.filter((m) => !m.read).length;
-
   return (
     <div className="flex flex-col gap-[20px]">
-      <PageHeader title="Contact Management" description="Messages from the contact form, and the contact details shown on the website." />
-      <div className="bg-white flex gap-[4px] p-[4px] rounded-[8px] self-start shadow-[0px_1px_4px_rgba(0,0,0,0.06)]">
-        {(
-          [
-            ["messages", `Messages${unread ? ` (${unread} new)` : ""}`],
-            ["info", "Contact info"],
-          ] as const
-        ).map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            className={`cursor-pointer font-['Inter:Medium'] font-medium px-[16px] py-[8px] rounded-[6px] text-[14px] ${tab === key ? "bg-[#00b6ca] text-white" : "text-[#3e3e3e] hover:bg-[#f4fbfc]"}`}
-            onClick={() => setTab(key)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      {tab === "messages" ? (
-        <Inbox {...props} />
-      ) : (
-        <ObjectEditor
-          embedded
-          title="Contact details"
-          description="Used on the Contact page and in the footer of every page."
-          value={settings.contact}
-          fields={[
-            { type: "text", path: "phone", label: "Phone", required: true },
-            { type: "text", path: "email", label: "Email", required: true },
-            { type: "textarea", path: "address", label: "Address", rows: 2 },
-            { type: "rich", path: "title", label: "Contact page title", rows: 1 },
-            { type: "textarea", path: "subtitle", label: "Contact page subtitle", rows: 2 },
-            { type: "text", path: "infoTitle", label: "Info card title" },
-            { type: "textarea", path: "infoText", label: "Info card text", rows: 3 },
-          ]}
-          onSave={(contact) => api.save("settings", { ...getContent().settings, contact })}
-        />
-      )}
+      <PageHeader title="Messages" description={`Inquiries sent through the website's contact form${unread ? ` · ${unread} unread` : ""}.`} />
+      <Inbox {...props} />
     </div>
   );
 }

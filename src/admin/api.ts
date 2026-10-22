@@ -1,5 +1,5 @@
 import { setContent } from "@/content/store";
-import type { Content, Message } from "@/content/types";
+import type { Content, Message, PendingReview } from "@/content/types";
 
 // Calls to the admin API (server/index.js).
 
@@ -25,14 +25,37 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   return data as T;
 }
 
-export type AdminUser = { email: string; name: string };
+export type AdminUser = {
+  /** Login ID; can't be changed from the dashboard. */
+  email: string;
+  name: string;
+  /** Uploaded photo URL, or "" to show initials. */
+  avatar: string;
+};
+
+/** One day of website visits (server/index.js, /api/visit). */
+export type DayVisits = {
+  views: number;
+  visitors: number;
+  pages: Record<string, number>;
+  sources: Record<string, number>;
+  devices: Record<string, number>;
+};
 
 export const api = {
   me: () => request<AdminUser>("/api/auth/me"),
   login: (email: string, password: string, remember: boolean) =>
     request<AdminUser>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password, remember }) }),
   logout: () => request<{ ok: true }>("/api/auth/logout", { method: "POST" }),
+  updateProfile: (profile: Pick<AdminUser, "name" | "avatar">) => request<AdminUser>("/api/admin/profile", { method: "PUT", body: JSON.stringify(profile) }),
   changePassword: (current: string, next: string) => request<{ ok: true }>("/api/admin/password", { method: "POST", body: JSON.stringify({ current, next }) }),
+
+  /** Everything, including inactive items the website doesn't show. */
+  async loadContent() {
+    const content = await request<Content>("/api/admin/content");
+    setContent(content);
+    return content;
+  },
 
   /** Saves one section of the site content and updates the live site data. */
   async save<K extends keyof Content>(section: K, value: Content[K]) {
@@ -44,6 +67,16 @@ export const api = {
   messages: () => request<Message[]>("/api/admin/messages"),
   markMessage: (id: string, read: boolean) => request<Message>(`/api/admin/messages/${id}`, { method: "PATCH", body: JSON.stringify({ read }) }),
   deleteMessage: (id: string) => request<{ ok: true }>(`/api/admin/messages/${id}`, { method: "DELETE" }),
+
+  /** Visit counts per day (YYYY-MM-DD), for the dashboard reports. */
+  visits: () => request<Record<string, DayVisits>>("/api/admin/visits"),
+
+  pendingReviews: () => request<PendingReview[]>("/api/admin/reviews/pending"),
+  /** Publishes a pending review on the website. */
+  async approveReview(id: string) {
+    setContent(await request<Content>(`/api/admin/reviews/pending/${id}/approve`, { method: "POST" }));
+  },
+  rejectReview: (id: string) => request<{ ok: true }>(`/api/admin/reviews/pending/${id}`, { method: "DELETE" }),
 };
 
 /** Uploads an image or video and reports progress (0-1). Resolves to its public URL. */

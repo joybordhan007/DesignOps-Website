@@ -69,7 +69,7 @@ export default function ServiceDetails() {
         </ol>
       </div>
 
-      <ProcessSection />
+      <ProcessSection title={detail.processTitle} steps={detail.process} />
       <GrowthSection />
       <ReviewsSection />
       <CtaSection />

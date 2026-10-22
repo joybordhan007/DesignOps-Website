@@ -58,7 +58,7 @@ export default function ServiceDetails() {
         </ol>
       </section>
 
-      <WorkingProcess />
+      <WorkingProcess title={detail.processTitle} steps={detail.process} />
       <GrowthInsights />
       <Reviews />
       <CtaBanner />

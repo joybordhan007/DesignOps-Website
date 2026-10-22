@@ -38,13 +38,13 @@ function StatCard({ stat, index, highlight }: { stat: Stat; index: number; highl
 }
 
 export default function Home() {
-  const { settings, achievements, services, projects } = useContent();
-  const stats = achievements.home;
+  const { settings, achievements, services, projects, process } = useContent();
+  const stats = achievements.filter((stat) => stat.showOnHome);
   const rows = Array.from({ length: Math.ceil(stats.length / 3) }, (_, r) => stats.slice(r * 3, r * 3 + 3));
 
   return (
     <Page name="Home">
-      <Hero hero={settings.heroes.home} />
+      <Hero page="home" />
 
       <div className="h-[900px] mt-[80px] relative shrink-0 w-[1920px]" data-name="Vision">
         <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[846px] left-[calc(50%-2px)] top-[calc(50%+88px)] w-[1582px]">
@@ -81,11 +81,11 @@ export default function Home() {
 
       <div className="flex flex-col gap-[64px] items-center mt-[40px] shrink-0 w-[1560px]" data-name="Services">
         <Heading title={settings.titles.services} />
-        <ServiceCards services={services} className="relative shrink-0" />
+        <ServiceCards services={services.filter((service) => service.showOnHome)} className="relative shrink-0" />
       </div>
 
       <StackedProjects projects={projects.filter((project) => project.featured)} />
-      <ProcessSection />
+      <ProcessSection title={settings.titles.process} steps={process} />
       <GrowthSection />
       <ReviewsSection />
       <CtaSection />

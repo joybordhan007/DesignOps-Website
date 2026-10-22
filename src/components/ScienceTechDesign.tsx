@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { useContent } from "@/content/store";
+import type { Labels } from "@/content/types";
 
 // Scroll-scrubbed "Science · Technology · Design" scene for the Home page.
 // Recreates the pinned image-sequence section from plabs.id in code: while the
@@ -8,6 +10,7 @@ import { useEffect, useRef } from "react";
 //   3. the circle splits into two overlapping circles and "Technology" scrambles in
 //   4. the connector lines draw, then the three annotations scramble in
 // A pixel grid dissolves the card in as it enters the viewport.
+// The words come from Website Settings → Labels; a line break splits a label in two lines.
 
 const SCENE_WIDTH = 1872;
 const SCENE_HEIGHT = 1080;
@@ -23,47 +26,63 @@ const imgScrollDown = "/assets/shared/icons/scroll-down.svg";
 
 type Line = { text: string; start: number; end: number };
 
-type Label = {
-  lines: Line[];
+type Spot = {
+  key: keyof Labels["science"];
+  // When each line scrambles in (a later line reuses the last timing).
+  timings: [number, number][];
   className: string;
   // Horizontal drift (px) applied before the label settles, and when it settles.
   drift?: { from: number; start: number; end: number };
 };
 
-const labels: Label[] = [
+const spots: Spot[] = [
   {
-    lines: [{ text: "Science", start: 0.02, end: 0.12 }],
+    key: "science",
+    timings: [[0.02, 0.12]],
     className: "left-[357px] top-[437.5px] text-[44px] tracking-[-1.76px]",
     drift: { from: 130, start: 0.14, end: 0.42 },
   },
   {
-    lines: [{ text: "Design", start: 0.04, end: 0.14 }],
+    key: "design",
+    timings: [[0.04, 0.14]],
     className: "left-[1069px] top-[437.5px] text-[44px] tracking-[-1.76px]",
     drift: { from: -130, start: 0.14, end: 0.42 },
   },
   {
-    lines: [{ text: "Technology", start: 0.4, end: 0.52 }],
+    key: "technology",
+    timings: [[0.4, 0.52]],
     className: "left-[667px] top-[437.5px] text-[44px] tracking-[-1.76px]",
   },
   {
-    lines: [
-      { text: "Research, Experience, ", start: 0.56, end: 0.68 },
-      { text: "Development (RDX)", start: 0.6, end: 0.72 },
+    key: "research",
+    timings: [
+      [0.56, 0.68],
+      [0.6, 0.72],
     ],
     className: "left-[79px] top-[664px] text-[24px] tracking-[-0.96px]",
   },
   {
-    lines: [{ text: "Digital Transformation (DX)", start: 0.62, end: 0.76 }],
+    key: "digital",
+    timings: [[0.62, 0.76]],
     className: "left-[886px] top-[113.5px] text-[24px] tracking-[-0.96px]",
   },
   {
-    lines: [
-      { text: "Customer Experience ", start: 0.68, end: 0.8 },
-      { text: "Transformation (CX)", start: 0.72, end: 0.84 },
+    key: "customer",
+    timings: [
+      [0.68, 0.8],
+      [0.72, 0.84],
     ],
     className: "-translate-x-1/2 left-[1376px] text-center top-[308px] text-[24px] tracking-[-0.96px]",
   },
 ];
+
+function linesOf(text: string, timings: Spot["timings"]): Line[] {
+  const parts = text.split("\n");
+  return parts.map((part, i) => {
+    const [start, end] = timings[Math.min(i, timings.length - 1)];
+    return { text: i < parts.length - 1 ? `${part} ` : part, start, end };
+  });
+}
 
 // Connector paths in frame coordinates, drawn from the circle outwards.
 const connectors = [
@@ -116,6 +135,10 @@ const PIXEL_TOTAL = (pixelRank.length - 1) * PIXEL_STAGGER + 1;
 
 export default function ScienceTechDesign() {
   const sceneRef = useRef<HTMLDivElement>(null);
+  const { science: words, scrollDown } = useContent().settings.labels;
+  const labels = spots.map((spot) => ({ ...spot, lines: linesOf(words[spot.key], spot.timings) }));
+  // The scroll effect below reads the rendered lines, so it restarts when a word changes.
+  const wordsKey = JSON.stringify(words);
 
   useEffect(() => {
     const scene = sceneRef.current;
@@ -206,7 +229,7 @@ export default function ScienceTechDesign() {
       window.removeEventListener("resize", update);
       reducedMotion.removeEventListener("change", update);
     };
-  }, []);
+  }, [wordsKey]);
 
   return (
     <div
@@ -243,7 +266,7 @@ export default function ScienceTechDesign() {
 
         {labels.map((label) => (
           <div
-            key={label.lines[0].text}
+            key={label.key}
             data-label
             data-drift-from={label.drift?.from}
             data-drift-start={label.drift?.start}
@@ -251,8 +274,8 @@ export default function ScienceTechDesign() {
             className={`-translate-y-1/2 absolute font-['Inter:Regular'] font-normal leading-[1.2] not-italic text-white whitespace-pre ${label.className}`}
             aria-label={label.lines.map((line) => line.text).join("")}
           >
-            {label.lines.map((line) => (
-              <p key={line.text} data-line data-text={line.text} data-start={line.start} data-end={line.end} aria-hidden="true">
+            {label.lines.map((line, i) => (
+              <p key={i} data-line data-text={line.text} data-start={line.start} data-end={line.end} aria-hidden="true">
                 <span />
                 <span className="opacity-0">{line.text}</span>
               </p>
@@ -266,7 +289,7 @@ export default function ScienceTechDesign() {
           className="font-['Noto_Sans:Light'] font-light leading-[1.2] text-[16px] text-white tracking-[3.52px] uppercase whitespace-nowrap"
           style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}
         >
-          Scroll Down
+          {scrollDown}
         </p>
         <img alt="" className="block h-[24px] w-[12px]" src={imgScrollDown} />
       </div>

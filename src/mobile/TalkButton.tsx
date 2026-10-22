@@ -1,6 +1,9 @@
+import { useContent } from "@/content/store";
+
 // Cyan "LET'S TALK" button: on hover/focus the label and the arrow roll up and
 // a copy rolls in from below, like the desktop button.
 export default function TalkButton({ className = "" }: { className?: string }) {
+  const label = useContent().settings.labels.buttons.letsTalk;
   const roll = "flex flex-col transition-transform duration-[380ms] ease-[cubic-bezier(0.2,0.75,0.3,1)] group-hover:-translate-y-1/2 group-focus-visible:-translate-y-1/2";
 
   return (
@@ -10,8 +13,8 @@ export default function TalkButton({ className = "" }: { className?: string }) {
     >
       <span className="block h-[12px] overflow-hidden">
         <span className={`${roll} font-['Inter:Medium'] font-medium leading-[1.2] text-[#f6f6f6] text-[10px] whitespace-nowrap`}>
-          <span>LET’S TALK</span>
-          <span aria-hidden="true">LET’S TALK</span>
+          <span>{label}</span>
+          <span aria-hidden="true">{label}</span>
         </span>
       </span>
       <span className="block overflow-hidden size-[12px]" aria-hidden="true">

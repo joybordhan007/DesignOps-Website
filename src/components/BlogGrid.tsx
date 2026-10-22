@@ -5,7 +5,7 @@ import { useContent } from "@/content/store";
 // slightly on hover and the whole card links to the post.
 
 export default function BlogGrid({ className }: { className?: string }) {
-  const { posts } = useContent();
+  const { posts, settings } = useContent();
   return (
     <div className={`grid grid-cols-3 gap-x-[24px] gap-y-[32px] w-[1560px] max-lg:grid-cols-1 max-lg:gap-y-[20px] max-lg:w-full md:max-lg:grid-cols-2 ${className ?? ""}`} data-name="Blog Posts">
       {sortedPosts(posts).map((post) => (
@@ -36,7 +36,7 @@ export default function BlogGrid({ className }: { className?: string }) {
               </div>
             </div>
             <div className="flex gap-[8px] items-center">
-              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#d68c13] text-[16px] group-hover:underline max-lg:text-[14px] underline-offset-4">Read Now</p>
+              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#d68c13] text-[16px] group-hover:underline max-lg:text-[14px] underline-offset-4">{settings.labels.buttons.readNow}</p>
               <img alt="" className="block size-[20px] transition-transform duration-300 group-hover:translate-x-[4px]" src="/assets/blog-posts/arrow-forward.svg" />
             </div>
           </div>

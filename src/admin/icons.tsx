@@ -116,3 +116,21 @@ export const MailIcon = (p: IconProps) => (
     <path d="m4 7 8 6 8-6" />
   </Svg>
 );
+export const MoreIcon = solid("M12 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z");
+export const EditIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4" />
+  </Svg>
+);
+export const BackIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M19 12H5m0 0 6-6m-6 6 6 6" />
+  </Svg>
+);
+export const AnalyticsIcon = solid("M4 3h2v16h15v2H4V3zm4 9h3v5H8v-5zm5-4h3v9h-3V8zm5-3h3v12h-3V5z");
+export const StarIcon = solid("M12 2.8l2.8 5.7 6.3.9-4.6 4.4 1.1 6.3L12 17.1l-5.6 3 1.1-6.3L2.9 9.4l6.3-.9L12 2.8z");
+export const ArrowRightIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 12h14m0 0-6-6m6 6-6 6" />
+  </Svg>
+);

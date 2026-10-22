@@ -1,17 +1,12 @@
 import { useEffect, useState } from "react";
+import { pageLinks } from "@/content/helpers";
+import { useContent } from "@/content/store";
 
 // Desktop navbar, shared by every page and fixed to the top of the screen.
 // It lives in its own layer outside the scaled page (see App.tsx) and is
 // scaled with the same factor, so it lines up with the 1920px artboard.
 // `hero` means the page opens with a video hero, where the bar sits lower,
 // inside the hero. Contact is reached through the LET’S TALK button.
-
-const links = [
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "Blog", href: "/blog" },
-  { label: "Company", href: "/company" },
-];
 
 const roll = "flex flex-col transition-transform duration-[380ms] ease-[cubic-bezier(0.2,0.75,0.3,1)] group-hover:-translate-y-1/2 group-focus-visible:-translate-y-1/2";
 
@@ -20,6 +15,9 @@ function isCurrent(path: string, href: string) {
 }
 
 export default function DesktopNav({ path, hero, scale }: { path: string; hero: boolean; scale: number }) {
+  const { labels } = useContent().settings;
+  // Home is reached through the logo.
+  const links = pageLinks(labels.nav).slice(1);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -72,8 +70,8 @@ export default function DesktopNav({ path, hero, scale }: { path: string; hero: 
         >
           <span className="block h-[19.2px] overflow-hidden">
             <span className={`${roll} font-['Inter:Medium'] font-medium leading-[1.2] text-[#f6f6f6] text-[16px] whitespace-nowrap`}>
-              <span>LET’S TALK</span>
-              <span aria-hidden="true">LET’S TALK</span>
+              <span>{labels.buttons.letsTalk}</span>
+              <span aria-hidden="true">{labels.buttons.letsTalk}</span>
             </span>
           </span>
           <span className="block overflow-hidden size-[18px]" aria-hidden="true">

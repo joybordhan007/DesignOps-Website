@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 type RollingNumberProps = {
   value: number;
+  prefix?: string;
   suffix?: string;
   /** How many intermediate numbers the reel shows on its way up. */
   steps?: number;
@@ -12,7 +13,7 @@ type RollingNumberProps = {
   size?: number;
 };
 
-export default function RollingNumber({ value, suffix = "", steps = 12, size = 48 }: RollingNumberProps) {
+export default function RollingNumber({ value, prefix = "", suffix = "", steps = 12, size = 48 }: RollingNumberProps) {
   const line = size * 1.2;
   const ref = useRef<HTMLDivElement>(null);
   const [rolled, setRolled] = useState(false);
@@ -41,7 +42,7 @@ export default function RollingNumber({ value, suffix = "", steps = 12, size = 4
   }, []);
 
   return (
-    <div ref={ref} className="overflow-clip relative shrink-0" style={{ height: line, width: size * 3.4 }} aria-label={`${value}${suffix}`}>
+    <div ref={ref} className="overflow-clip relative shrink-0" style={{ height: line, width: size * 3.4 }} aria-label={`${prefix}${value}${suffix}`}>
       <div
         aria-hidden="true"
         className="absolute flex flex-col font-['Inter:Semi_Bold'] font-semibold inset-x-0 not-italic text-[#2f2f2f] text-center top-0 transition-transform duration-[2000ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -49,6 +50,7 @@ export default function RollingNumber({ value, suffix = "", steps = 12, size = 4
       >
         {reel.map((n, i) => (
           <p key={i} className="leading-[1.2] whitespace-nowrap">
+            {prefix}
             {n}
             {suffix}
           </p>

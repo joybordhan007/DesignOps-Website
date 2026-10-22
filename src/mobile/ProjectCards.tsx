@@ -7,12 +7,13 @@ import SectionTitle from "./SectionTitle";
 // Each card links to the case study.
 
 function ViewCaseStudy() {
+  const label = useContent().settings.labels.buttons.viewCaseStudy;
   return (
     <span className="bg-[#171717] flex gap-[6px] items-center pl-[12px] pr-[6px] py-[6px] rounded-[4px] self-start">
       <span className="block h-[12px] overflow-hidden">
         <span className="flex flex-col font-['Inter:Medium'] font-medium leading-[1.2] text-[#f6f6f6] text-[10px] transition-transform duration-[380ms] whitespace-nowrap group-hover:-translate-y-1/2">
-          <span>VIEW CASE STUDY</span>
-          <span aria-hidden="true">VIEW CASE STUDY</span>
+          <span>{label}</span>
+          <span aria-hidden="true">{label}</span>
         </span>
       </span>
       <span className="bg-[#f6f6f6] flex items-center justify-center p-[4px] rounded-[4px]">
@@ -43,17 +44,15 @@ export default function ProjectCards({ projects }: { projects: Project[] }) {
                 <div className="flex flex-col gap-[10px]">
                   <p className="font-['Inter:Italic'] italic leading-[1.2] text-[#2f2f2f] text-[14px]">{project.category}</p>
                   <h3 className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.title}</h3>
-                  <p className="font-['Inter:Regular'] leading-[1.4] text-[#3e3e3e] text-[14px]">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                  </p>
+                  <p className="font-['Inter:Regular'] leading-[1.4] text-[#3e3e3e] text-[14px]">{project.summary}</p>
                 </div>
                 <div className="flex gap-[40px]">
                   <div className="flex flex-col gap-[6px]">
-                    <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">Pages in Projects</p>
+                    <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">{settings.labels.projectCard.pages}</p>
                     <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.pages}</p>
                   </div>
                   <div className="flex flex-col gap-[6px]">
-                    <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">Project Duration</p>
+                    <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">{settings.labels.projectCard.duration}</p>
                     <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.duration}</p>
                   </div>
                 </div>

@@ -1,4 +1,6 @@
 import { useContent } from "@/content/store";
+import ArrowButton from "@/components/ArrowButton";
+import { ReviewAvatar } from "@/components/ReviewBits";
 import type { Review } from "@/content/types";
 import SectionTitle from "./SectionTitle";
 
@@ -8,13 +10,13 @@ import SectionTitle from "./SectionTitle";
 function ReviewCard({ review }: { review: Review }) {
   return (
     <figure className="bg-white flex flex-col gap-[20px] justify-between mr-[12px] p-[24px] rounded-[12px] shadow-[0px_1px_6px_rgba(0,0,0,0.08)] shrink-0 w-[290px]">
-      <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[14px]">{review.company}</p>
-      <blockquote className="font-['Inter:Medium'] font-medium leading-[1.35] text-[#222] text-[16px]">{review.quote}</blockquote>
+      {review.company && <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[14px]">{review.company}</p>}
+      {review.quote && <blockquote className="font-['Inter:Medium'] font-medium leading-[1.35] text-[#222] text-[16px]">{review.quote}</blockquote>}
       <figcaption className="flex gap-[12px] items-center">
-        <img alt="" className="block object-cover rounded-full size-[44px]" src={review.avatar} loading="lazy" />
+        <ReviewAvatar review={review} className="size-[44px] text-[15px]" />
         <span className="flex flex-col gap-[4px]">
           <span className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[14px]">{review.name}</span>
-          <span className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#505050] text-[12px]">{review.role}</span>
+          {review.role && <span className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#505050] text-[12px]">{review.role}</span>}
         </span>
       </figcaption>
     </figure>
@@ -63,6 +65,8 @@ export default function Reviews() {
           ))}
         </div>
       </div>
+
+      <ArrowButton href="/reviews" label={settings.labels.buttons.allReviews} className="self-center" />
     </section>
   );
 }

@@ -11,7 +11,7 @@ export default function ServicesList() {
     <section className="flex flex-col gap-[28px] mx-auto px-[20px] py-[48px] w-full max-w-[760px]" data-name="Services">
       <SectionTitle title={settings.titles.services} />
       <div className="gap-[16px] grid md:grid-cols-2">
-        {services.map((service, index) => (
+        {services.filter((service) => service.showOnHome).map((service, index) => (
           <a
             key={service.id}
             href={serviceUrl(service)}

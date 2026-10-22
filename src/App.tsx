@@ -5,6 +5,8 @@ import useScaledSticky from "./lib/useScaledSticky";
 import useMediaQuery from "./lib/useMediaQuery";
 import DesktopNav from "./components/DesktopNav";
 import MobileNav from "./mobile/MobileNav";
+import { trackEvent, trackPageView } from "./lib/tracking";
+import { reportVisit } from "./lib/visits";
 
 // Phones and tablets (below 1024px) get the responsive pages in src/mobile;
 // larger screens get the 1920px Figma artboards in src/websitepages, scaled to fit.
@@ -54,6 +56,8 @@ const pages = {
   "/blog/:slug": page(() => import("./websitepages/BlogDetails"), () => import("./mobile/pages/BlogDetails"), 4940),
 
   "/company": page(() => import("./websitepages/Company"), () => import("./mobile/pages/Company"), 4523),
+
+  "/reviews": page(() => import("./websitepages/Reviews"), () => import("./mobile/pages/Reviews"), 3400),
 
   "/contact": page(() => import("./websitepages/Contact"), () => import("./mobile/pages/Contact"), 5003),
 
@@ -110,6 +114,22 @@ export default function App() {
   const pageRef = useRef<HTMLDivElement>(null)
 
   const pendingHash = useRef(window.location.hash.slice(1))
+
+  // The tracking tags count the first page; later page switches are reported here.
+  const trackedPath = useRef(path)
+
+  useEffect(() => {
+    if (path === trackedPath.current) return
+
+    trackedPath.current = path
+
+    trackPageView(path)
+  }, [path])
+
+  // Our own visit counts for the dashboard (every page, the first one included).
+  useEffect(() => {
+    reportVisit(path)
+  }, [path])
 
   useLayoutEffect(() => {
     const resize = () => setScale(Math.min(1, document.documentElement.clientWidth / 1920))
@@ -217,6 +237,10 @@ export default function App() {
 
     if (anchor && event.currentTarget.contains(anchor)) {
       const [target, hash = ""] = (anchor.getAttribute("href") || "").split("#")
+
+      if (/^(tel:|mailto:|https:\/\/(wa\.me|api\.whatsapp\.com)\/)/.test(target)) {
+        trackEvent("contactClick", { method: target.split(":")[0] === "https" ? "whatsapp" : target.split(":")[0] })
+      }
 
       const modified =
         event.metaKey ||

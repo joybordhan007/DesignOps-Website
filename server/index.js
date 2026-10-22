@@ -4,8 +4,9 @@
 //   page, so it renders without waiting for an API call.
 // - /api/content           public: everything the site shows
 // - /api/contact           public: stores contact-form messages
+// - /api/reviews           public: stores reviews sent from the Reviews page (shown after approval)
 // - /api/auth/*            admin login / logout / session
-// - /api/admin/*           admin: save content, upload files, read messages
+// - /api/admin/*           admin: save content, upload files, read messages, approve reviews
 //
 // Data lives in JSON files under DATA_DIR (default server/data) and uploads in
 // UPLOAD_DIR (default server/uploads). See server/README.md for setup.
@@ -16,6 +17,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import multer from "multer";
+import { migrate } from "./migrate.js";
+import { trackingBody, trackingHead } from "./tracking.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..");
@@ -37,6 +40,8 @@ fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 const files = {
   content: path.join(DATA_DIR, "content.json"),
   messages: path.join(DATA_DIR, "messages.json"),
+  pendingReviews: path.join(DATA_DIR, "pending-reviews.json"),
+  visits: path.join(DATA_DIR, "visits.json"),
   admin: path.join(DATA_DIR, "admin.json"),
   secret: path.join(DATA_DIR, "session-secret"),
 };
@@ -63,6 +68,20 @@ if (!fs.existsSync(files.content)) {
 
 let content = readJson(files.content, null);
 if (!content) throw new Error(`Could not read ${files.content}`);
+{
+  const migrated = migrate(content, readJson(DEFAULT_CONTENT, {}));
+  if (JSON.stringify(migrated) !== JSON.stringify(content)) {
+    content = migrated;
+    writeJson(files.content, content);
+    console.log("Updated", files.content, "to the current content format.");
+  }
+}
+
+/** What visitors get: inactive services, projects, posts and reviews are left out. */
+function publicContent() {
+  const shown = (items) => (items || []).filter((item) => item.active !== false);
+  return { ...content, services: shown(content.services), projects: shown(content.projects), posts: shown(content.posts), reviews: shown(content.reviews) };
+}
 
 const sessionSecret =
   process.env.SESSION_SECRET ||
@@ -90,6 +109,9 @@ if (!admin && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
   writeJson(files.admin, admin);
   console.log("Created the admin account for", admin.email);
 }
+/** What the dashboard gets to know about the admin (never the password hash). */
+const publicAdmin = () => ({ email: admin.email, name: admin.name, avatar: admin.avatar || "" });
+
 if (!admin) console.warn("No admin account yet: set ADMIN_EMAIL and ADMIN_PASSWORD (see server/README.md).");
 
 // ---------------------------------------------------------------- sessions
@@ -151,6 +173,7 @@ function limiter(limit, windowMs) {
 }
 const loginLimit = limiter(8, 10 * 60 * 1000);
 const contactLimit = limiter(5, 10 * 60 * 1000);
+const reviewLimit = limiter(5, 10 * 60 * 1000);
 
 // ---------------------------------------------------------------- app
 
@@ -167,7 +190,7 @@ app.use(express.json({ limit: "8mb" }));
 // Public content (everything the site renders).
 app.get("/api/content", (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
-  res.json(content);
+  res.json(publicContent());
 });
 
 // Contact form.
@@ -184,6 +207,49 @@ app.post("/api/contact", (req, res) => {
   res.json({ ok: true });
 });
 
+// Visit counts for the dashboard reports: per day, the page views, new visitors
+// (counted once a day by the browser), pages, traffic sources and device types.
+// No cookies, IPs or other personal data are stored.
+const visits = readJson(files.visits, {});
+const visitLimit = limiter(120, 60 * 1000);
+let visitsTimer = null;
+const KEEP_DAYS = 400;
+const bump = (counts, key) => (counts[key] = (counts[key] || 0) + 1);
+
+app.post("/api/visit", (req, res) => {
+  res.status(204).end();
+  if (!visitLimit(req.ip)) return;
+  const body = req.body || {};
+  const page = String(body.path || "").split(/[?#]/)[0].slice(0, 120);
+  if (!page.startsWith("/") || page.startsWith("/admin")) return;
+  const device = ["mobile", "tablet", "desktop"].includes(body.device) ? body.device : "desktop";
+  const day = new Date().toISOString().slice(0, 10);
+  const today = (visits[day] ||= { views: 0, visitors: 0, pages: {}, sources: {}, devices: {} });
+  today.views++;
+  bump(today.pages, page);
+  bump(today.devices, device);
+  if (body.newVisitor) today.visitors++;
+  if (body.newSession) {
+    let source = "Direct";
+    try {
+      const host = new URL(String(body.referrer || "")).hostname.replace(/^www\./, "");
+      if (host && host !== req.hostname) source = host.slice(0, 80);
+    } catch {
+      /* no referrer */
+    }
+    bump(today.sources, source);
+  }
+  // Written at most every 10 seconds; old days are dropped.
+  visitsTimer ||= setTimeout(() => {
+    visitsTimer = null;
+    const oldest = new Date(Date.now() - KEEP_DAYS * 86_400_000).toISOString().slice(0, 10);
+    for (const key of Object.keys(visits)) if (key < oldest) delete visits[key];
+    writeJson(files.visits, visits);
+  }, 10_000);
+});
+
+app.get("/api/admin/visits", requireAdmin, (req, res) => res.json(visits));
+
 // Auth.
 app.post("/api/auth/login", (req, res) => {
   if (!loginLimit(req.ip)) return res.status(429).json({ error: "Too many attempts. Please wait a few minutes." });
@@ -195,7 +261,7 @@ app.post("/api/auth/login", (req, res) => {
   const remember = Boolean(req.body?.remember);
   const maxAge = remember ? 30 * 24 * 3600 * 1000 : 12 * 3600 * 1000;
   setSessionCookie(req, res, makeToken(admin.email, maxAge), remember ? maxAge : 0);
-  res.json({ email: admin.email, name: admin.name });
+  res.json(publicAdmin());
 });
 
 app.post("/api/auth/logout", (req, res) => {
@@ -205,12 +271,17 @@ app.post("/api/auth/logout", (req, res) => {
 
 app.get("/api/auth/me", (req, res) => {
   if (!readToken(cookies(req)[COOKIE])) return res.status(401).json({ error: "Not signed in." });
-  res.json({ email: admin.email, name: admin.name });
+  res.json(publicAdmin());
 });
 
 // Admin: content.
-const LIST_SECTIONS = ["services", "projects", "posts", "clients", "reviews", "process", "faqs"];
-const OBJECT_SECTIONS = ["settings", "achievements"];
+app.get("/api/admin/content", requireAdmin, (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json(content);
+});
+
+const LIST_SECTIONS = ["services", "projects", "posts", "clients", "reviews", "achievements", "process", "faqs"];
+const OBJECT_SECTIONS = ["settings"];
 
 app.put("/api/admin/content/:section", requireAdmin, (req, res) => {
   const { section } = req.params;
@@ -248,10 +319,89 @@ const upload = multer({
   fileFilter: (req, file, done) => done(null, ALLOWED_TYPES.test(file.mimetype)),
 });
 
+const uploadUrl = (file) => `/uploads/${path.relative(UPLOAD_DIR, file.path).split(path.sep).join("/")}`;
+
 app.post("/api/admin/upload", requireAdmin, upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "Only images (JPG, PNG, WebP, GIF, SVG, AVIF) and videos (MP4, WebM) can be uploaded." });
-  const rel = path.relative(UPLOAD_DIR, req.file.path).split(path.sep).join("/");
-  res.json({ url: `/uploads/${rel}`, size: req.file.size, type: req.file.mimetype });
+  res.json({ url: uploadUrl(req.file), size: req.file.size, type: req.file.mimetype });
+});
+
+// Reviews sent by visitors: kept apart from the site content until approved.
+// Photos are optional, raster images only (no SVG from the public), max 3 MB.
+const REVIEW_PHOTO_TYPES = /^image\/(jpeg|png|webp|avif)$/;
+const REVIEW_DIR = path.join(UPLOAD_DIR, "reviews");
+const reviewUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, done) => {
+      fs.mkdirSync(REVIEW_DIR, { recursive: true });
+      done(null, REVIEW_DIR);
+    },
+    filename: (req, file, done) => done(null, `${crypto.randomUUID()}${{ "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/avif": ".avif" }[file.mimetype]}`),
+  }),
+  limits: { fileSize: 3 * 1024 * 1024, files: 1 },
+  fileFilter: (req, file, done) => {
+    if (REVIEW_PHOTO_TYPES.test(file.mimetype)) return done(null, true);
+    req.badPhoto = true;
+    done(null, false);
+  },
+});
+
+const REVIEW_FIELDS = { name: 100, email: 200, role: 100, company: 120, quote: 1000 };
+
+function removeUpload(url) {
+  if (!url?.startsWith("/uploads/reviews/")) return;
+  fs.rm(path.join(REVIEW_DIR, path.basename(url)), { force: true }, () => {});
+}
+
+app.post(
+  "/api/reviews",
+  (req, res, next) => (reviewLimit(req.ip) ? next() : res.status(429).json({ error: "Too many reviews. Please try again later." })),
+  reviewUpload.single("avatar"),
+  (req, res) => {
+    const body = req.body || {};
+    const review = { id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    for (const [field, max] of Object.entries(REVIEW_FIELDS)) review[field] = String(body[field] ?? "").trim().slice(0, max);
+    review.rating = Math.round(Number(body.rating));
+    review.avatar = req.file ? uploadUrl(req.file) : "";
+    const problem = req.badPhoto
+      ? "The photo must be a JPG, PNG, WebP or AVIF image."
+      : !review.name
+        ? "Please enter your name."
+        : review.email && !/^\S+@\S+\.\S+$/.test(review.email)
+          ? "Please enter a valid email."
+          : !(review.rating >= 1 && review.rating <= 5)
+            ? "Please choose a rating from 1 to 5 stars."
+            : "";
+    if (problem) {
+      removeUpload(review.avatar);
+      return res.status(400).json({ error: problem });
+    }
+    const pending = readJson(files.pendingReviews, []);
+    pending.unshift(review);
+    writeJson(files.pendingReviews, pending);
+    res.json({ ok: true });
+  },
+);
+
+app.get("/api/admin/reviews/pending", requireAdmin, (req, res) => res.json(readJson(files.pendingReviews, [])));
+
+app.post("/api/admin/reviews/pending/:id/approve", requireAdmin, (req, res) => {
+  const pending = readJson(files.pendingReviews, []);
+  const review = pending.find((r) => r.id === req.params.id);
+  if (!review) return res.status(404).json({ error: "Review not found." });
+  const quote = !review.quote || /^[“"]/.test(review.quote) ? review.quote : `“${review.quote}”`;
+  const published = { id: `review-${review.id.slice(0, 8)}`, active: true, createdAt: review.createdAt.slice(0, 10), company: review.company, quote, name: review.name, role: review.role, avatar: review.avatar, rating: review.rating };
+  content = { ...content, reviews: [published, ...(content.reviews || [])] };
+  writeJson(files.content, content);
+  writeJson(files.pendingReviews, pending.filter((r) => r.id !== review.id));
+  res.json(content);
+});
+
+app.delete("/api/admin/reviews/pending/:id", requireAdmin, (req, res) => {
+  const pending = readJson(files.pendingReviews, []);
+  removeUpload(pending.find((r) => r.id === req.params.id)?.avatar);
+  writeJson(files.pendingReviews, pending.filter((r) => r.id !== req.params.id));
+  res.json({ ok: true });
 });
 
 // Admin: messages.
@@ -276,11 +426,22 @@ app.delete("/api/admin/messages/:id", requireAdmin, (req, res) => {
 app.post("/api/admin/password", requireAdmin, (req, res) => {
   const current = String(req.body?.current || "");
   const next = String(req.body?.next || "");
+  if (!loginLimit(req.ip)) return res.status(429).json({ error: "Too many attempts. Please wait a few minutes." });
   if (!passwordMatches(current, admin)) return res.status(400).json({ error: "Current password is incorrect." });
   if (next.length < 8) return res.status(400).json({ error: "New password must be at least 8 characters." });
   admin = { ...admin, ...hashPassword(next) };
   writeJson(files.admin, admin);
   res.json({ ok: true });
+});
+
+app.put("/api/admin/profile", requireAdmin, (req, res) => {
+  const name = String(req.body?.name || "").trim().slice(0, 80);
+  const avatar = String(req.body?.avatar || "").trim();
+  if (!name) return res.status(400).json({ error: "Please enter your name." });
+  if (avatar && !avatar.startsWith("/uploads/")) return res.status(400).json({ error: "Upload the photo from your computer." });
+  admin = { ...admin, name, avatar };
+  writeJson(files.admin, admin);
+  res.json(publicAdmin());
 });
 
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found." }));
@@ -295,20 +456,27 @@ app.get("*", (req, res) => {
   const indexFile = path.join(DIST_DIR, "index.html");
   if (!fs.existsSync(indexFile)) return res.status(503).send("Site not built yet. Run: npm run build");
   const seo = content.settings?.seo || {};
-  const data = JSON.stringify(content).replace(/</g, "\\u003c");
+  const data = JSON.stringify(publicContent()).replace(/</g, "\\u003c");
   let html = fs.readFileSync(indexFile, "utf8");
   if (seo.title) {
     html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(seo.title)}</title>`);
     html = html.replace(/(<meta property="og:title" content=")[^"]*/, `$1${escapeHtml(seo.title)}`);
   }
   if (seo.description) html = html.replace(/(<meta (?:name="description"|property="og:description") content=")[^"]*/g, `$1${escapeHtml(seo.description)}`);
-  html = html.replace("</head>", `<script>window.__SITE_CONTENT__=${data}</script></head>`);
+  // Replacer functions, so a "$" in the content or pasted code is kept as it is.
+  html = html.replace("</head>", () => `<script>window.__SITE_CONTENT__=${data}</script></head>`);
+  // Marketing tags (GTM, GA4, Meta Pixel) on the website only, never in the dashboard.
+  if (!/^\/admin(\/|$)/.test(req.path)) {
+    const tracking = content.settings?.tracking;
+    html = html.replace("</head>", () => `${trackingHead(tracking)}\n</head>`);
+    html = html.replace(/<body([^>]*)>/, (body) => `${body}\n${trackingBody(tracking)}`);
+  }
   res.setHeader("Cache-Control", "no-cache");
   res.type("html").send(html);
 });
 
 app.use((err, req, res, next) => {
-  if (err?.code === "LIMIT_FILE_SIZE") return res.status(413).json({ error: "File is too large (max 100 MB)." });
+  if (err?.code === "LIMIT_FILE_SIZE") return res.status(413).json({ error: req.path === "/api/reviews" ? "The photo is too large (max 3 MB)." : "File is too large (max 100 MB)." });
   const status = err?.status || err?.statusCode;
   if (status >= 400 && status < 500) return res.status(status === 403 ? 404 : status).send("Not found");
   console.error(err);

@@ -1,28 +1,36 @@
 import { useState } from "react";
-import { postUrl, projectUrl, serviceUrl } from "@/content/helpers";
+import { formatDate, postUrl, projectUrl, serviceUrl } from "@/content/helpers";
 import { getContent, useContent } from "@/content/store";
-import type { Client, Faq, Post, Project, Review, Service, Stat } from "@/content/types";
+import type { Client, Faq, PendingReview, Post, Project, Review, Service, Stat } from "@/content/types";
 import type { PageProps } from "../AdminApp";
 import { api } from "../api";
-import { CollectionEditor, ObjectEditor, type CollectionConfig } from "../editor";
+import { card, CollectionEditor, ObjectEditor, secondaryButton, toast, type CollectionConfig } from "../editor";
 import { newId, type Field } from "../fields";
+import { CheckIcon, MailIcon, TrashIcon } from "../icons";
+import ListPage, { today, type ListConfig } from "../table";
 
-// Admin pages for the website's lists (services, work, blog, clients, reviews,
-// achievements, FAQ). Each one edits the list and saves it in one go.
+// Admin pages for the website's lists. Services, work and blog are tables with
+// a details editor per item (see ../table.tsx); clients, reviews, achievements
+// and FAQ edit the whole list and save it in one go.
+
+/** A new list item starts hidden, with a placeholder name and a unique page address. */
+const newListed = (prefix: string, title: string) => {
+  const id = newId(prefix);
+  return { id, slug: id, title, active: false, createdAt: today() };
+};
 
 // ---------------------------------------------------------------- services
 
 const serviceFields: Field[] = [
   {
     type: "group",
-    label: "Basics",
+    label: "Card (Home page and Services page)",
     fields: [
       { type: "text", path: "title", label: "Service name", required: true, placeholder: "UI/UX Design" },
       { type: "slug", path: "slug", label: "Page address", from: "title", required: true },
+      { type: "textarea", path: "summary", label: "Short description", rows: 3, hint: "The same text is shown on the Home page service card and on the Services page." },
       { type: "text", path: "eyebrow", label: "Small label (Services page)", placeholder: "Design" },
       { type: "text", path: "name", label: "Big title (Services page)", placeholder: "UI/UX" },
-      { type: "textarea", path: "summary", label: "Short text (Home page card)", rows: 3 },
-      { type: "textarea", path: "description", label: "Text (Services page)", rows: 4 },
       { type: "image", path: "image", label: "Picture (Services page)", wide: true },
       { type: "image", path: "numberImage", label: "Big number artwork (Home card, optional)", wide: true, hint: "Leave empty to show a plain number instead." },
     ],
@@ -50,34 +58,65 @@ const serviceFields: Field[] = [
       },
     ],
   },
+  {
+    type: "group",
+    label: "Working process (this service's details page only)",
+    hint: "The Home page has its own working process under Website Settings. Leave the steps empty to hide this section.",
+    fields: [
+      { type: "text", path: "detail.processTitle.lead", label: "Heading: dark part" },
+      { type: "textarea", path: "detail.processTitle.muted", label: "Heading: grey part", rows: 2, wide: false, hint: "Enter = line break on desktop." },
+      {
+        type: "objects",
+        path: "detail.process",
+        label: "Steps",
+        newItem: () => ({ id: newId("step"), title: "", text: "", image: "" }),
+        itemLabel: (step, i) => (step.title ? `${i + 1}. ${step.title}` : ""),
+        fields: [
+          { type: "text", path: "title", label: "Title" },
+          { type: "textarea", path: "text", label: "Text", rows: 3, hint: "Press Enter for a line break on desktop." },
+          { type: "image", path: "image", label: "Picture (shown on hover)", wide: true },
+        ],
+      },
+    ],
+  },
 ];
 
-const servicesConfig: CollectionConfig<Service> = {
+const servicesConfig: ListConfig<Service> = {
   title: "Services",
   singular: "Service",
-  description: "Shown on the Home page, the Services page, the footer, and each service's own details page.",
+  description: "Shown on the Services page, the footer, each service's own details page and (if switched on) the Home page.",
+  basePath: "/admin/services",
+  settings: [{ type: "toggle", path: "showOnHome", label: "Show on the Home page", hint: "In the “Our Services” cards." }],
   fields: serviceFields,
   newItem: () => ({
-    id: newId("service"),
-    slug: "",
-    title: "",
+    ...newListed("service", "New service"),
+    showOnHome: false,
     eyebrow: "",
     name: "",
     summary: "",
-    description: "",
     image: "",
     numberImage: "",
-    detail: { tagline: "", image: "", intro: "", body: "", features: [], deliverablesTitle: "What You Get From Our *End-to-End Digital* Expertise", deliverables: [] },
+    detail: {
+      tagline: "",
+      image: "",
+      intro: "",
+      body: "",
+      features: [],
+      deliverablesTitle: "What You Get From Our *End-to-End Digital* Expertise",
+      deliverables: [],
+      processTitle: structuredClone(getContent().settings.titles.process),
+      process: [],
+    },
   }),
-  itemTitle: (s) => s.title,
-  itemSubtitle: (s) => `/services/${s.slug}`,
-  itemImage: (s) => s.image,
+  summary: (s) => s.summary,
+  image: (s) => s.image,
+  meta: (s) => `/services/${s.slug}${s.showOnHome ? " · on Home" : ""}`,
   viewUrl: serviceUrl,
 };
 
-export function ServicesPage({ focusId }: PageProps) {
+export function ServicesPage({ focusId, navigate }: PageProps) {
   const { services } = useContent();
-  return <CollectionEditor config={servicesConfig} items={services} onSave={(items) => api.save("services", items)} focusId={focusId} />;
+  return <ListPage config={servicesConfig} items={services} onSave={(items) => api.save("services", items)} focusId={focusId} navigate={navigate} />;
 }
 
 // ---------------------------------------------------------------- work
@@ -90,8 +129,7 @@ const projectFields: Field[] = [
       { type: "text", path: "title", label: "Project name", required: true },
       { type: "slug", path: "slug", label: "Page address", from: "title", required: true },
       { type: "text", path: "category", label: "Category", placeholder: "Mobile App Design" },
-      { type: "toggle", path: "featured", label: "Show on the Home page" },
-      { type: "textarea", path: "summary", label: "Short description", rows: 3 },
+      { type: "textarea", path: "summary", label: "Short description", rows: 3, hint: "Shown on the project card (Home and Work pages)." },
       { type: "text", path: "pages", label: "Pages in project", placeholder: "100+" },
       { type: "text", path: "duration", label: "Project duration", placeholder: "2 Months" },
       { type: "url", path: "website", label: "Website", placeholder: "https://" },
@@ -155,17 +193,43 @@ const projectFields: Field[] = [
   },
 ];
 
-const workConfig: CollectionConfig<Project> = {
+/** Tiny drawings of the two Work page card styles. */
+const layoutPreview = (horizontal: boolean) => (
+  <span className={`bg-[#f0f0f0] flex gap-[4px] h-[54px] p-[5px] rounded-[4px] w-[96px] ${horizontal ? "" : "flex-col"}`} aria-hidden="true">
+    <span className={`bg-[#c9c9c9] rounded-[2px] ${horizontal ? "order-2 w-1/2" : "h-[24px]"}`} />
+    <span className={`flex flex-1 flex-col gap-[3px] justify-center ${horizontal ? "" : "px-[2px]"}`}>
+      <span className="bg-[#9a9a9a] h-[3px] rounded-full w-3/4" />
+      <span className="bg-[#c9c9c9] h-[3px] rounded-full w-full" />
+      <span className="bg-[#c9c9c9] h-[3px] rounded-full w-2/3" />
+    </span>
+  </span>
+);
+
+const workConfig: ListConfig<Project> = {
   title: "Work",
-  singular: "Project",
-  description: "Projects on the Home page (featured ones) and the Work page — the first four are stacked cards, the rest a grid — each with its own details page.",
+  singular: "Work",
+  description: "Projects on the Work page, each with its own details page, and (if switched on) the Home page.",
+  basePath: "/admin/work",
+  settings: [
+    { type: "toggle", path: "featured", label: "Show on the Home page", hint: "In the “Turn your ideas…” stacked cards." },
+    {
+      type: "choice",
+      path: "layout",
+      label: "Card style on the Work page",
+      wide: true,
+      hint: "Horizontal cards stack up as you scroll; vertical cards sit two per row on a dark band. Mix them in any order — neighbouring cards of the same style are grouped together.",
+      options: [
+        { value: "horizontal", label: "Horizontal card", preview: layoutPreview(true) },
+        { value: "vertical", label: "Vertical card", preview: layoutPreview(false) },
+      ],
+    },
+  ],
   fields: projectFields,
   newItem: () => {
     const sample = structuredClone(getContent().projects[0]?.detail);
     return {
-      id: newId("project"),
-      slug: "",
-      title: "",
+      ...newListed("work", "New work"),
+      layout: "vertical",
       category: "",
       summary: "",
       pages: "",
@@ -186,44 +250,50 @@ const workConfig: CollectionConfig<Project> = {
       },
     };
   },
-  itemTitle: (p) => p.title,
-  itemSubtitle: (p) => `${p.category}${p.featured ? " · on Home" : ""}`,
-  itemImage: (p) => p.cover,
+  summary: (p) => p.summary,
+  image: (p) => p.cover,
+  meta: (p) => [p.category, p.layout === "horizontal" ? "Horizontal card" : "Vertical card", p.featured && "on Home"].filter(Boolean).join(" · "),
   viewUrl: projectUrl,
 };
 
-export function WorkPage({ focusId }: PageProps) {
+export function WorkPage({ focusId, navigate }: PageProps) {
   const { projects } = useContent();
-  return <CollectionEditor config={workConfig} items={projects} onSave={(items) => api.save("projects", items)} focusId={focusId} />;
+  return <ListPage config={workConfig} items={projects} onSave={(items) => api.save("projects", items)} focusId={focusId} navigate={navigate} />;
 }
 
 // ---------------------------------------------------------------- blog
 
-const today = () => new Date().toISOString().slice(0, 10);
-
-const blogConfig: CollectionConfig<Post> = {
+const blogConfig: ListConfig<Post> = {
   title: "Blog Management",
-  singular: "Post",
-  description: "Posts are listed newest first on the Blog page; the three newest also appear in “Growth Insights”.",
+  singular: "Blog",
+  description: "Posts are listed newest first (by publish date) on the Blog page.",
+  basePath: "/admin/blog",
+  settings: [{ type: "toggle", path: "showOnHome", label: "Show on the Home page", hint: "In “Growth Insights” (the three newest switched-on posts)." }],
   fields: [
-    { type: "text", path: "title", label: "Title", required: true, wide: true },
-    { type: "slug", path: "slug", label: "Page address", from: "title", required: true },
-    { type: "date", path: "date", label: "Publish date", required: true },
-    { type: "lines", path: "categories", label: "Categories (one per line)", rows: 2, wide: false },
-    { type: "image", path: "image", label: "Cover image", wide: true },
-    { type: "textarea", path: "excerpt", label: "Excerpt (shown on the Blog page)", rows: 3 },
-    { type: "markdown", path: "body", label: "Article" },
+    {
+      type: "group",
+      label: "Card (Blog page and Growth Insights)",
+      fields: [
+        { type: "text", path: "title", label: "Title", required: true, wide: true },
+        { type: "slug", path: "slug", label: "Page address", from: "title", required: true },
+        { type: "date", path: "date", label: "Publish date", required: true },
+        { type: "lines", path: "categories", label: "Categories (one per line)", rows: 2, wide: false },
+        { type: "textarea", path: "excerpt", label: "Short description", rows: 3, hint: "Shown under the title on the Blog page." },
+        { type: "image", path: "image", label: "Cover image", wide: true },
+      ],
+    },
+    { type: "group", label: "Article page", fields: [{ type: "markdown", path: "body", label: "Article" }] },
   ],
-  newItem: () => ({ id: newId("post"), slug: "", title: "", excerpt: "", categories: ["UI Design"], date: today(), image: "", body: "" }),
-  itemTitle: (p) => p.title,
-  itemSubtitle: (p) => p.date,
-  itemImage: (p) => p.image,
+  newItem: () => ({ ...newListed("blog", "New blog post"), showOnHome: true, excerpt: "", categories: ["UI Design"], date: today(), image: "", body: "" }),
+  summary: (p) => p.excerpt,
+  image: (p) => p.image,
+  meta: (p) => `Published ${formatDate(p.date)}${p.showOnHome ? " · on Home" : ""}`,
   viewUrl: postUrl,
 };
 
-export function BlogPage({ focusId }: PageProps) {
+export function BlogPage({ focusId, navigate }: PageProps) {
   const { posts } = useContent();
-  return <CollectionEditor config={blogConfig} items={posts} onSave={(items) => api.save("posts", items)} focusId={focusId} />;
+  return <ListPage config={blogConfig} items={posts} onSave={(items) => api.save("posts", items)} focusId={focusId} navigate={navigate} />;
 }
 
 // ---------------------------------------------------------------- clients
@@ -249,27 +319,131 @@ export function ClientsPage({ focusId }: PageProps) {
 // ---------------------------------------------------------------- reviews
 
 const reviewsConfig: CollectionConfig<Review> = {
-  title: "Review Management",
+  title: "Published reviews",
   singular: "Review",
-  description: "Client reviews that scroll beside the rating card.",
+  description: "Shown on the Reviews page and in the reviews strip beside the rating card. Approved visitor reviews land here.",
   fields: [
+    { type: "toggle", path: "active", label: "Show on the website", wide: true },
     { type: "text", path: "name", label: "Reviewer name", required: true },
     { type: "text", path: "role", label: "Role", placeholder: "CTO" },
     { type: "text", path: "company", label: "Company" },
-    { type: "image", path: "avatar", label: "Photo", wide: true },
-    { type: "textarea", path: "quote", label: "Review", required: true, rows: 4 },
+    { type: "number", path: "rating", label: "Rating (1–5 stars)", required: true },
+    { type: "image", path: "avatar", label: "Photo (optional)", wide: true, hint: "Without a photo the reviewer's initials are shown." },
+    { type: "textarea", path: "quote", label: "Review (optional)", rows: 4 },
   ],
-  newItem: () => ({ id: newId("review"), company: "", quote: "", name: "", role: "", avatar: "" }),
+  newItem: () => ({ id: newId("review"), active: true, createdAt: today(), company: "", quote: "", name: "", role: "", avatar: "", rating: 5 }),
   itemTitle: (r) => r.name,
-  itemSubtitle: (r) => r.company,
+  itemSubtitle: (r) => `${"★".repeat(Math.max(0, Math.min(5, r.rating)))} ${r.company}${r.active ? "" : " · hidden"}`.trim(),
   itemImage: (r) => r.avatar,
+  validate: (items) => (items.some((r) => !(r.rating >= 1 && r.rating <= 5)) ? "Ratings must be between 1 and 5." : null),
 };
 
-export function ReviewsPage({ focusId }: PageProps) {
+function PendingCard({ review, onDone }: { review: PendingReview; onDone: () => void }) {
+  const [busy, setBusy] = useState(false);
+  const act = async (approve: boolean) => {
+    if (!approve && !window.confirm(`Reject and delete the review from ${review.name}?`)) return;
+    setBusy(true);
+    try {
+      if (approve) await api.approveReview(review.id);
+      else await api.rejectReview(review.id);
+      toast(approve ? `Review from ${review.name} is now on the website.` : "Review rejected.");
+      onDone();
+    } catch (e) {
+      toast((e as Error).message, true);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <li className={`${card} flex flex-col gap-[14px] p-[20px]`}>
+      <div className="flex flex-wrap gap-[12px] items-start justify-between">
+        <div className="flex gap-[12px] items-center">
+          {review.avatar ? (
+            <img src={review.avatar} alt="" className="block object-cover rounded-full shrink-0 size-[48px]" />
+          ) : (
+            <span className="bg-[#e9f9fb] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-full shrink-0 size-[48px] text-[#00a0b2] text-[16px]">{review.name.slice(0, 1).toUpperCase()}</span>
+          )}
+          <div className="flex flex-col gap-[2px]">
+            <span className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[16px]">{review.name}</span>
+            {(review.role || review.company) && <span className="font-['Inter:Regular'] text-[#707070] text-[13px]">{[review.role, review.company].filter(Boolean).join(" · ")}</span>}
+          </div>
+        </div>
+        <div className="flex flex-col gap-[2px] items-end">
+          <span className="text-[#f5a623] text-[18px] tracking-[2px]" aria-label={`${review.rating} out of 5 stars`}>
+            {"★".repeat(review.rating)}
+            <span className="text-[#dcdcdc]">{"★".repeat(5 - review.rating)}</span>
+          </span>
+          <span className="font-['Inter:Regular'] text-[#9a9a9a] text-[12px]">{new Date(review.createdAt).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+        </div>
+      </div>
+      {review.quote ? (
+        <p className="bg-[#fafafa] font-['Inter:Regular'] leading-[1.6] p-[14px] rounded-[6px] text-[#222] text-[15px] whitespace-pre-wrap">{review.quote}</p>
+      ) : (
+        <p className="font-['Inter:Regular'] italic text-[#9a9a9a] text-[14px]">Rating only, no written review.</p>
+      )}
+      <div className="flex flex-wrap gap-[10px] items-center">
+        <button type="button" className="bg-[#00b6ca] cursor-pointer flex font-['Inter:Semi_Bold'] font-semibold gap-[8px] items-center px-[16px] py-[9px] rounded-[6px] text-[14px] text-white hover:bg-[#009fb0] disabled:opacity-50" onClick={() => act(true)} disabled={busy}>
+          <CheckIcon size={16} /> Approve
+        </button>
+        <button type="button" className={`${secondaryButton} hover:!border-[#e5484d] hover:!text-[#e5484d]`} onClick={() => act(false)} disabled={busy}>
+          <TrashIcon size={16} /> Reject
+        </button>
+        {review.email && (
+          <a className={`${secondaryButton} ml-auto`} href={`mailto:${review.email}`}>
+            <MailIcon size={16} /> {review.email}
+          </a>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function PendingReviews({ pending, reload }: { pending: PendingReview[]; reload: () => void }) {
+  if (!pending.length) return <div className={`${card} font-['Inter:Regular'] p-[40px] text-center text-[#707070] text-[15px]`}>No reviews waiting. Reviews sent from the website's Reviews page appear here for approval.</div>;
+  return (
+    <ul className="flex flex-col gap-[16px]">
+      {pending.map((review) => (
+        <PendingCard key={review.id} review={review} onDone={reload} />
+      ))}
+    </ul>
+  );
+}
+
+export function ReviewsPage({ focusId, pendingReviews, reloadPendingReviews }: PageProps) {
   const { reviews, settings } = useContent();
+  // Waiting reviews load after the page opens, so the tab follows them until the admin picks one.
+  const [picked, setPicked] = useState<"pending" | "published" | null>(null);
+  const tab = picked ?? (pendingReviews.length && !focusId ? "pending" : "published");
   return (
     <div className="flex flex-col gap-[32px]">
-      <CollectionEditor config={reviewsConfig} items={reviews} onSave={(items) => api.save("reviews", items)} focusId={focusId} />
+      <div className="flex flex-col gap-[16px]">
+        <div className="flex flex-col gap-[4px]">
+          <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#191919] text-[24px]">Review Management</h1>
+          <p className="font-['Inter:Regular'] text-[#707070] text-[14px]">Visitors send reviews from the website's Reviews page; they go live only after you approve them.</p>
+        </div>
+        <div className="bg-white flex gap-[4px] p-[4px] rounded-[8px] self-start shadow-[0px_1px_4px_rgba(0,0,0,0.06)]">
+          {(
+            [
+              ["pending", `Waiting for approval${pendingReviews.length ? ` (${pendingReviews.length})` : ""}`],
+              ["published", "Published reviews"],
+            ] as const
+          ).map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              className={`cursor-pointer font-['Inter:Medium'] font-medium px-[16px] py-[8px] rounded-[6px] text-[14px] ${tab === key ? "bg-[#00b6ca] text-white" : "text-[#3e3e3e] hover:bg-[#f4fbfc]"}`}
+              onClick={() => setPicked(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      {tab === "pending" ? (
+        <PendingReviews pending={pendingReviews} reload={reloadPendingReviews} />
+      ) : (
+        <CollectionEditor config={reviewsConfig} items={reviews} onSave={(items) => api.save("reviews", items)} focusId={focusId} />
+      )}
       <ObjectEditor
         embedded
         title="Rating card"
@@ -287,48 +461,43 @@ export function ReviewsPage({ focusId }: PageProps) {
 
 // ---------------------------------------------------------------- achievements
 
-const statFields = (home: boolean): Field[] => [
-  { type: "number", path: "value", label: "Number", required: true, hint: "Counts up from 0 when it scrolls into view." },
-  { type: "text", path: "prefix", label: "Before the number", placeholder: "$" },
-  { type: "text", path: "suffix", label: "After the number", placeholder: "+ or % or M+" },
-  ...(home ? [{ type: "text", path: "after", label: "Words after it (optional)", placeholder: " global projects" } as Field] : []),
-  { type: "textarea", path: "label", label: "Label", required: true, rows: 2, hint: home ? "Press Enter for a line break on desktop." : undefined },
-];
-
-const statConfig = (home: boolean): CollectionConfig<Stat> => ({
-  title: home ? "Home page numbers" : "Company page numbers",
+const achievementsConfig: CollectionConfig<Stat> = {
+  title: "Numbers",
   singular: "Number",
-  description: home ? "The “Bold UX design, billion-dollar proof” cards. The last card is highlighted in cyan." : "The row of numbers on the Company page.",
-  fields: statFields(home),
-  newItem: () => ({ id: newId("stat"), value: 0, prefix: "", suffix: "+", after: "", label: "" }),
+  description: "One list for the Home page cards and the Company page row. Switch on where each number is shown; on Home the last card is highlighted in cyan.",
+  fields: [
+    { type: "toggle", path: "showOnHome", label: "Show on the Home page" },
+    { type: "toggle", path: "showOnCompany", label: "Show on the Company page" },
+    { type: "number", path: "value", label: "Number", required: true, hint: "Counts up from 0 when it scrolls into view." },
+    { type: "text", path: "prefix", label: "Before the number", placeholder: "$" },
+    { type: "text", path: "suffix", label: "After the number", placeholder: "+ or % or M+" },
+    { type: "text", path: "after", label: "Words after it (Home only, optional)", placeholder: " global projects" },
+    { type: "textarea", path: "label", label: "Label", required: true, rows: 2, hint: "Press Enter for a line break on the Home page." },
+  ],
+  newItem: () => ({ id: newId("stat"), value: 0, prefix: "", suffix: "+", after: "", label: "", showOnHome: true, showOnCompany: true }),
   itemTitle: (s) => `${s.prefix}${s.value}${s.suffix}${s.after}`,
-  itemSubtitle: (s) => s.label.replace(/\n/g, " "),
-});
+  itemSubtitle: (s) => [s.label.replace(/\n/g, " "), [s.showOnHome && "Home", s.showOnCompany && "Company"].filter(Boolean).join(" + ") || "Hidden"].join(" · "),
+};
 
 export function AchievementsPage({ focusId }: PageProps) {
-  const { achievements } = useContent();
-  const [tab, setTab] = useState<"home" | "company">(() => (focusId && achievements.company.some((s) => s.id === focusId) ? "company" : "home"));
+  const { achievements, settings } = useContent();
   return (
-    <div className="flex flex-col gap-[20px]">
-      <div className="bg-white flex gap-[4px] p-[4px] rounded-[8px] self-start shadow-[0px_1px_4px_rgba(0,0,0,0.06)]">
-        {(["home", "company"] as const).map((key) => (
-          <button
-            key={key}
-            type="button"
-            className={`cursor-pointer font-['Inter:Medium'] font-medium px-[16px] py-[8px] rounded-[6px] text-[14px] ${tab === key ? "bg-[#00b6ca] text-white" : "text-[#3e3e3e] hover:bg-[#f4fbfc]"}`}
-            onClick={() => setTab(key)}
-          >
-            {key === "home" ? "Home page" : "Company page"}
-          </button>
-        ))}
-      </div>
-      <CollectionEditor
-        key={tab}
-        config={statConfig(tab === "home")}
-        items={achievements[tab]}
-        onSave={(items) => api.save("achievements", { ...getContent().achievements, [tab]: items })}
-        focusId={focusId}
+    <div className="flex flex-col gap-[32px]">
+      <ObjectEditor
+        embedded
+        title="Section title"
+        description="The heading above the numbers on the Home page."
+        value={settings.titles.stats}
+        fields={[
+          { type: "text", path: "lead", label: "Dark part", required: true, wide: true },
+          { type: "textarea", path: "muted", label: "Grey part", rows: 2, hint: "Press Enter for a line break on desktop." },
+        ]}
+        onSave={(stats) => {
+          const current = getContent().settings;
+          return api.save("settings", { ...current, titles: { ...current.titles, stats } });
+        }}
       />
+      <CollectionEditor config={achievementsConfig} items={achievements} onSave={(items) => api.save("achievements", items)} focusId={focusId} />
     </div>
   );
 }

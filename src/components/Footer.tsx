@@ -2,34 +2,27 @@
 // the intro text and the service links come from the admin content.
 
 import { Fragment } from "react";
-import { serviceUrl } from "@/content/helpers";
+import { pageLinks, serviceUrl } from "@/content/helpers";
 import { useContent } from "@/content/store";
-
-export const quickLinks = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "Company", href: "/company" },
-  { label: "Blog", href: "/blog" },
-];
-
-export const supportLinks = [
-  { label: "Contact Us", href: "/contact" },
-  { label: "FAQ", href: "/contact#faq" },
-];
+import SocialIcon, { socialLabel } from "./SocialIcon";
 
 /** Footer data shared by the desktop and mobile footers. */
 export function useFooter() {
   const { settings, services } = useContent();
-  const { contact, footer } = settings;
+  const { contact, footer, labels } = settings;
   return {
+    labels: labels.footer,
+    quickLinks: pageLinks(labels.nav),
+    supportLinks: [
+      { label: labels.footer.contactUs, href: "/contact" },
+      { label: labels.footer.faq, href: "/contact#faq" },
+    ],
     text: footer.text,
     copyright: footer.copyright,
     serviceLinks: services.map((service) => ({ label: service.title, href: serviceUrl(service) })),
-    socialLinks: [
-      { label: "LinkedIn", href: footer.linkedin, icon: "/assets/shared/icons/linkedin.svg", iconClass: "size-[20px]" },
-      { label: "Facebook", href: footer.facebook, icon: "/assets/shared/icons/facebook.svg", iconClass: "h-[20px] w-[10.4px]" },
-    ].filter((social) => social.href),
+    socialLinks: (footer.socials ?? [])
+      .filter((social) => social.url.trim())
+      .map((social) => ({ id: social.id, platform: social.platform, label: socialLabel(social.platform), href: social.url.trim() })),
     contact: {
       phone: { label: contact.phone, href: `tel:${contact.phone.replace(/[^+\d]/g, "")}` },
       email: { label: contact.email, href: `mailto:${contact.email}` },
@@ -57,7 +50,7 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
 }
 
 export default function Footer({ className }: { className?: string }) {
-  const { text, copyright, serviceLinks, socialLinks, contact } = useFooter();
+  const { labels, quickLinks, supportLinks, text, copyright, serviceLinks, socialLinks, contact } = useFooter();
   return (
     <div role="contentinfo" className={className || "bg-[#191919] h-[764px] overflow-clip relative rounded-[8px] w-[1872px]"} data-name="Footer">
       <div className="absolute flex h-[222px] items-start justify-between left-[156px] right-[156px] top-[40px] z-[1]">
@@ -75,32 +68,28 @@ export default function Footer({ className }: { className?: string }) {
               ))}
             </p>
           </div>
-          <div className="flex gap-[16px] items-center">
+          <div className="flex flex-wrap gap-[16px] items-center">
             {socialLinks.map((social) => (
               <a
-                key={social.label}
+                key={social.id}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`DesignOps on ${social.label}`}
-                className="border border-transparent flex group items-center justify-center p-[10px] rounded-[999px] size-[40px] transition-[background-color,border-color,transform] duration-300 hover:-translate-y-[2px] hover:bg-[#00b6ca] hover:border-[#00b6ca]"
+                className="border border-transparent flex items-center justify-center p-[10px] rounded-[999px] size-[40px] text-[#00b6ca] transition-[background-color,border-color,color,transform] duration-300 hover:-translate-y-[2px] hover:bg-[#00b6ca] hover:border-[#00b6ca] hover:text-white"
               >
-                <img
-                  alt=""
-                  className={`block transition-[filter] duration-300 group-hover:brightness-0 group-hover:invert ${social.iconClass}`}
-                  src={social.icon}
-                />
+                <SocialIcon platform={social.platform} size={20} className="block" />
               </a>
             ))}
           </div>
         </div>
 
-        <LinkColumn title="Quick Links" links={quickLinks} />
-        <LinkColumn title="Support" links={supportLinks} />
-        <LinkColumn title="Services" links={serviceLinks} />
+        <LinkColumn title={labels.quickLinks} links={quickLinks} />
+        <LinkColumn title={labels.support} links={supportLinks} />
+        <LinkColumn title={labels.services} links={serviceLinks} />
 
         <div className="flex flex-col gap-[24px] items-start shrink-0 w-[306px]">
-          <p className={heading}>Contact Info</p>
+          <p className={heading}>{labels.contactInfo}</p>
           <div className="flex flex-col gap-[16px] items-start w-full">
             <div className="flex gap-[8px] items-start">
               <img alt="" className="block shrink-0 size-[20px]" src="/assets/shared/icons/phone.svg" />
@@ -131,8 +120,8 @@ export default function Footer({ className }: { className?: string }) {
         <div className="flex items-start justify-between text-[18px] text-white w-full whitespace-nowrap">
           <p className="font-['Inter:Regular'] font-normal leading-[1.2]">{copyright}</p>
           <div className="flex font-['Inter:Medium'] font-medium gap-[16px] items-center">
-            <p className="leading-[1.2]">Privacy Policy</p>
-            <p className="leading-[1.2]">Terms of Service</p>
+            <p className="leading-[1.2]">{labels.privacy}</p>
+            <p className="leading-[1.2]">{labels.terms}</p>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ function SectionLabel({ children }: { children: string }) {
 
 // Work details page (/work/:slug), one layout for every project.
 export default function WorkDetails() {
-  useContent(); // re-render when the content changes
+  const labels = useContent().settings.labels.workDetails;
   const project = currentProject();
   const { detail } = project;
   const { solution } = detail;
@@ -60,7 +60,7 @@ export default function WorkDetails() {
 
       <div className="flex flex-col gap-[56px] items-start mt-[80px] shrink-0 text-[20px] w-[1560px]">
         <p className="font-['Inter:Regular'] leading-[1.4] text-[#2f2f2f] w-full">
-          <span className="font-['Inter:Semi_Bold'] font-semibold">Project overview:</span> {detail.overview}
+          <span className="font-['Inter:Semi_Bold'] font-semibold">{labels.overview}</span> {detail.overview}
         </p>
         <div className="flex gap-[80px] items-start w-full">
           {[
@@ -83,7 +83,7 @@ export default function WorkDetails() {
       </div>
 
       <div className="flex flex-col gap-[20px] items-start mt-[80px] shrink-0 w-[1560px]">
-        <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[24px] w-full">Goals</p>
+        <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[24px] w-full">{labels.goals}</p>
         <div className="flex flex-col font-['Inter:Regular'] gap-[20px] items-start text-[18px] w-full">
           <p className="leading-[1.4] text-[#333] w-full">{detail.goals}</p>
           {detail.goalPoints.length > 0 && (
@@ -100,7 +100,7 @@ export default function WorkDetails() {
 
       <div className="flex gap-[24px] items-center min-h-[619px] mt-[159px] shrink-0 w-[1560px]">
         <div className="flex flex-[1_0_0] flex-col gap-[16px] items-start min-w-px">
-          <Tag>The Challenge</Tag>
+          <Tag>{labels.challenge}</Tag>
           <div className="flex flex-col gap-[20px] items-start w-full">
             <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[24px] w-full">{detail.challenge.title}</p>
             <div className="flex flex-col font-['Inter:Regular'] gap-[20px] items-start text-[18px] w-full">
@@ -122,7 +122,7 @@ export default function WorkDetails() {
 
       <div className="bg-[#191919] flex flex-col gap-[32px] items-start mt-[160px] px-[180px] py-[64px] shrink-0 w-[1920px]">
         <div className="flex flex-col gap-[16px] items-start w-[852px]">
-          <Tag>The Solution</Tag>
+          <Tag>{labels.solution}</Tag>
           <div className="flex flex-col gap-[16px] items-start text-white w-full">
             <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[24px] w-full">{solution.title}</p>
             <p className="font-['Inter:Regular'] leading-[1.2] text-[18px] w-full">{solution.text}</p>
@@ -168,7 +168,7 @@ export default function WorkDetails() {
       {detail.palette.length > 0 && (
         <div className="flex flex-col gap-[64px] items-start mt-[81px] shrink-0 w-[1560px]">
           <div className="flex flex-col gap-[40px] items-start w-full">
-            <SectionLabel>Color Palette</SectionLabel>
+            <SectionLabel>{labels.palette}</SectionLabel>
             <p className="font-['Inter:Regular'] leading-[1.2] text-[#2f2f2f] text-[18px] w-full">This website uses a {detail.palette.length} color palette.</p>
           </div>
           <ColorPalette colors={detail.palette} />
@@ -177,7 +177,7 @@ export default function WorkDetails() {
 
       {detail.tags.length > 0 && (
         <div className="flex flex-col gap-[56px] items-start mt-[79px] shrink-0 w-[1560px]">
-          <SectionLabel>Technologies &amp; Tools</SectionLabel>
+          <SectionLabel>{labels.tools}</SectionLabel>
           <div className="flex flex-wrap gap-[24px] items-center w-full">
             {detail.tags.map((tag) => (
               <div key={tag} className="border border-[#2f2f2f] border-solid flex items-center justify-center px-[32px] py-[13.5px] rounded-[9999px] shrink-0">

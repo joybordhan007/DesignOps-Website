@@ -1,4 +1,5 @@
-import { quickLinks, supportLinks, useFooter } from "@/components/Footer";
+import { useFooter } from "@/components/Footer";
+import SocialIcon from "@/components/SocialIcon";
 
 // Mobile/tablet layout of the site footer. The links and contact details come
 // from components/Footer.tsx, so editing them there updates both layouts.
@@ -24,7 +25,7 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
 }
 
 export default function MobileFooter() {
-  const { text, copyright, serviceLinks, socialLinks, contact } = useFooter();
+  const { labels, quickLinks, supportLinks, text, copyright, serviceLinks, socialLinks, contact } = useFooter();
   return (
     <footer className="px-[8px] pb-[8px]" data-name="Footer">
       <div className="bg-[#191919] isolate overflow-hidden relative rounded-[8px]">
@@ -44,32 +45,32 @@ export default function MobileFooter() {
             <p className="font-['Inter:Regular'] leading-[1.4] text-[#dfdfdf] text-[14px]">
               {text.replace(/\s*\n\s*/g, " ")}
             </p>
-            <div className="flex gap-[12px]">
+            <div className="flex flex-wrap gap-[12px]">
               {socialLinks.map((social) => (
                 <a
-                  key={social.label}
+                  key={social.id}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`DesignOps on ${social.label}`}
-                  className="border border-[rgba(255,255,255,0.25)] flex group items-center justify-center rounded-full size-[44px] transition-colors duration-300 hover:bg-[#00b6ca] hover:border-[#00b6ca]"
+                  className="border border-[rgba(255,255,255,0.25)] flex items-center justify-center rounded-full size-[44px] text-[#00b6ca] transition-colors duration-300 hover:bg-[#00b6ca] hover:border-[#00b6ca] hover:text-white"
                 >
-                  <img alt="" className={`block transition-[filter] duration-300 group-hover:brightness-0 group-hover:invert ${social.iconClass}`} src={social.icon} />
+                  <SocialIcon platform={social.platform} size={20} className="block" />
                 </a>
               ))}
             </div>
           </div>
 
           <div className="gap-x-[24px] gap-y-[32px] grid grid-cols-2 md:grid-cols-3">
-            <LinkColumn title="Quick Links" links={quickLinks} />
-            <LinkColumn title="Support" links={supportLinks} />
+            <LinkColumn title={labels.quickLinks} links={quickLinks} />
+            <LinkColumn title={labels.support} links={supportLinks} />
             <div className="col-span-2 md:col-span-1">
-              <LinkColumn title="Services" links={serviceLinks} />
+              <LinkColumn title={labels.services} links={serviceLinks} />
             </div>
           </div>
 
           <div className="flex flex-col gap-[16px]">
-            <p className={heading}>Contact Info</p>
+            <p className={heading}>{labels.contactInfo}</p>
             <a href={contact.phone.href} className={`flex gap-[10px] items-center ${link}`}>
               <img alt="" className="block shrink-0 size-[20px]" src="/assets/shared/icons/phone.svg" />
               {contact.phone.label}
@@ -87,8 +88,8 @@ export default function MobileFooter() {
           <div className="border-[rgba(255,255,255,0.15)] border-t flex flex-col gap-[12px] pt-[20px] text-[12px] text-white md:flex-row md:justify-between">
             <p className="font-['Inter:Regular'] leading-[1.2]">{copyright}</p>
             <div className="flex font-['Inter:Medium'] font-medium gap-[16px]">
-              <p className="leading-[1.2]">Privacy Policy</p>
-              <p className="leading-[1.2]">Terms of Service</p>
+              <p className="leading-[1.2]">{labels.privacy}</p>
+              <p className="leading-[1.2]">{labels.terms}</p>
             </div>
           </div>
         </div>

@@ -9,6 +9,8 @@ dashboard edits, and keeps uploaded images/videos.
 | Admin dashboard | `https://your-domain/admin` |
 | Site content (texts, lists, settings) | `server/data/content.json` |
 | Contact-form messages | `server/data/messages.json` |
+| Reviews waiting for approval | `server/data/pending-reviews.json` |
+| Photos sent with visitor reviews | `server/uploads/reviews/` |
 | Admin account (password is hashed) | `server/data/admin.json` |
 | Uploaded images & videos | `server/uploads/` |
 
@@ -16,6 +18,11 @@ dashboard edits, and keeps uploaded images/videos.
 start (the content starts as a copy of `src/content/defaultContent.json`).
 They are **not** in git — back them up, and never overwrite them when you
 upload a new version of the site.
+
+**Tracking (Google Tag Manager, Meta Pixel):** set the IDs in the
+dashboard under *Tracking & Analytics*. The server writes the tags into every
+website page it sends (`server/tracking.js`), never into `/admin`; the site
+then reports page changes and conversions (`src/lib/tracking.ts`).
 
 ## Run it on your computer
 

@@ -18,7 +18,7 @@ const articleStyles = {
 
 // Blog post page (/blog/:slug) on small screens.
 export default function BlogDetails() {
-  useContent(); // re-render when the content changes
+  const labels = useContent().settings.labels.blogDetails;
   const post = currentPost();
   const blocks = useMemo(() => parseArticle(post.body), [post.body]);
   const headings = blocks.flatMap((block) => (block.type === "h2" ? [block] : []));
@@ -36,7 +36,7 @@ export default function BlogDetails() {
         {headings.length > 0 && (
           <details className="bg-white group p-[18px] rounded-[10px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]">
             <summary className="cursor-pointer flex font-['Inter:Semi_Bold'] font-semibold items-center justify-between leading-[1.2] list-none text-[#2f2f2f] text-[16px]">
-              Table of Contents
+              {labels.toc}
               <span aria-hidden="true" className="text-[#00b6ca] text-[20px] transition-transform duration-300 group-open:rotate-45">
                 +
               </span>
@@ -58,13 +58,13 @@ export default function BlogDetails() {
 
       <aside className="gap-[16px] grid mx-auto px-[20px] pb-[16px] w-full max-w-[760px] md:grid-cols-2">
         <div className="bg-[#00b6ca] flex flex-col gap-[16px] p-[24px] rounded-[8px] text-white">
-          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px]">UI UX design Inspiration right in your inbox</p>
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px]">{labels.newsletterTitle}</p>
           <p className="font-['Inter:Regular'] leading-[1.5] text-[14px]">
-            By entering your email, you are agreeing to our <span className="underline">privacy policy.</span>
+            {labels.newsletterText} <span className="underline">{labels.newsletterLink}</span>
           </p>
         </div>
         <div className="bg-black flex flex-col gap-[20px] items-start p-[24px] rounded-[8px]">
-          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px] text-white">Want a site that sells, Not just sits?</p>
+          <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px] text-white">{labels.ctaTitle}</p>
           <TalkButton />
         </div>
       </aside>

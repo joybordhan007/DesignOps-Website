@@ -1,23 +1,21 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type FormEvent } from "react";
 import { useContent } from "@/content/store";
-import type { Message } from "@/content/types";
+import type { Message, PendingReview } from "@/content/types";
 import { api, ApiError, type AdminUser } from "./api";
-import { confirmLeave, primaryButton, secondaryButton, ToastHost, toast } from "./editor";
+import { confirmLeave, ToastHost, toast } from "./editor";
 import { inputClass as inputClassName } from "./fields";
 import {
   AchievementIcon,
-  BellIcon,
+  AnalyticsIcon,
   BlogIcon,
   ChevronDown,
   ClientIcon,
   CloseIcon,
-  ContactIcon,
   DashboardIcon,
   ExternalIcon,
   EyeIcon,
   EyeOffIcon,
   FaqIcon,
-  KeyIcon,
   LogoutIcon,
   MenuIcon,
   MessageIcon,
@@ -29,26 +27,58 @@ import {
 } from "./icons";
 import Dashboard from "./pages/Dashboard";
 import { AchievementsPage, BlogPage, ClientsPage, FaqPage, ReviewsPage, ServicesPage, WorkPage } from "./pages/Collections";
-import ContactPage from "./pages/Contact";
+import MessagesPage from "./pages/Messages";
 import SettingsPage from "./pages/Settings";
+import ProfilePage, { AdminAvatar } from "./pages/Profile";
+import TrackingPage from "./pages/Tracking";
 
 // Admin dashboard at /admin. Signs in against the server, then shows the
 // sidebar layout; each sidebar entry edits one part of the website.
 
-export type PageProps = { messages: Message[]; reloadMessages: () => void; focusId?: string; navigate: (to: string) => void };
+// Old links to the former "Contact Management" page open Messages.
+const ALIASES: Record<string, string> = { contact: "messages" };
 
-const NAV: { path: string; label: string; icon: ComponentType<{ size?: number }>; page: ComponentType<PageProps> }[] = [
-  { path: "", label: "Dashboard", icon: DashboardIcon, page: Dashboard },
-  { path: "services", label: "Services", icon: ServicesIcon, page: ServicesPage },
-  { path: "work", label: "Work", icon: WorkIcon, page: WorkPage },
-  { path: "blog", label: "Blog Management", icon: BlogIcon, page: BlogPage },
-  { path: "contact", label: "Contact Management", icon: ContactIcon, page: ContactPage },
-  { path: "clients", label: "Client Management", icon: ClientIcon, page: ClientsPage },
-  { path: "reviews", label: "Review Management", icon: ReviewIcon, page: ReviewsPage },
-  { path: "achievements", label: "Achievement Management", icon: AchievementIcon, page: AchievementsPage },
-  { path: "faq", label: "FAQ Management", icon: FaqIcon, page: FaqPage },
-  { path: "settings", label: "Website Settings", icon: SettingsIcon, page: SettingsPage },
+export type PageProps = {
+  messages: Message[];
+  reloadMessages: () => void;
+  pendingReviews: PendingReview[];
+  reloadPendingReviews: () => void;
+  focusId?: string;
+  navigate: (to: string) => void;
+};
+
+type NavItem = { path: string; label: string; icon: ComponentType<{ size?: number }>; page: ComponentType<PageProps>; badge?: "messages" | "reviews" };
+
+const NAV_GROUPS: { title: string; items: NavItem[] }[] = [
+  { title: "Overview", items: [{ path: "", label: "Dashboard", icon: DashboardIcon, page: Dashboard }] },
+  {
+    title: "Website content",
+    items: [
+      { path: "services", label: "Services", icon: ServicesIcon, page: ServicesPage },
+      { path: "work", label: "Work", icon: WorkIcon, page: WorkPage },
+      { path: "blog", label: "Blog Management", icon: BlogIcon, page: BlogPage },
+      { path: "clients", label: "Client Management", icon: ClientIcon, page: ClientsPage },
+      { path: "achievements", label: "Achievement Management", icon: AchievementIcon, page: AchievementsPage },
+      { path: "faq", label: "FAQ Management", icon: FaqIcon, page: FaqPage },
+    ],
+  },
+  {
+    title: "Engagement",
+    items: [
+      { path: "messages", label: "Messages", icon: MessageIcon, page: MessagesPage, badge: "messages" },
+      { path: "reviews", label: "Review Management", icon: ReviewIcon, page: ReviewsPage, badge: "reviews" },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [
+      { path: "settings", label: "Website Settings", icon: SettingsIcon, page: SettingsPage },
+      { path: "tracking", label: "Tracking & Analytics", icon: AnalyticsIcon, page: TrackingPage },
+    ],
+  },
 ];
+
+const NAV = NAV_GROUPS.flatMap((group) => group.items);
 
 const LOGO = "/assets/shared/logos/designops-logo.svg";
 const LOGO_LIGHT = "/assets/shared/logos/designops-logo-footer.svg";
@@ -116,47 +146,6 @@ function Login({ onSignedIn }: { onSignedIn: (user: AdminUser) => void }) {
         </button>
       </form>
     </main>
-  );
-}
-
-// ---------------------------------------------------------------- change password
-
-function PasswordDialog({ onClose }: { onClose: () => void }) {
-  const [current, setCurrent] = useState("");
-  const [next, setNext] = useState("");
-  const [repeat, setRepeat] = useState("");
-  const [busy, setBusy] = useState(false);
-  const submit = async (event: FormEvent) => {
-    event.preventDefault();
-    if (next !== repeat) return toast("The new passwords don't match.", true);
-    setBusy(true);
-    try {
-      await api.changePassword(current, next);
-      toast("Password changed.");
-      onClose();
-    } catch (e) {
-      toast((e as Error).message, true);
-    } finally {
-      setBusy(false);
-    }
-  };
-  return (
-    <div className="bg-[rgba(0,0,0,0.4)] fixed flex inset-0 items-center justify-center p-[16px] z-[90]" onClick={onClose}>
-      <form onSubmit={submit} onClick={(e) => e.stopPropagation()} className="bg-white flex flex-col gap-[14px] max-w-[420px] p-[24px] rounded-[12px] w-full">
-        <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[18px]">Change password</h2>
-        <input className={inputClassName} type="password" placeholder="Current password" autoComplete="current-password" required value={current} onChange={(e) => setCurrent(e.target.value)} />
-        <input className={inputClassName} type="password" placeholder="New password (8+ characters)" autoComplete="new-password" minLength={8} required value={next} onChange={(e) => setNext(e.target.value)} />
-        <input className={inputClassName} type="password" placeholder="Repeat new password" autoComplete="new-password" minLength={8} required value={repeat} onChange={(e) => setRepeat(e.target.value)} />
-        <div className="flex gap-[10px] justify-end">
-          <button type="button" className={secondaryButton} onClick={onClose}>
-            Cancel
-          </button>
-          <button type="submit" className={primaryButton} disabled={busy}>
-            {busy ? "Saving…" : "Change password"}
-          </button>
-        </div>
-      </form>
-    </div>
   );
 }
 
@@ -240,21 +229,10 @@ function Badge({ count }: { count: number }) {
   );
 }
 
-function TopBar({ user, unread, messages, navigate, onMenu, onSignOut }: { user: AdminUser; unread: number; messages: Message[]; navigate: (to: string) => void; onMenu: () => void; onSignOut: () => void }) {
+function TopBar({ user, unread, navigate, onMenu, onSignOut }: { user: AdminUser; unread: number; navigate: (to: string) => void; onMenu: () => void; onSignOut: () => void }) {
   const [menu, setMenu] = useState(false);
-  const [bell, setBell] = useState(false);
-  const [password, setPassword] = useState(false);
   const closeMenu = useCallback(() => setMenu(false), []);
-  const closeBell = useCallback(() => setBell(false), []);
   const menuRef = useOutsideClose(menu, closeMenu);
-  const bellRef = useOutsideClose(bell, closeBell);
-  const latest = messages.filter((m) => !m.read).slice(0, 5);
-  const initials = user.name
-    .split(/\s+/)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
   return (
     <header className="bg-[#f5f5f5] flex gap-[20px] items-center px-[50px] py-[32px] sticky top-0 z-[30] max-lg:px-[16px] max-lg:py-[16px]">
@@ -263,33 +241,13 @@ function TopBar({ user, unread, messages, navigate, onMenu, onSignOut }: { user:
       </button>
       <Search navigate={navigate} />
       <div className="flex gap-[28px] items-center ml-auto max-sm:gap-[16px]">
-        <button type="button" aria-label={`Messages (${unread} unread)`} className="cursor-pointer relative text-[#191919] hover:text-[#00b6ca]" onClick={() => navigate("/admin/contact")}>
+        <button type="button" aria-label={`Messages (${unread} unread)`} className="cursor-pointer relative text-[#191919] hover:text-[#00b6ca]" onClick={() => navigate("/admin/messages")}>
           <MessageIcon size={28} />
           <Badge count={unread} />
         </button>
-        <div ref={bellRef} className="relative">
-          <button type="button" aria-label="Notifications" className="cursor-pointer relative text-[#191919] hover:text-[#00b6ca]" onClick={() => setBell(!bell)}>
-            <BellIcon size={28} />
-            <Badge count={unread} />
-          </button>
-          {bell && (
-            <div className="absolute bg-white mt-[10px] overflow-hidden right-0 rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.14)] w-[320px] z-[40]">
-              <p className="border-[#f0f0f0] border-b font-['Inter:Semi_Bold'] font-semibold px-[16px] py-[12px] text-[14px]">New messages</p>
-              {latest.map((m) => (
-                <button key={m.id} type="button" className="border-[#f6f6f6] border-b cursor-pointer flex flex-col gap-[2px] px-[16px] py-[10px] text-left w-full hover:bg-[#f4fbfc]" onClick={() => (setBell(false), navigate(`/admin/contact?item=${m.id}`))}>
-                  <span className="font-['Inter:Medium'] font-medium text-[#222] text-[14px]">
-                    {m.first_name} {m.last_name}
-                  </span>
-                  <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px] truncate">{m.message || m.email}</span>
-                </button>
-              ))}
-              {!latest.length && <p className="font-['Inter:Regular'] px-[16px] py-[14px] text-[#8a8a8a] text-[14px]">You're all caught up.</p>}
-            </div>
-          )}
-        </div>
         <div ref={menuRef} className="relative">
           <button type="button" className="cursor-pointer flex gap-[12px] items-center" onClick={() => setMenu(!menu)}>
-            <span className="bg-[#191919] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-full shrink-0 size-[40px] text-[14px] text-white">{initials}</span>
+            <AdminAvatar user={user} size={40} />
             <span className="flex flex-col items-start max-sm:hidden">
               <span className="font-['Inter:Medium'] font-medium leading-[1.3] text-[#191919] text-[14px]">{user.name}</span>
               <span className="font-['Inter:Regular'] leading-[1.3] text-[#505050] text-[12px]">Super Admin</span>
@@ -299,63 +257,94 @@ function TopBar({ user, unread, messages, navigate, onMenu, onSignOut }: { user:
           {menu && (
             <div className="absolute bg-white mt-[10px] overflow-hidden py-[6px] right-0 rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.14)] w-[220px] z-[40]">
               <p className="border-[#f0f0f0] border-b font-['Inter:Regular'] mb-[6px] px-[16px] pb-[10px] pt-[4px] text-[#8a8a8a] text-[12px] truncate">{user.email}</p>
-              <a href="/" target="_blank" rel="noreferrer" className="flex font-['Inter:Medium'] font-medium gap-[10px] items-center px-[16px] py-[10px] text-[#222] text-[14px] hover:bg-[#f4fbfc]">
-                <ExternalIcon size={18} /> View website
-              </a>
-              <button type="button" className="cursor-pointer flex font-['Inter:Medium'] font-medium gap-[10px] items-center px-[16px] py-[10px] text-[#222] text-[14px] w-full hover:bg-[#f4fbfc]" onClick={() => (setMenu(false), setPassword(true))}>
-                <KeyIcon size={18} /> Change password
+              <button type="button" className="cursor-pointer flex font-['Inter:Medium'] font-medium gap-[10px] items-center px-[16px] py-[10px] text-[#222] text-[14px] w-full hover:bg-[#f4fbfc]" onClick={() => (setMenu(false), navigate("/admin/profile"))}>
+                <ClientIcon size={18} /> Profile
               </button>
               <button type="button" className="cursor-pointer flex font-['Inter:Medium'] font-medium gap-[10px] items-center px-[16px] py-[10px] text-[#d93a3f] text-[14px] w-full hover:bg-[#fdf1f1]" onClick={onSignOut}>
-                <LogoutIcon size={18} /> Sign out
+                <LogoutIcon size={18} /> Logout
               </button>
             </div>
           )}
         </div>
       </div>
-      {password && <PasswordDialog onClose={() => setPassword(false)} />}
     </header>
   );
 }
 
 // ---------------------------------------------------------------- layout
 
-function Sidebar({ section, navigate, open, onClose }: { section: string; navigate: (to: string) => void; open: boolean; onClose: () => void }) {
+function Sidebar({ section, navigate, open, onClose, counts }: { section: string; navigate: (to: string) => void; open: boolean; onClose: () => void; counts: Record<"messages" | "reviews", number> }) {
   return (
     <>
       {open && <div className="bg-[rgba(0,0,0,0.4)] fixed inset-0 lg:hidden z-[45]" onClick={onClose} aria-hidden="true" />}
       <aside
-        className={`bg-[#191919] fixed flex flex-col gap-[40px] h-svh left-0 overflow-y-auto px-[24px] py-[40px] top-0 transition-transform w-[350px] z-[50] max-lg:w-[300px] ${
-          open ? "translate-x-0" : "max-lg:-translate-x-full"
-        }`}
+        className={`bg-[#191919] fixed flex flex-col h-svh left-0 top-0 transition-transform w-[350px] z-[50] max-lg:w-[300px] ${open ? "translate-x-0" : "max-lg:-translate-x-full"}`}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between pb-[28px] pt-[36px] px-[24px] max-lg:pb-[20px] max-lg:pt-[24px]">
           <a href="/admin" onClick={(e) => (e.preventDefault(), navigate("/admin"))} className="block pl-[28px] max-lg:pl-[8px]">
-            <img src={LOGO_LIGHT} alt="DesignOps" className="block h-[56px] w-auto" />
+            <img src={LOGO_LIGHT} alt="DesignOps" className="block h-[56px] w-auto max-lg:h-[44px]" />
           </a>
           <button type="button" aria-label="Close menu" className="cursor-pointer lg:hidden p-[6px] text-white" onClick={onClose}>
             <CloseIcon />
           </button>
         </div>
-        <nav aria-label="Admin" className="flex flex-col gap-[12px]">
-          {NAV.map((item) => {
-            const active = item.path === section;
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.path}
-                href={`/admin${item.path ? `/${item.path}` : ""}`}
-                onClick={(e) => (e.preventDefault(), navigate(`/admin${item.path ? `/${item.path}` : ""}`))}
-                aria-current={active ? "page" : undefined}
-                className={`flex font-['Inter:Medium'] font-medium gap-[12px] h-[60px] items-center px-[20px] rounded-[4px] text-[18px] transition-colors whitespace-nowrap max-lg:h-[52px] max-lg:text-[16px] ${
-                  active ? "bg-[#00b6ca] text-white" : "text-white hover:bg-[rgba(255,255,255,0.08)]"
-                }`}
-              >
-                <Icon size={22} />
-                {item.label}
-              </a>
-            );
-          })}
+
+        {/* Pages grouped by job; the active one is the cyan pill. */}
+        <nav aria-label="Admin" className="[scrollbar-color:#3a3a3a_transparent] [scrollbar-width:thin] flex flex-1 flex-col gap-[22px] min-h-0 overflow-y-auto pb-[20px] px-[24px] max-lg:px-[16px]">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.title} className="flex flex-col gap-[4px]">
+              <p className="font-['Inter:Semi_Bold'] font-semibold pb-[6px] px-[14px] text-[#6f6f6f] text-[11px] tracking-[1.2px] uppercase">{group.title}</p>
+              {group.items.map((item) => {
+                const active = item.path === section;
+                const Icon = item.icon;
+                const count = item.badge ? counts[item.badge] : 0;
+                const href = `/admin${item.path ? `/${item.path}` : ""}`;
+                return (
+                  <a
+                    key={item.path}
+                    href={href}
+                    onClick={(e) => (e.preventDefault(), navigate(href))}
+                    aria-current={active ? "page" : undefined}
+                    className={`flex font-['Inter:Medium'] font-medium gap-[12px] group h-[50px] items-center pl-[10px] pr-[14px] rounded-[8px] text-[15px] transition-colors whitespace-nowrap ${
+                      active ? "bg-[#00b6ca] shadow-[0px_6px_18px_rgba(0,182,202,0.28)] text-white" : "text-[#cfcfcf] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
+                    }`}
+                  >
+                    <span
+                      className={`flex items-center justify-center rounded-[8px] shrink-0 size-[34px] transition-colors ${
+                        active ? "bg-[rgba(255,255,255,0.2)] text-white" : "bg-[rgba(255,255,255,0.05)] text-[#9a9a9a] group-hover:text-[#00b6ca]"
+                      }`}
+                    >
+                      <Icon size={19} />
+                    </span>
+                    <span className="truncate">{item.label}</span>
+                    {count > 0 && (
+                      <span className={`flex font-['Inter:Bold'] font-bold h-[20px] items-center justify-center min-w-[20px] ml-auto px-[6px] rounded-full text-[11px] ${active ? "bg-white text-[#00a0b2]" : "bg-[#ff2d2d] text-white"}`}>
+                        {count > 99 ? "99+" : count}
+                      </span>
+                    )}
+                  </a>
+                );
+              })}
+            </div>
+          ))}
         </nav>
+
+        <div className="border-[rgba(255,255,255,0.08)] border-t px-[24px] py-[18px] max-lg:px-[16px]">
+          <a
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+            className="bg-[rgba(255,255,255,0.05)] flex font-['Inter:Medium'] font-medium gap-[12px] items-center px-[12px] py-[10px] rounded-[8px] text-[#e5e5e5] text-[14px] transition-colors hover:bg-[rgba(0,182,202,0.15)]"
+          >
+            <span className="bg-[rgba(0,182,202,0.15)] flex items-center justify-center rounded-[8px] shrink-0 size-[34px] text-[#00b6ca]">
+              <ExternalIcon size={17} />
+            </span>
+            <span className="flex flex-col">
+              View live website
+              <span className="font-['Inter:Regular'] text-[#7a7a7a] text-[12px]">Opens in a new tab</span>
+            </span>
+          </a>
+        </div>
       </aside>
     </>
   );
@@ -367,6 +356,8 @@ export default function AdminApp() {
   const [serverDown, setServerDown] = useState(false);
   const [location, setLocation] = useState(() => window.location.pathname + window.location.search);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [pendingReviews, setPendingReviews] = useState<PendingReview[]>([]);
+  const [contentLoaded, setContentLoaded] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -385,12 +376,22 @@ export default function AdminApp() {
     api.messages().then(setMessages).catch(() => {});
   }, []);
 
+  const reloadPendingReviews = useCallback(() => {
+    api.pendingReviews().then(setPendingReviews).catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (!user) return;
-    reloadMessages();
-    const timer = setInterval(reloadMessages, 60_000);
+    // The page only carries what visitors see; the dashboard also needs inactive items.
+    api
+      .loadContent()
+      .catch((e) => toast(`Couldn't load hidden items: ${(e as Error).message}`, true))
+      .finally(() => setContentLoaded(true));
+    const reload = () => (reloadMessages(), reloadPendingReviews());
+    reload();
+    const timer = setInterval(reload, 60_000);
     return () => clearInterval(timer);
-  }, [user, reloadMessages]);
+  }, [user, reloadMessages, reloadPendingReviews]);
 
   const navigate = useCallback((to: string) => {
     if (to === window.location.pathname + window.location.search) return;
@@ -417,8 +418,11 @@ export default function AdminApp() {
     );
   }
 
+  if (!contentLoaded) return null;
+
   const [pathname, search] = location.split("?");
-  const section = pathname.replace(/^\/admin\/?/, "").split("/")[0] || currentSection();
+  const rawSection = pathname.replace(/^\/admin\/?/, "").split("/")[0] || currentSection();
+  const section = ALIASES[rawSection] ?? rawSection;
   const entry = NAV.find((item) => item.path === section) ?? NAV[0];
   const Page = entry.page;
   const focusId = new URLSearchParams(search ?? "").get("item") ?? undefined;
@@ -434,11 +438,16 @@ export default function AdminApp() {
 
   return (
     <div className="bg-[#f5f5f5] min-h-svh">
-      <Sidebar section={entry.path} navigate={navigate} open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <Sidebar section={section === "profile" ? "profile" : entry.path} navigate={navigate} open={menuOpen} onClose={() => setMenuOpen(false)} counts={{ messages: unread, reviews: pendingReviews.length }} />
       <div className="lg:pl-[350px]">
-        <TopBar user={user} unread={unread} messages={messages} navigate={navigate} onMenu={() => setMenuOpen(true)} onSignOut={signOut} />
+        <TopBar user={user} unread={unread} navigate={navigate} onMenu={() => setMenuOpen(true)} onSignOut={signOut} />
         <main className="pb-[60px] px-[50px] max-lg:px-[16px]">
-          <Page key={entry.path} messages={messages} reloadMessages={reloadMessages} focusId={focusId} navigate={navigate} />
+          {/* The profile page is opened from the account menu, not the sidebar. */}
+          {section === "profile" ? (
+            <ProfilePage user={user} onChange={setUser} />
+          ) : (
+            <Page key={entry.path} messages={messages} reloadMessages={reloadMessages} pendingReviews={pendingReviews} reloadPendingReviews={reloadPendingReviews} focusId={focusId} navigate={navigate} />
+          )}
         </main>
       </div>
       <ToastHost />

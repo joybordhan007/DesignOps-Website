@@ -1,5 +1,5 @@
 import { getContent } from "./store";
-import type { Post, Project, Service } from "./types";
+import type { Labels, Post, Project, Service } from "./types";
 
 // Lookups and URLs for the editable content.
 
@@ -30,3 +30,13 @@ export function posterFor(video: string) {
 
 /** Years like 2019 read better without a thousands separator. */
 export const grouping = (value: number) => !(value >= 1900 && value <= 2100);
+
+/** The site's main pages, named by the nav labels in Website Settings. */
+export const pageLinks = (nav: Labels["nav"]) => [
+  { label: nav.home, href: "/" },
+  { label: nav.services, href: "/services" },
+  { label: nav.work, href: "/work" },
+  { label: nav.blog, href: "/blog" },
+  { label: nav.company, href: "/company" },
+  { label: nav.reviews, href: "/reviews" },
+];

@@ -14,7 +14,7 @@ function Tag({ children }: { children: string }) {
 
 // Work details page (/work/:slug) on small screens.
 export default function WorkDetails() {
-  useContent(); // re-render when the content changes
+  const labels = useContent().settings.labels.workDetails;
   const project = currentProject();
   const { detail } = project;
   const { solution } = detail;
@@ -25,7 +25,7 @@ export default function WorkDetails() {
         <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.25] text-[#2f2f2f] text-[20px]">{detail.heading}</h1>
         <img alt={project.title} className="aspect-[16/10] block object-cover rounded-[12px] w-full" src={detail.heroImage} />
         <p className={body}>
-          <span className="font-['Inter:Semi_Bold'] font-semibold text-[#2f2f2f]">Project overview:</span> {detail.overview}
+          <span className="font-['Inter:Semi_Bold'] font-semibold text-[#2f2f2f]">{labels.overview}</span> {detail.overview}
         </p>
         <dl className="border-[rgba(0,0,0,0.1)] border-y gap-[16px] grid grid-cols-2 py-[18px] md:grid-cols-3">
           {[
@@ -42,7 +42,7 @@ export default function WorkDetails() {
       </section>
 
       <section className={`${container} flex flex-col gap-[16px] py-[24px]`} data-name="Goals">
-        <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">Goals</h2>
+        <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">{labels.goals}</h2>
         <p className={body}>{detail.goals}</p>
         {detail.goalPoints.length > 0 && (
           <ul className="flex flex-col gap-[10px] list-disc pl-[20px]">
@@ -56,7 +56,7 @@ export default function WorkDetails() {
       </section>
 
       <section className={`${container} flex flex-col gap-[20px] py-[32px]`} data-name="Challenge">
-        <Tag>The Challenge</Tag>
+        <Tag>{labels.challenge}</Tag>
         <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">{detail.challenge.title}</h2>
         <p className={body}>{detail.challenge.text}</p>
         <ul className="flex flex-col gap-[10px]">
@@ -73,7 +73,7 @@ export default function WorkDetails() {
       <section className="px-[8px] py-[24px]" data-name="Solution">
         <div className="bg-[#191919] rounded-[8px]">
           <div className={`${container} flex flex-col gap-[20px] py-[48px]`}>
-            <Tag>The Solution</Tag>
+            <Tag>{labels.solution}</Tag>
             <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[20px] text-white">{solution.title}</h2>
             <p className="font-['Inter:Regular'] leading-[1.5] text-[#dfdfdf] text-[14px]">{solution.text}</p>
             <figure className="bg-[#2a2a2a] overflow-hidden rounded-[10px]">
@@ -107,7 +107,7 @@ export default function WorkDetails() {
 
       {detail.palette.length > 0 && (
         <section className={`${container} flex flex-col gap-[16px] py-[32px]`} data-name="Color Palette">
-          <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">Color Palette</h2>
+          <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">{labels.palette}</h2>
           <p className={body}>This website uses a {detail.palette.length} color palette.</p>
           <div className="flex h-[220px] overflow-hidden rounded-[12px]">
             {detail.palette.map((hex, i) => (
@@ -122,7 +122,7 @@ export default function WorkDetails() {
 
       {detail.tags.length > 0 && (
         <section className={`${container} flex flex-col gap-[16px] py-[24px]`} data-name="Technologies">
-          <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">Technologies &amp; Tools</h2>
+          <h2 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#2f2f2f] text-[20px]">{labels.tools}</h2>
           <div className="flex flex-wrap gap-[10px]">
             {detail.tags.map((tag) => (
               <span key={tag} className="border border-[#2f2f2f] font-['Inter:Regular'] leading-[1.2] px-[14px] py-[8px] rounded-full text-[#2f2f2f] text-[12px]">

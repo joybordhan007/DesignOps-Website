@@ -13,7 +13,7 @@ export default function GrowthInsights({ showButton = true }: { showButton?: boo
       </div>
 
       <div className="flex gap-[16px] mx-auto overflow-x-auto pb-[8px] px-[20px] scroll-px-[20px] snap-mandatory snap-x w-full max-w-[760px] [scrollbar-width:none]">
-        {latestPosts(3, posts).map((post) => (
+        {latestPosts(3, posts.filter((post) => post.showOnHome)).map((post) => (
           <a
             key={post.id}
             href={postUrl(post)}
@@ -46,7 +46,7 @@ export default function GrowthInsights({ showButton = true }: { showButton?: boo
         ))}
       </div>
 
-      {showButton && <ArrowButton href="/blog" label="ALL ARTICLES" className="self-center" />}
+      {showButton && <ArrowButton href="/blog" label={settings.labels.buttons.allArticles} className="self-center" />}
     </section>
   );
 }

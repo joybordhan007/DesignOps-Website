@@ -7,10 +7,10 @@ import CtaBanner from "../CtaBanner";
 import MobileFooter from "../MobileFooter";
 
 export default function Work() {
-  const { settings, projects } = useContent();
+  const { projects } = useContent();
   return (
     <>
-      <MobileHero hero={settings.heroes.work} />
+      <MobileHero page="work" />
       <ProjectCards projects={projects} />
       <GrowthInsights />
       <Reviews />

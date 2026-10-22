@@ -14,7 +14,7 @@ export default function Company() {
   const { company } = settings;
   return (
     <Page name="Company">
-      <Hero hero={settings.heroes.company} />
+      <Hero page="company" />
 
       <div className="flex flex-col gap-[40px] items-center mt-[160px] shrink-0 text-center w-[1560px]" data-name="Quote">
         <p className="capitalize font-['Poppins:SemiBold'] leading-[1.3] text-[#3e3e3e] text-[40px] w-full">
@@ -42,12 +42,12 @@ export default function Company() {
         </div>
       </div>
 
-      <div className="flex h-[130px] items-stretch mt-[160px] shrink-0 w-[1560px]" data-name="Achievements">
-        {achievements.company.map((stat, i) => (
+      <div className="flex items-stretch min-h-[130px] mt-[160px] shrink-0 w-[1560px]" data-name="Achievements">
+        {achievements.filter((stat) => stat.showOnCompany).map((stat, i) => (
           <Fragment key={stat.id}>
             {i > 0 && <div className="bg-[rgba(0,0,0,0.5)] shrink-0 w-px" />}
             <div className="flex flex-[1_0_0] flex-col gap-[16px] items-center justify-center min-w-px">
-              <RollingNumber value={stat.value} suffix={stat.suffix} />
+              <RollingNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
               <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#707070] text-[24px] text-center">{stat.label}</p>
             </div>
           </Fragment>

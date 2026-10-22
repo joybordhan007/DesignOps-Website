@@ -1,4 +1,6 @@
 import { FormEvent, useState } from "react";
+import { useContent } from "@/content/store";
+import { trackEvent } from "@/lib/tracking";
 
 // Contact page inquiry form. The site has no backend, so submissions are sent
 // through FormSubmit (https://formsubmit.co), which emails them to INBOX.
@@ -6,8 +8,6 @@ import { FormEvent, useState } from "react";
 // after the link in it is clicked, every inquiry is delivered.
 const INBOX = "joybordhan224@gmail.com";
 const ENDPOINT = `https://formsubmit.co/ajax/${INBOX}`;
-
-const contactTimes = ["Morning (9am – 12pm)", "Afternoon (12pm – 5pm)", "Evening (5pm – 8pm)", "Anytime"];
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -24,6 +24,7 @@ function Label({ text, required = true }: { text: string; required?: boolean }) 
 }
 
 export default function ContactForm() {
+  const labels = useContent().settings.labels.contactForm;
   const [status, setStatus] = useState<Status>("idle");
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
@@ -57,6 +58,7 @@ export default function ContactForm() {
     const ok = (await saved) || (await emailed);
     if (ok) {
       setStatus("sent");
+      trackEvent("lead", { form: "contact" });
       form.reset();
     } else {
       setStatus("error");
@@ -72,37 +74,37 @@ export default function ContactForm() {
       <div className="flex flex-col gap-[40px] items-start w-full max-lg:gap-[24px]">
         <div className="flex gap-[48px] items-start w-full max-lg:flex-col max-lg:gap-[24px]">
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="First Name" />
+            <Label text={labels.firstName} />
             <input className={field} name="first_name" placeholder="Jane" required autoComplete="given-name" />
           </label>
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="Last Name" />
+            <Label text={labels.lastName} />
             <input className={field} name="last_name" placeholder="Doe" required autoComplete="family-name" />
           </label>
         </div>
         <div className="flex gap-[48px] items-start w-full max-lg:flex-col max-lg:gap-[24px]">
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="Email" />
+            <Label text={labels.email} />
             <input className={field} name="email" type="email" placeholder="jane@example.com" required autoComplete="email" />
           </label>
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="Phone Number" />
+            <Label text={labels.phone} />
             <input className={field} name="phone" type="tel" placeholder="(555) 555-1234" required autoComplete="tel" />
           </label>
         </div>
         <div className="flex gap-[48px] items-start w-full max-lg:flex-col max-lg:gap-[24px]">
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="Company Name" />
+            <Label text={labels.company} />
             <input className={field} name="company" placeholder="Enter your company name" required autoComplete="organization" />
           </label>
           <label className="flex flex-[1_0_0] flex-col gap-[16px] min-w-px px-[4px] max-lg:flex-none max-lg:gap-[10px] max-lg:w-full">
-            <Label text="Preferred Contact Time" />
+            <Label text={labels.time} />
             <span className="relative w-full">
               <select className={`${field} appearance-none cursor-pointer invalid:text-[rgba(0,0,0,0.3)] pr-[48px]`} name="preferred_time" required defaultValue="">
                 <option value="" disabled>
-                  Select preferred time
+                  {labels.timePlaceholder}
                 </option>
-                {contactTimes.map((time) => (
+                {labels.times.map((time) => (
                   <option key={time} value={time} className="text-[#2f2f2f]">
                     {time}
                   </option>
@@ -113,8 +115,8 @@ export default function ContactForm() {
           </label>
         </div>
         <label className="flex flex-col gap-[16px] px-[4px] w-full max-lg:gap-[10px]">
-          <Label text="Message" required={false} />
-          <textarea className={`${field} h-[168px] resize-none`} name="message" placeholder="Tell us about your project..." />
+          <Label text={labels.message} required={false} />
+          <textarea className={`${field} h-[168px] resize-none`} name="message" placeholder={labels.messagePlaceholder} />
         </label>
       </div>
 
@@ -124,10 +126,10 @@ export default function ContactForm() {
           disabled={status === "sending"}
           className="bg-[#00b6ca] cursor-pointer disabled:cursor-wait disabled:opacity-70 font-['Inter:Medium'] font-medium leading-[1.2] px-[55px] py-[16px] rounded-[6px] text-[18px] text-white transition-colors hover:bg-[#009fb0] max-lg:px-[24px] max-lg:py-[10px] max-lg:text-[10px]"
         >
-          {status === "sending" ? "Sending…" : "Send Inquiry"}
+          {status === "sending" ? "Sending…" : labels.submit}
         </button>
         <p role="status" className="font-['Inter:Regular'] leading-[1.3] min-h-[21px] text-[16px] text-center max-lg:text-[14px]">
-          {status === "sent" && <span className="text-[#0a8a4a]">Thanks! Your inquiry has been sent. We’ll get back to you soon.</span>}
+          {status === "sent" && <span className="text-[#0a8a4a]">{labels.sent}</span>}
           {status === "error" && (
             <span className="text-[#c62828]">
               Sorry, something went wrong. Please try again or email us at{" "}

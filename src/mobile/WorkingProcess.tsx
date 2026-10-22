@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { useContent } from "@/content/store";
+import type { ProcessStep, SectionTitle as Title } from "@/content/types";
 import SectionTitle from "./SectionTitle";
 
-// "Our Working Process" on small screens. Tapping a step turns it cyan and
-// shows its tilted picture, like hovering on desktop. The first step starts open.
-export default function WorkingProcess() {
-  const { settings, process: steps } = useContent();
+// "Our Working Process" on small screens (Home steps, or a service's own steps).
+// Tapping a step turns it cyan and shows its tilted picture, like hovering on
+// desktop. The first step starts open.
+export default function WorkingProcess({ title, steps }: { title: Title; steps: ProcessStep[] }) {
   const [active, setActive] = useState(0);
+  if (!steps.length) return null;
 
   return (
     <section className="px-[8px] py-[24px]" data-name="Working Process">
       <div className="bg-[#191919] rounded-[8px]">
         <div className="flex flex-col gap-[32px] mx-auto px-[20px] py-[48px] max-w-[760px]">
-          <SectionTitle title={settings.titles.process} dark />
+          <SectionTitle title={title} dark />
           <ol className="flex flex-col">
             {steps.map((step, index) => {
               const open = active === index;

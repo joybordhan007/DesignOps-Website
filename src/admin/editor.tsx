@@ -14,7 +14,7 @@ import { DownIcon, ExternalIcon, PlusIcon, SearchIcon, TrashIcon, UpIcon } from 
 const dirtyEditors = new Set<symbol>();
 export const confirmLeave = () => !dirtyEditors.size || window.confirm("You have unsaved changes. Leave without saving?");
 
-function useDirtyFlag(isDirty: boolean) {
+export function useDirtyFlag(isDirty: boolean) {
   const [key] = useState(() => Symbol("editor"));
   useEffect(() => {
     if (isDirty) dirtyEditors.add(key);
@@ -75,7 +75,7 @@ export const secondaryButton =
   "bg-white border border-[#e3e3e3] cursor-pointer flex font-['Inter:Medium'] font-medium gap-[8px] items-center px-[16px] py-[10px] rounded-[6px] text-[#3e3e3e] text-[14px] transition-colors hover:border-[#00b6ca] hover:text-[#00b6ca] disabled:cursor-not-allowed disabled:opacity-40";
 export const card = "bg-white rounded-[8px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]";
 
-function SaveButtons({ isDirty, saving, onSave, onDiscard }: { isDirty: boolean; saving: boolean; onSave: () => void; onDiscard: () => void }) {
+export function SaveButtons({ isDirty, saving, onSave, onDiscard }: { isDirty: boolean; saving: boolean; onSave: () => void; onDiscard: () => void }) {
   return (
     <>
       {isDirty && (
@@ -90,7 +90,7 @@ function SaveButtons({ isDirty, saving, onSave, onDiscard }: { isDirty: boolean;
   );
 }
 
-const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+export const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
 
 // ---------------------------------------------------------------- collection editor
 
@@ -344,6 +344,15 @@ export function ObjectEditor<T>({
         </div>
         {description && <p className="font-['Inter:Regular'] -mt-[6px] text-[#707070] text-[14px]">{description}</p>}
         {form}
+        {/* Long forms: keep Save in reach while there are changes. */}
+        {isDirty && (
+          <div className="bg-[#191919] bottom-[16px] flex flex-wrap gap-[10px] items-center justify-between px-[16px] py-[10px] rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.2)] sticky z-[20]">
+            <span className="font-['Inter:Medium'] font-medium text-[14px] text-white">You have unsaved changes</span>
+            <div className="flex gap-[8px]">
+              <SaveButtons isDirty={isDirty} saving={saving} onSave={save} onDiscard={() => setDraft(value)} />
+            </div>
+          </div>
+        )}
       </div>
     );
   }

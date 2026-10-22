@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
+import { pageLinks } from "@/content/helpers";
+import { useContent } from "@/content/store";
 import TalkButton from "./TalkButton";
 
 // Mobile/tablet header: logo + menu button in a bar that sticks to the top of
 // the screen. The menu opens as a panel with every page and the LET'S TALK button.
 // Contact is reached through the LET’S TALK button in the menu.
 
-const links = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "Blog", href: "/blog" },
-  { label: "Company", href: "/company" },
-];
-
 export default function MobileNav({ path }: { path: string }) {
+  const links = pageLinks(useContent().settings.labels.nav);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

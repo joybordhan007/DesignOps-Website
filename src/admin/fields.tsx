@@ -18,8 +18,11 @@ export type Field =
   | (Base & { type: "lines"; path: string; rows?: number })
   | (Base & { type: "colors"; path: string })
   | (Base & { type: "toggle"; path: string })
+  | (Base & { type: "choice"; path: string; options: { value: string; label: string; preview?: ReactNode }[] })
   | (Base & { type: "image" | "video"; path: string })
-  | (Base & { type: "group"; fields: Field[] })
+  | (Base & { type: "group"; fields: Field[]; /** Folded away until clicked (for long lists of small texts). */ collapsible?: boolean })
+  /** A one-off editor written for one setting; it gets the value at `path` and a setter. */
+  | (Base & { type: "custom"; path: string; render: (value: Value, onChange: (next: Value) => void) => ReactNode })
   | (Base & { type: "objects"; path: string; fields: Field[]; newItem: () => Value; itemLabel: (item: Value, index: number) => string });
 
 export function getPath(obj: Value, path: string): Value {
@@ -46,7 +49,7 @@ export const newId = (prefix: string) => `${prefix}-${Date.now().toString(36)}${
 export function missingFields(fields: Field[], item: Value): string[] {
   return fields.flatMap((field) => {
     if (field.type === "group") return missingFields(field.fields, item);
-    if (!field.required || field.type === "objects") return [];
+    if (!field.required || field.type === "objects" || field.type === "custom") return [];
     const value = getPath(item, field.path);
     return value === undefined || value === null || String(value).trim() === "" ? [field.label] : [];
   });
@@ -54,7 +57,7 @@ export function missingFields(fields: Field[], item: Value): string[] {
 
 export const inputClass =
   "bg-[#fafafa] border border-[#e3e3e3] font-['Inter:Regular'] leading-[1.4] outline-none px-[12px] py-[10px] rounded-[6px] text-[#222] text-[14px] transition-colors w-full focus:bg-white focus:border-[#00b6ca]";
-const smallButton =
+export const smallButton =
   "border border-[#e3e3e3] cursor-pointer flex font-['Inter:Medium'] font-medium gap-[6px] items-center px-[12px] py-[8px] rounded-[6px] text-[#3e3e3e] text-[13px] transition-colors hover:border-[#00b6ca] hover:text-[#00b6ca] disabled:opacity-50";
 
 function Label({ field, children }: { field: Base; children: ReactNode }) {
@@ -67,6 +70,23 @@ function Label({ field, children }: { field: Base; children: ReactNode }) {
       {children}
       {field.hint && <span className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
     </label>
+  );
+}
+
+/** On/off switch. */
+export function Switch({ checked, onChange, label, disabled }: { checked: boolean; onChange: (next: boolean) => void; label: string; disabled?: boolean }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      aria-label={label}
+      disabled={disabled}
+      onClick={(e) => (e.stopPropagation(), onChange(!checked))}
+      className={`cursor-pointer h-[24px] relative rounded-full shrink-0 transition-colors w-[44px] disabled:cursor-wait disabled:opacity-60 ${checked ? "bg-[#00b6ca]" : "bg-[#d4d4d4]"}`}
+    >
+      <span className={`absolute bg-white left-[3px] rounded-full shadow-[0px_1px_2px_rgba(0,0,0,0.2)] size-[18px] top-[3px] transition-transform ${checked ? "translate-x-[20px]" : ""}`} />
+    </button>
   );
 }
 
@@ -251,6 +271,24 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
   return (
     <>
       {fields.map((field, index) => {
+        if (field.type === "group" && field.collapsible) {
+          return (
+            <details key={index} className="border border-[#ececec] col-span-full group/fold rounded-[8px] open:bg-[#fcfcfc]">
+              <summary className="cursor-pointer flex gap-[10px] items-center justify-between list-none px-[16px] py-[13px] rounded-[8px] select-none hover:bg-[#f7fbfc] [&::-webkit-details-marker]:hidden">
+                <span className="flex flex-col gap-[2px]">
+                  <span className="font-['Inter:Semi_Bold'] font-semibold text-[#222] text-[14px]">{field.label}</span>
+                  {field.hint && <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+                </span>
+                <span className="shrink-0 text-[#9a9a9a] transition-transform group-open/fold:rotate-180">
+                  <DownIcon size={18} />
+                </span>
+              </summary>
+              <div className="border-[#ececec] border-t gap-[14px] grid grid-cols-1 p-[16px] md:grid-cols-2">
+                <Fields fields={field.fields} value={value} onChange={onChange} />
+              </div>
+            </details>
+          );
+        }
         if (field.type === "group") {
           return (
             <fieldset key={index} className="border-[#ececec] border-t col-span-full gap-[14px] grid grid-cols-1 pt-[16px] md:grid-cols-2">
@@ -272,12 +310,48 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
             return <ColorsField key={field.path} field={field} value={current} onChange={set} />;
           case "objects":
             return <ObjectsField key={field.path} field={field} value={current} onChange={set} />;
+          case "custom":
+            return (
+              <div key={field.path} className={`flex flex-col gap-[6px] ${field.wide === false ? "" : "col-span-full"}`}>
+                <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px]">{field.label}</span>
+                {field.render(current, set)}
+                {field.hint && <span className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+              </div>
+            );
           case "toggle":
             return (
-              <label key={field.path} className="cursor-pointer flex gap-[10px] items-center self-end py-[10px]">
-                <input type="checkbox" className="accent-[#00b6ca] size-[18px]" checked={Boolean(current)} onChange={(e) => set(e.target.checked)} />
-                <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[14px]">{field.label}</span>
-              </label>
+              <div key={field.path} className={`flex gap-[12px] items-center self-end py-[10px] ${field.wide ? "col-span-full" : ""}`}>
+                <Switch checked={Boolean(current)} onChange={set} label={field.label} />
+                <span className="flex flex-col gap-[2px]">
+                  <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[14px]">{field.label}</span>
+                  {field.hint && <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+                </span>
+              </div>
+            );
+          case "choice":
+            return (
+              <div key={field.path} role="radiogroup" aria-label={field.label} className={`flex flex-col gap-[6px] ${field.wide ? "col-span-full" : ""}`}>
+                <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px]">{field.label}</span>
+                <div className="flex flex-wrap gap-[10px]">
+                  {field.options.map((option) => {
+                    const selected = current === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => set(option.value)}
+                        className={`border-2 cursor-pointer flex flex-col gap-[8px] items-start p-[10px] rounded-[8px] transition-colors ${selected ? "bg-[#e9f9fb] border-[#00b6ca]" : "bg-white border-[#e3e3e3] hover:border-[#9adfe7]"}`}
+                      >
+                        {option.preview}
+                        <span className={`font-['Inter:Medium'] font-medium text-[13px] ${selected ? "text-[#00a0b2]" : "text-[#3e3e3e]"}`}>{option.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {field.hint && <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+              </div>
             );
           case "textarea":
           case "rich":

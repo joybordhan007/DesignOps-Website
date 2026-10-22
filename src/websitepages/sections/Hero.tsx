@@ -1,15 +1,19 @@
 import HeroVideo from "@/components/HeroVideo";
 import Rich from "@/components/Rich";
-import type { Hero as HeroContent } from "@/content/types";
+import { useContent } from "@/content/store";
+import type { Settings } from "@/content/types";
 import { Lines } from "./Heading";
 import StartButton from "./StartButton";
 
-// Desktop video hero (Home, Services, Work, Blog, Company).
-export default function Hero({ hero }: { hero: HeroContent }) {
+// Desktop video hero (Home, Services, Work, Blog, Company). Home has its own
+// video; the other pages share one (Website Settings → Page heroes).
+export default function Hero({ page }: { page: keyof Settings["heroes"] }) {
+  const { settings } = useContent();
+  const hero = settings.heroes[page];
   return (
     <div className="bg-[#2b2b2b] h-[870px] mt-[24px] overflow-clip relative rounded-[8px] shrink-0 w-[1872px]" data-name="Hero">
       <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]">
-        <HeroVideo src={hero.video} />
+        <HeroVideo src={page === "home" ? settings.heroVideos.home : settings.heroVideos.pages} />
       </div>
       <div className="absolute bg-gradient-to-r from-[16.438%] from-[rgba(0,0,0,0.74)] h-[980px] left-0 to-[rgba(0,0,0,0.2)] top-0 w-[1920px]" />
 
@@ -26,7 +30,7 @@ export default function Hero({ hero }: { hero: HeroContent }) {
       </div>
 
       <div className="-translate-x-1/2 absolute flex gap-[16px] items-center left-1/2 top-[830px]">
-        <p className="font-['Noto_Sans:Light'] font-light leading-[1.2] text-[16px] text-white tracking-[3.52px] uppercase whitespace-nowrap">Scroll Down</p>
+        <p className="font-['Noto_Sans:Light'] font-light leading-[1.2] text-[16px] text-white tracking-[3.52px] uppercase whitespace-nowrap">{settings.labels.scrollDown}</p>
         <img alt="" className="block h-[24px] scroll-cue-icon w-[12px]" src="/assets/shared/icons/scroll-down.svg" />
       </div>
     </div>

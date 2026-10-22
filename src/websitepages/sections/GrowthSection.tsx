@@ -10,7 +10,7 @@ export default function GrowthSection({ button = true, className = "mt-[160px]" 
     <div className={`flex flex-col gap-[64px] items-center shrink-0 w-[1560px] ${className}`} data-name="Growth Insights">
       <Heading title={settings.titles.insights} />
       <LatestBlogCards />
-      {button && <ArrowButton href="/blog" label="ALL ARTICLES" />}
+      {button && <ArrowButton href="/blog" label={settings.labels.buttons.allArticles} />}
     </div>
   );
 }

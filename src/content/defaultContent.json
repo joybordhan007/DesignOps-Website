@@ -7,29 +7,28 @@
     "heroes": {
       "home": {
         "title": "We Design & *Build High*\n*Converting* Digital Products",
-        "text": "UI/UX & Full-stack digital agency combining editorial aesthetics with engineering rigor.",
-        "video": "/videos/hero/home.mp4"
+        "text": "UI/UX & Full-stack digital agency combining editorial aesthetics with engineering rigor."
       },
       "services": {
         "title": "Digital Services *Built*\n*for Real* Impact",
-        "text": "We provide innovative solutions that attract customers, improve engagement,\nand help businesses grow with confidence, solve complex problems with elegant solutions.",
-        "video": "/videos/hero/pages.mp4"
+        "text": "We provide innovative solutions that attract customers, improve engagement,\nand help businesses grow with confidence, solve complex problems with elegant solutions."
       },
       "work": {
         "title": "Showcasing Our *Digital*\n*Product* Design Work",
-        "text": "A collection of projects that define our approach to digital product design.\nWe solve complex problems with elegant solutions.",
-        "video": "/videos/hero/pages.mp4"
+        "text": "A collection of projects that define our approach to digital product design.\nWe solve complex problems with elegant solutions."
       },
       "blog": {
         "title": "Our Blog on *Design,*\n*Strategy* & Growth",
-        "text": "Exploring design, engineering, and the process of building digital products\nthat last and grow with modern businesses.",
-        "video": "/videos/hero/pages.mp4"
+        "text": "Exploring design, engineering, and the process of building digital products\nthat last and grow with modern businesses."
       },
       "company": {
         "title": "We Are *DesignOps*\n*Creative* Studio",
-        "text": "A team of passionate designers and developers dedicated to building\ndigital products that matter. We bridge the gap between creative vision and technical reality.",
-        "video": "/videos/hero/pages.mp4"
+        "text": "A team of passionate designers and developers dedicated to building\ndigital products that matter. We bridge the gap between creative vision and technical reality."
       }
+    },
+    "heroVideos": {
+      "home": "/videos/hero/home.mp4",
+      "pages": "/videos/hero/pages.mp4"
     },
     "titles": {
       "clients": {
@@ -90,16 +89,145 @@
     "footer": {
       "text": "We design & build software that sells. Full-stack\ndigital product agency for ambitious brands.",
       "copyright": "© 2026 DesignOps. All rights reserved.",
-      "linkedin": "https://www.linkedin.com/company/143894150",
-      "facebook": "https://www.facebook.com/DesignOps.agency/"
+      "socials": [
+        {
+          "id": "social-linkedin",
+          "platform": "linkedin",
+          "url": "https://www.linkedin.com/company/143894150"
+        },
+        {
+          "id": "social-facebook",
+          "platform": "facebook",
+          "url": "https://www.facebook.com/DesignOps.agency/"
+        }
+      ]
     },
     "rating": {
       "score": "4.9",
       "count": "200+ reviews"
+    },
+    "reviewsPage": {
+      "title": "What Our *Clients* Say",
+      "subtitle": "Real words from the teams we've designed and built for. Worked with us? We'd love to hear from you."
+    },
+    "labels": {
+      "nav": {
+        "home": "Home",
+        "services": "Services",
+        "work": "Work",
+        "blog": "Blog",
+        "company": "Company",
+        "reviews": "Reviews"
+      },
+      "buttons": {
+        "startProject": "START A PROJECT",
+        "letsTalk": "LET’S TALK",
+        "learnMore": "LEARN MORE",
+        "viewCaseStudy": "VIEW CASE STUDY",
+        "allArticles": "ALL ARTICLES",
+        "allReviews": "ALL REVIEWS",
+        "readNow": "Read Now",
+        "writeReview": "WRITE A REVIEW",
+        "backToHome": "BACK TO HOME",
+        "contactUs": "CONTACT US"
+      },
+      "scrollDown": "Scroll Down",
+      "projectCard": {
+        "pages": "Pages in Projects",
+        "duration": "Project Duration"
+      },
+      "science": {
+        "science": "Science",
+        "technology": "Technology",
+        "design": "Design",
+        "research": "Research, Experience,\nDevelopment (RDX)",
+        "digital": "Digital Transformation (DX)",
+        "customer": "Customer Experience\nTransformation (CX)"
+      },
+      "workDetails": {
+        "overview": "Project overview:",
+        "goals": "Goals",
+        "challenge": "The Challenge",
+        "solution": "The Solution",
+        "palette": "Color Palette",
+        "tools": "Technologies & Tools"
+      },
+      "blogDetails": {
+        "newsletterTitle": "UI UX design Inspiration right in your inbox",
+        "newsletterText": "By entering your email, you are agreeing to our",
+        "newsletterLink": "privacy policy.",
+        "ctaTitle": "Want a site that sells, Not just sits?",
+        "toc": "Table of Contents"
+      },
+      "footer": {
+        "quickLinks": "Quick Links",
+        "support": "Support",
+        "services": "Services",
+        "contactInfo": "Contact Info",
+        "contactUs": "Contact Us",
+        "faq": "FAQ",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+      },
+      "notFound": {
+        "badge": "Error 404",
+        "title": "Oops! This page *took a wrong turn.*",
+        "text": "The page you’re looking for doesn’t exist, was moved, or the link is broken. Let’s get you back on track.",
+        "popular": "Popular pages"
+      },
+      "reviews": {
+        "empty": "No reviews yet — be the first to write one.",
+        "formTitle": "Write a review",
+        "formText": "Tell others what it was like to work with us. Your email isn't shown on the website.",
+        "formSubmit": "SUBMIT REVIEW",
+        "thanksTitle": "Thank you for your review!",
+        "thanksText": "We'll check it shortly. Once it's approved it will appear on this page.",
+        "rating": "Your rating",
+        "name": "Full name",
+        "email": "Email",
+        "role": "Your role",
+        "company": "Company",
+        "quote": "Your review",
+        "photo": "Photo",
+        "optional": "(optional)"
+      },
+      "contactForm": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone Number",
+        "company": "Company Name",
+        "time": "Preferred Contact Time",
+        "timePlaceholder": "Select preferred time",
+        "times": [
+          "Morning (9am – 12pm)",
+          "Afternoon (12pm – 5pm)",
+          "Evening (5pm – 8pm)",
+          "Anytime"
+        ],
+        "message": "Message",
+        "messagePlaceholder": "Tell us about your project...",
+        "submit": "Send Inquiry",
+        "sent": "Thanks! Your inquiry has been sent. We’ll get back to you soon."
+      }
+    },
+    "tracking": {
+      "gtm": {
+        "enabled": true,
+        "containerId": ""
+      },
+      "meta": {
+        "enabled": true,
+        "pixelId": "",
+        "domainVerification": ""
+      }
     }
   },
   "services": [
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "showOnHome": true,
       "id": "service-1",
       "slug": "full-stack-development",
       "title": "Full-stack Development",
@@ -108,7 +236,6 @@
       "summary": "We build fast, secure and scalable web and mobile products end to end, from front-end interfaces to APIs, databases and cloud infrastructure.",
       "image": "/assets/services/98189.webp",
       "numberImage": "/assets/home/b93e2.svg",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English",
       "detail": {
         "tagline": "WE offer *innovative*\n*solutions* that\n*captivate* customers.",
         "image": "/assets/ui-ux-design/894da.webp",
@@ -140,10 +267,43 @@
             "title": "Usability Report",
             "text": "Validated designs with real user feedback and iteration notes."
           }
+        ],
+        "processTitle": {
+          "lead": "Our Working Process That Drives",
+          "muted": "Growth\nWith Clear Direction"
+        },
+        "process": [
+          {
+            "id": "step-10",
+            "title": "Discovery",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/discovery.jpg"
+          },
+          {
+            "id": "step-11",
+            "title": "Creative idea",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/creative-idea.jpg"
+          },
+          {
+            "id": "step-12",
+            "title": "Best features",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/best-features.jpg"
+          },
+          {
+            "id": "step-13",
+            "title": "Easy solutions",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/easy-solutions.jpg"
+          }
         ]
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "showOnHome": true,
       "id": "service-2",
       "slug": "ui-ux-design",
       "title": "UI/UX Design",
@@ -152,7 +312,6 @@
       "summary": "Research-led interface design that turns complex flows into intuitive experiences: user research, wireframes, prototypes and polished, developer-ready UI.",
       "image": "/assets/services/2e9f2.webp",
       "numberImage": "/assets/home/6e5ec.svg",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English",
       "detail": {
         "tagline": "WE offer *innovative*\n*solutions* that\n*captivate* customers.",
         "image": "/assets/ui-ux-design/894da.webp",
@@ -184,10 +343,43 @@
             "title": "Usability Report",
             "text": "Validated designs with real user feedback and iteration notes."
           }
+        ],
+        "processTitle": {
+          "lead": "Our Working Process That Drives",
+          "muted": "Growth\nWith Clear Direction"
+        },
+        "process": [
+          {
+            "id": "step-10",
+            "title": "Discovery",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/discovery.jpg"
+          },
+          {
+            "id": "step-11",
+            "title": "Creative idea",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/creative-idea.jpg"
+          },
+          {
+            "id": "step-12",
+            "title": "Best features",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/best-features.jpg"
+          },
+          {
+            "id": "step-13",
+            "title": "Easy solutions",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/easy-solutions.jpg"
+          }
         ]
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "showOnHome": true,
       "id": "service-3",
       "slug": "brand-design",
       "title": "Brand Design",
@@ -196,7 +388,6 @@
       "summary": "Distinct brand identities that stay consistent everywhere: logo, typography, colour systems and guidelines built to grow with your business.",
       "image": "/assets/services/55f86.webp",
       "numberImage": "/assets/home/b314f.svg",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English",
       "detail": {
         "tagline": "WE offer *innovative*\n*solutions* that\n*captivate* customers.",
         "image": "/assets/ui-ux-design/894da.webp",
@@ -228,10 +419,43 @@
             "title": "Usability Report",
             "text": "Validated designs with real user feedback and iteration notes."
           }
+        ],
+        "processTitle": {
+          "lead": "Our Working Process That Drives",
+          "muted": "Growth\nWith Clear Direction"
+        },
+        "process": [
+          {
+            "id": "step-10",
+            "title": "Discovery",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/discovery.jpg"
+          },
+          {
+            "id": "step-11",
+            "title": "Creative idea",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/creative-idea.jpg"
+          },
+          {
+            "id": "step-12",
+            "title": "Best features",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/best-features.jpg"
+          },
+          {
+            "id": "step-13",
+            "title": "Easy solutions",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/easy-solutions.jpg"
+          }
         ]
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "showOnHome": true,
       "id": "service-4",
       "slug": "digital-marketing",
       "title": "Digital Marketing",
@@ -240,7 +464,6 @@
       "summary": "Data-driven campaigns that bring the right people to your product: SEO, paid ads, social media and conversion optimisation with measurable results.",
       "image": "/assets/services/51e90.webp",
       "numberImage": "/assets/home/518d1.svg",
-      "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English",
       "detail": {
         "tagline": "WE offer *innovative*\n*solutions* that\n*captivate* customers.",
         "image": "/assets/ui-ux-design/894da.webp",
@@ -272,12 +495,45 @@
             "title": "Usability Report",
             "text": "Validated designs with real user feedback and iteration notes."
           }
+        ],
+        "processTitle": {
+          "lead": "Our Working Process That Drives",
+          "muted": "Growth\nWith Clear Direction"
+        },
+        "process": [
+          {
+            "id": "step-10",
+            "title": "Discovery",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/discovery.jpg"
+          },
+          {
+            "id": "step-11",
+            "title": "Creative idea",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/creative-idea.jpg"
+          },
+          {
+            "id": "step-12",
+            "title": "Best features",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/best-features.jpg"
+          },
+          {
+            "id": "step-13",
+            "title": "Easy solutions",
+            "text": "We take pride in our collaborative approach, working closely\nwith clients to understand their challenges, goals.",
+            "image": "/assets/working-process/easy-solutions.jpg"
+          }
         ]
       }
     }
   ],
   "projects": [
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "horizontal",
       "id": "project-5",
       "slug": "mighty-school-lms",
       "title": "Mighty School LMS",
@@ -361,6 +617,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "horizontal",
       "id": "project-6",
       "slug": "mighty-school-lms-2",
       "title": "Mighty School LMS",
@@ -444,6 +703,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "horizontal",
       "id": "project-7",
       "slug": "mighty-school-lms-3",
       "title": "Mighty School LMS",
@@ -527,6 +789,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "horizontal",
       "id": "project-8",
       "slug": "mighty-school-lms-4",
       "title": "Mighty School LMS",
@@ -610,6 +875,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "vertical",
       "id": "project-9",
       "slug": "mighty-school-lms-5",
       "title": "Mighty School LMS",
@@ -693,6 +961,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "vertical",
       "id": "project-a",
       "slug": "mighty-school-lms-6",
       "title": "Mighty School LMS",
@@ -776,6 +1047,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "vertical",
       "id": "project-b",
       "slug": "mighty-school-lms-7",
       "title": "Mighty School LMS",
@@ -859,6 +1133,9 @@
       }
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "layout": "vertical",
       "id": "project-c",
       "slug": "mighty-school-lms-8",
       "title": "Mighty School LMS",
@@ -944,6 +1221,9 @@
   ],
   "posts": [
     {
+      "active": true,
+      "createdAt": "2025-05-27",
+      "showOnHome": true,
       "id": "post-d",
       "slug": "why-your-saas-needs-a-design-system",
       "title": "Why Your SaaS Needs a Design System",
@@ -956,6 +1236,9 @@
       "body": "Novel research material” refers to original, unexplored sources or data sets that offer fresh perspectives on a given topic, pushing the boundaries of existing knowledge and inviting rigorous scholarly inquiry. Unlike repurposed or derivative content, novel research material emerges from innovative methodologies—whether through cutting‑edge experiments, newly digitized archives, under‑studied communities, or interdisciplinary synthesis—that have not yet been subjected to extensive academic scrutiny. Its value lies not only in presenting previously hidden insights but also in challenging prevailing assumptions.\n\nPrompting researchers to refine theoretical frameworks and forge new avenues of investigation. To be truly “researchable,” such material must be accessible and well‑documented, with clear provenance, reliable metadata, and methodological transparency that allow others to replicate or build upon initial findings.\n\nMoreover, novel research material often catalyzes collaboration across fields—historians might mine geospatial data to reinterpret urban development, while sociologists leverage machine‑learning analyses of social media footprints to trace emergent cultural trends—ensuring that breakthroughs in one discipline reverberate widely. In an era defined by both information overload and accelerating technological change, the discovery and cultivation of novel research material remain indispensable for driving impactful scholarship and sustaining the continual evolution of human understanding.\n\n## Lorem ipsum dolor sit amet.\n\n![](/assets/blog-details/dbe4b.webp)\n\n## Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nTo instruct aspiring learners in the principles of fiscal legislation, begin by crafting a well‑structured syllabus that balances theoretical frameworks with practical illustrations. Rather than merely lecturing, strive for participatory sessions: facilitate roundtable discussions on landmark statutes, organize mock hearings to explore regulatory compliance, and assign case analyses of real‑world monetary statutes. Introduce scholarly articles and judicial opinions as reading materials, then guide students through critical appraisal by highlighting how courts interpret securities laws, banking ordinances, or consumer protection mandates.\n\nTo reinforce conceptual clarity, employ visual aids—flowcharts tracing the lifecycle of a financial instrument, infographics summarizing anti‑fraud provisions, or timelines of major regulatory reforms. Encourage collaborative projects in which small groups draft policy briefs or simulate legislative hearings, enabling each participant to articulate arguments, negotiate amendments, and defend their positions under peer review.\n\nThroughout the course, emphasize the importance of ethical considerations, professional responsibility, and ongoing legal developments, ensuring that every disciple of financial law cultivates not only a robust knowledge base but also the analytical skills and moral compass necessary to navigate the ever‑evolving landscape of fiscal governance.\n\n## Lorem ipsum dolor sit amet, consectetur.\n\n### 1. Lorem ipsum dolor sit amet, consectetur.\n\nFinancial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.\n\n### 2. Lorem ipsum dolor sit amet, consectetur.\n\nKnowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.\n\n### 3. Lorem ipsum dolor sit amet, consectetur.\n\nFinancial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.\n\n### 4. Lorem ipsum dolor sit amet, consectetur.\n\nGlobal finance is subject to rapid change—new instruments, digital currencies, cross‑border transactions, and environmental, social, and governance (ESG) mandates all demand fresh legal responses. A solid grounding in current financial law gives students the analytical tools to interpret novel regulations, adapt to shifting compliance requirements, and contribute to future policy developments.\n\nIn sum, teaching financial law cultivates a generation of professionals who understand the legal architecture underpinning economic activity, can safeguard the rights of individuals and markets alike, and are prepared to navigate—and even guide—the ever‑shifting terrain of global finance."
     },
     {
+      "active": true,
+      "createdAt": "2025-05-20",
+      "showOnHome": true,
       "id": "post-e",
       "slug": "design-system-consistency",
       "title": "Why Your SaaS Needs a Design System",
@@ -968,6 +1251,9 @@
       "body": "Novel research material” refers to original, unexplored sources or data sets that offer fresh perspectives on a given topic, pushing the boundaries of existing knowledge and inviting rigorous scholarly inquiry. Unlike repurposed or derivative content, novel research material emerges from innovative methodologies—whether through cutting‑edge experiments, newly digitized archives, under‑studied communities, or interdisciplinary synthesis—that have not yet been subjected to extensive academic scrutiny. Its value lies not only in presenting previously hidden insights but also in challenging prevailing assumptions.\n\nPrompting researchers to refine theoretical frameworks and forge new avenues of investigation. To be truly “researchable,” such material must be accessible and well‑documented, with clear provenance, reliable metadata, and methodological transparency that allow others to replicate or build upon initial findings.\n\nMoreover, novel research material often catalyzes collaboration across fields—historians might mine geospatial data to reinterpret urban development, while sociologists leverage machine‑learning analyses of social media footprints to trace emergent cultural trends—ensuring that breakthroughs in one discipline reverberate widely. In an era defined by both information overload and accelerating technological change, the discovery and cultivation of novel research material remain indispensable for driving impactful scholarship and sustaining the continual evolution of human understanding.\n\n## Lorem ipsum dolor sit amet.\n\n![](/assets/blog-details/dbe4b.webp)\n\n## Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nTo instruct aspiring learners in the principles of fiscal legislation, begin by crafting a well‑structured syllabus that balances theoretical frameworks with practical illustrations. Rather than merely lecturing, strive for participatory sessions: facilitate roundtable discussions on landmark statutes, organize mock hearings to explore regulatory compliance, and assign case analyses of real‑world monetary statutes. Introduce scholarly articles and judicial opinions as reading materials, then guide students through critical appraisal by highlighting how courts interpret securities laws, banking ordinances, or consumer protection mandates.\n\nTo reinforce conceptual clarity, employ visual aids—flowcharts tracing the lifecycle of a financial instrument, infographics summarizing anti‑fraud provisions, or timelines of major regulatory reforms. Encourage collaborative projects in which small groups draft policy briefs or simulate legislative hearings, enabling each participant to articulate arguments, negotiate amendments, and defend their positions under peer review.\n\nThroughout the course, emphasize the importance of ethical considerations, professional responsibility, and ongoing legal developments, ensuring that every disciple of financial law cultivates not only a robust knowledge base but also the analytical skills and moral compass necessary to navigate the ever‑evolving landscape of fiscal governance.\n\n## Lorem ipsum dolor sit amet, consectetur.\n\n### 1. Lorem ipsum dolor sit amet, consectetur.\n\nFinancial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.\n\n### 2. Lorem ipsum dolor sit amet, consectetur.\n\nKnowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.\n\n### 3. Lorem ipsum dolor sit amet, consectetur.\n\nFinancial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.\n\n### 4. Lorem ipsum dolor sit amet, consectetur.\n\nGlobal finance is subject to rapid change—new instruments, digital currencies, cross‑border transactions, and environmental, social, and governance (ESG) mandates all demand fresh legal responses. A solid grounding in current financial law gives students the analytical tools to interpret novel regulations, adapt to shifting compliance requirements, and contribute to future policy developments.\n\nIn sum, teaching financial law cultivates a generation of professionals who understand the legal architecture underpinning economic activity, can safeguard the rights of individuals and markets alike, and are prepared to navigate—and even guide—the ever‑shifting terrain of global finance."
     },
     {
+      "active": true,
+      "createdAt": "2025-05-13",
+      "showOnHome": true,
       "id": "post-f",
       "slug": "design-system-scaling",
       "title": "Why Your SaaS Needs a Design System",
@@ -1014,6 +1300,9 @@
   ],
   "reviews": [
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "rating": 5,
       "id": "review-m",
       "company": "TechFlow Inc.",
       "quote": "“DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched.”",
@@ -1022,6 +1311,9 @@
       "avatar": "/assets/shared/images/reviewer-avatar.jpg"
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "rating": 5,
       "id": "review-n",
       "company": "TechFlow Inc.",
       "quote": "“DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched.”",
@@ -1030,6 +1322,9 @@
       "avatar": "/assets/shared/images/reviewer-avatar.jpg"
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "rating": 5,
       "id": "review-o",
       "company": "TechFlow Inc.",
       "quote": "“DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched.”",
@@ -1038,6 +1333,9 @@
       "avatar": "/assets/shared/images/reviewer-avatar.jpg"
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "rating": 5,
       "id": "review-p",
       "company": "TechFlow Inc.",
       "quote": "“DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched.”",
@@ -1046,6 +1344,9 @@
       "avatar": "/assets/shared/images/reviewer-avatar.jpg"
     },
     {
+      "active": true,
+      "createdAt": "2026-10-22",
+      "rating": 5,
       "id": "review-q",
       "company": "TechFlow Inc.",
       "quote": "“DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched.”",
@@ -1054,84 +1355,98 @@
       "avatar": "/assets/shared/images/reviewer-avatar.jpg"
     }
   ],
-  "achievements": {
-    "home": [
-      {
-        "id": "stat-r",
-        "value": 92,
-        "prefix": "",
-        "suffix": "%",
-        "after": "",
-        "label": "client satisfaction\nin post-project reviews."
-      },
-      {
-        "id": "stat-s",
-        "value": 10,
-        "prefix": "$",
-        "suffix": "B+",
-        "after": "",
-        "label": "valuation influenced\nby our design"
-      },
-      {
-        "id": "stat-t",
-        "value": 2019,
-        "prefix": "",
-        "suffix": "",
-        "after": "",
-        "label": "Founded, 6 years\nof experience"
-      },
-      {
-        "id": "stat-u",
-        "value": 25,
-        "prefix": "",
-        "suffix": "M+",
-        "after": "",
-        "label": "monthly visits\non client platforms"
-      },
-      {
-        "id": "stat-v",
-        "value": 500,
-        "prefix": "",
-        "suffix": "+",
-        "after": " global projects",
-        "label": "250+ testimonials with\ntrusted by google"
-      }
-    ],
-    "company": [
-      {
-        "id": "stat-w",
-        "value": 500,
-        "prefix": "",
-        "suffix": "+",
-        "after": "",
-        "label": "Projects Delivered"
-      },
-      {
-        "id": "stat-x",
-        "value": 6,
-        "prefix": "",
-        "suffix": "+",
-        "after": "",
-        "label": "Years Experience"
-      },
-      {
-        "id": "stat-y",
-        "value": 92,
-        "prefix": "",
-        "suffix": "%",
-        "after": "",
-        "label": "Client Satisfaction"
-      },
-      {
-        "id": "stat-z",
-        "value": 20,
-        "prefix": "",
-        "suffix": "+",
-        "after": "",
-        "label": "Team Members"
-      }
-    ]
-  },
+  "achievements": [
+    {
+      "showOnHome": true,
+      "showOnCompany": false,
+      "id": "stat-r",
+      "value": 92,
+      "prefix": "",
+      "suffix": "%",
+      "after": "",
+      "label": "client satisfaction\nin post-project reviews."
+    },
+    {
+      "showOnHome": true,
+      "showOnCompany": false,
+      "id": "stat-s",
+      "value": 10,
+      "prefix": "$",
+      "suffix": "B+",
+      "after": "",
+      "label": "valuation influenced\nby our design"
+    },
+    {
+      "showOnHome": true,
+      "showOnCompany": false,
+      "id": "stat-t",
+      "value": 2019,
+      "prefix": "",
+      "suffix": "",
+      "after": "",
+      "label": "Founded, 6 years\nof experience"
+    },
+    {
+      "showOnHome": true,
+      "showOnCompany": false,
+      "id": "stat-u",
+      "value": 25,
+      "prefix": "",
+      "suffix": "M+",
+      "after": "",
+      "label": "monthly visits\non client platforms"
+    },
+    {
+      "showOnHome": true,
+      "showOnCompany": false,
+      "id": "stat-v",
+      "value": 500,
+      "prefix": "",
+      "suffix": "+",
+      "after": " global projects",
+      "label": "250+ testimonials with\ntrusted by google"
+    },
+    {
+      "showOnHome": false,
+      "showOnCompany": true,
+      "id": "stat-w",
+      "value": 500,
+      "prefix": "",
+      "suffix": "+",
+      "after": "",
+      "label": "Projects Delivered"
+    },
+    {
+      "showOnHome": false,
+      "showOnCompany": true,
+      "id": "stat-x",
+      "value": 6,
+      "prefix": "",
+      "suffix": "+",
+      "after": "",
+      "label": "Years Experience"
+    },
+    {
+      "showOnHome": false,
+      "showOnCompany": true,
+      "id": "stat-y",
+      "value": 92,
+      "prefix": "",
+      "suffix": "%",
+      "after": "",
+      "label": "Client Satisfaction"
+    },
+    {
+      "showOnHome": false,
+      "showOnCompany": true,
+      "id": "stat-z",
+      "value": 20,
+      "prefix": "",
+      "suffix": "+",
+      "after": "",
+      "label": "Team Members"
+    }
+  ],
   "process": [
     {
       "id": "step-10",
