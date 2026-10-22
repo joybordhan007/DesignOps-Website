@@ -1,4 +1,4 @@
-import { contact, quickLinks, serviceLinks, socialLinks, supportLinks } from "@/components/Footer";
+import { quickLinks, supportLinks, useFooter } from "@/components/Footer";
 
 // Mobile/tablet layout of the site footer. The links and contact details come
 // from components/Footer.tsx, so editing them there updates both layouts.
@@ -24,6 +24,7 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
 }
 
 export default function MobileFooter() {
+  const { text, copyright, serviceLinks, socialLinks, contact } = useFooter();
   return (
     <footer className="px-[8px] pb-[8px]" data-name="Footer">
       <div className="bg-[#191919] isolate overflow-hidden relative rounded-[8px]">
@@ -41,7 +42,7 @@ export default function MobileFooter() {
               <img alt="DesignOps" className="block size-full" src="/assets/shared/logos/designops-logo-footer.svg" />
             </a>
             <p className="font-['Inter:Regular'] leading-[1.4] text-[#dfdfdf] text-[14px]">
-              We design &amp; build software that sells. Full-stack digital product agency for ambitious brands.
+              {text.replace(/\s*\n\s*/g, " ")}
             </p>
             <div className="flex gap-[12px]">
               {socialLinks.map((social) => (
@@ -84,7 +85,7 @@ export default function MobileFooter() {
           </div>
 
           <div className="border-[rgba(255,255,255,0.15)] border-t flex flex-col gap-[12px] pt-[20px] text-[12px] text-white md:flex-row md:justify-between">
-            <p className="font-['Inter:Regular'] leading-[1.2]">© 2026 DesignOps. All rights reserved.</p>
+            <p className="font-['Inter:Regular'] leading-[1.2]">{copyright}</p>
             <div className="flex font-['Inter:Medium'] font-medium gap-[16px]">
               <p className="leading-[1.2]">Privacy Policy</p>
               <p className="leading-[1.2]">Terms of Service</p>

@@ -1,13 +1,15 @@
-import { formatDate, latestPosts, postUrl } from "@/data/blogPosts";
+import { formatDate, latestPosts, postUrl } from "@/content/helpers";
+import { useContent } from "@/content/store";
 
 // "Growth Insights" row: the three newest blog posts as image cards. Each card
 // links to the post, and its image zooms in slightly on hover.
 export default function LatestBlogCards() {
+  const { posts } = useContent();
   return (
     <div className="flex gap-[24px] items-center relative shrink-0" data-name="Latest Blog Posts">
-      {latestPosts(3).map((post) => (
+      {latestPosts(3, posts).map((post) => (
         <a
-          key={post.slug}
+          key={post.id}
           href={postUrl(post)}
           className="group flex flex-col h-[350px] isolate items-start overflow-clip p-[24px] relative rounded-[24px] shadow-[0px_2px_6px_0px_rgba(0,0,0,0.1)] shrink-0 w-[504px]"
         >

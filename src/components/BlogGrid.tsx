@@ -1,22 +1,15 @@
-import { postUrl, sortedPosts } from "@/data/blogPosts";
+import { postUrl, sortedPosts } from "@/content/helpers";
+import { useContent } from "@/content/store";
 
 // Blog page list: every post, newest first, three per row. The image zooms in
 // slightly on hover and the whole card links to the post.
 
-const CARD_HEIGHT = 503;
-const ROW_GAP = 32;
-
-/** Height of the grid for the current number of posts, so the Blog page can size itself. */
-export function blogGridHeight() {
-  const rows = Math.ceil(sortedPosts().length / 3);
-  return rows ? rows * CARD_HEIGHT + (rows - 1) * ROW_GAP : 0;
-}
-
 export default function BlogGrid({ className }: { className?: string }) {
+  const { posts } = useContent();
   return (
     <div className={`grid grid-cols-3 gap-x-[24px] gap-y-[32px] w-[1560px] max-lg:grid-cols-1 max-lg:gap-y-[20px] max-lg:w-full md:max-lg:grid-cols-2 ${className ?? ""}`} data-name="Blog Posts">
-      {sortedPosts().map((post) => (
-        <a key={post.slug} href={postUrl(post)} className="bg-white flex flex-col gap-[24px] group items-center overflow-hidden rounded-[8px] w-[504px] max-lg:gap-[18px] max-lg:w-full">
+      {sortedPosts(posts).map((post) => (
+        <a key={post.id} href={postUrl(post)} className="bg-white flex flex-col gap-[24px] group items-center overflow-hidden rounded-[8px] w-[504px] max-lg:gap-[18px] max-lg:w-full">
           <div className="h-[300px] overflow-clip relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-full max-lg:h-auto max-lg:aspect-[16/10]">
             <img
               alt=""

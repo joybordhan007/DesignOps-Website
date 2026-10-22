@@ -3,7 +3,7 @@ import TalkButton from "./TalkButton";
 
 // Mobile/tablet header: logo + menu button in a bar that sticks to the top of
 // the screen. The menu opens as a panel with every page and the LET'S TALK button.
-// `brand` is the cyan bar used by pages without a hero (UI/UX, Case Study, Contact, Blog post).
+// Contact is reached through the LET’S TALK button in the menu.
 
 const links = [
   { label: "Home", href: "/" },
@@ -11,10 +11,9 @@ const links = [
   { label: "Work", href: "/work" },
   { label: "Blog", href: "/blog" },
   { label: "Company", href: "/company" },
-  { label: "Contact Us", href: "/contact" },
 ];
 
-export default function MobileNav({ path, brand = false }: { path: string; brand?: boolean }) {
+export default function MobileNav({ path }: { path: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -29,15 +28,13 @@ export default function MobileNav({ path, brand = false }: { path: string; brand
   return (
     <header className="sticky top-0 z-50 px-[12px] pt-[12px]" data-name="Mobile Nav">
       <div
-        className={`flex h-[60px] items-center justify-between pl-[14px] pr-[8px] relative rounded-[6px] shadow-[0px_2px_10px_rgba(0,0,0,0.12)] ${
-          brand ? "bg-[#00b6ca]" : "bg-[#f6f6f6]"
-        }`}
+        className="bg-[#f6f6f6] flex h-[60px] items-center justify-between pl-[14px] pr-[8px] relative rounded-[6px] shadow-[0px_2px_10px_rgba(0,0,0,0.12)]"
       >
         <a href="/" className="block h-[34px] w-[149px]" aria-label="DesignOps home" onClick={() => setOpen(false)}>
           <img
             alt="DesignOps"
             className="block size-full"
-            src={brand ? "/assets/shared/logos/designops-logo-light.svg" : "/assets/shared/logos/designops-logo.svg"}
+            src="/assets/shared/logos/designops-logo.svg"
           />
         </a>
         <button
@@ -46,7 +43,7 @@ export default function MobileNav({ path, brand = false }: { path: string; brand
           aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen(!open)}
-          className={`cursor-pointer flex items-center justify-center rounded-[4px] size-[44px] ${brand ? "text-white" : "text-[#171717]"}`}
+          className="cursor-pointer flex items-center justify-center rounded-[4px] size-[44px] text-[#171717]"
         >
           <span className="relative block h-[14px] w-[22px]" aria-hidden="true">
             <span className={`absolute bg-current h-[2px] left-0 rounded-full transition-transform duration-300 w-full ${open ? "top-[6px] rotate-45" : "top-0"}`} />

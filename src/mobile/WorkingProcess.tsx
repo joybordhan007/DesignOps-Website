@@ -1,22 +1,23 @@
 import { useState } from "react";
-import { steps } from "@/components/WorkingProcessSteps";
+import { useContent } from "@/content/store";
 import SectionTitle from "./SectionTitle";
 
 // "Our Working Process" on small screens. Tapping a step turns it cyan and
 // shows its tilted picture, like hovering on desktop. The first step starts open.
 export default function WorkingProcess() {
+  const { settings, process: steps } = useContent();
   const [active, setActive] = useState(0);
 
   return (
     <section className="px-[8px] py-[24px]" data-name="Working Process">
       <div className="bg-[#191919] rounded-[8px]">
         <div className="flex flex-col gap-[32px] mx-auto px-[20px] py-[48px] max-w-[760px]">
-          <SectionTitle lead="Our Working Process That Drives" muted="Growth With Clear Direction" dark />
+          <SectionTitle title={settings.titles.process} dark />
           <ol className="flex flex-col">
             {steps.map((step, index) => {
               const open = active === index;
               return (
-                <li key={step.title} className={index < steps.length - 1 ? "border-[rgba(255,255,255,0.2)] border-b" : ""}>
+                <li key={step.id} className={index < steps.length - 1 ? "border-[rgba(255,255,255,0.2)] border-b" : ""}>
                   <button
                     type="button"
                     aria-expanded={open}
@@ -31,7 +32,7 @@ export default function WorkingProcess() {
                         {step.title}
                       </span>
                       <span className="font-['Inter:Regular'] leading-[1.4] text-[14px] text-white">
-                        We take pride in our collaborative approach, working closely with clients to understand their challenges, goals.
+                        {step.text.replace(/\s*\n\s*/g, " ")}
                       </span>
                     </span>
                   </button>

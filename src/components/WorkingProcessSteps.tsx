@@ -1,27 +1,21 @@
 import { useState } from "react";
+import type { ProcessStep } from "@/content/types";
 
 // "Our Working Process" list. Hovering (or focusing) a step turns its title
 // cyan and grows that step's tilted picture out of the centre of the picture
 // area, as in the Figma prototype; leaving the list shrinks it away again.
 
-export const steps = [
-  { title: "Discovery", image: "/assets/working-process/discovery.jpg" },
-  { title: "Creative idea", image: "/assets/working-process/creative-idea.jpg" },
-  { title: "Best features", image: "/assets/working-process/best-features.jpg" },
-  { title: "Easy solutions", image: "/assets/working-process/easy-solutions.jpg" },
-];
+export const ROW_PITCH = 178;
 
-const ROW_PITCH = 178;
-
-export default function WorkingProcessSteps() {
+export default function WorkingProcessSteps({ steps }: { steps: ProcessStep[] }) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
     <>
-      <div className="absolute h-[694px] left-0 top-[160px] w-[1560px]" data-name="Steps" onMouseLeave={() => setActive(null)}>
+      <div className="absolute left-0 top-[160px] w-[1560px]" style={{ height: steps.length * ROW_PITCH }} data-name="Steps" onMouseLeave={() => setActive(null)}>
         {steps.map((step, index) => (
           <div
-            key={step.title}
+            key={step.id}
             tabIndex={0}
             onMouseEnter={() => setActive(index)}
             onFocus={() => setActive(index)}
@@ -43,8 +37,11 @@ export default function WorkingProcessSteps() {
                 {step.title}
               </p>
               <div className="font-['Inter:Regular'] font-normal text-[18px] text-white">
-                <p className="leading-[1.3]">We take pride in our collaborative approach, working closely</p>
-                <p className="leading-[1.3]">with clients to understand their challenges, goals.</p>
+                {step.text.split("\n").map((line, i) => (
+                  <p key={i} className="leading-[1.3]">
+                    {line}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
@@ -54,7 +51,7 @@ export default function WorkingProcessSteps() {
       <div className="absolute h-[759px] left-[844px] pointer-events-none top-[96px] w-[649px]" data-name="Picture" aria-hidden="true">
         {steps.map((step, index) => (
           <div
-            key={step.title}
+            key={step.id}
             className="absolute h-[600px] left-1/2 overflow-clip rounded-[16px] shadow-[0px_24px_60px_rgba(0,0,0,0.45)] top-1/2 w-[480px] transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{
               opacity: active === index ? 1 : 0,

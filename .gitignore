@@ -19,3 +19,8 @@ logs/
 # beside it.
 /.plugins/
 /.opencode-skills/
+
+# Server runtime data (content, messages, admin account, uploads) and secrets
+server/.env
+server/data/
+server/uploads/

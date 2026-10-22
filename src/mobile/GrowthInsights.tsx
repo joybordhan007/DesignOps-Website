@@ -1,19 +1,21 @@
 import ArrowButton from "@/components/ArrowButton";
-import { formatDate, latestPosts, postUrl } from "@/data/blogPosts";
+import { formatDate, latestPosts, postUrl } from "@/content/helpers";
+import { useContent } from "@/content/store";
 import SectionTitle from "./SectionTitle";
 
 // "Growth Insights" block: the newest posts as swipeable cards, then ALL ARTICLES.
 export default function GrowthInsights({ showButton = true }: { showButton?: boolean }) {
+  const { settings, posts } = useContent();
   return (
     <section className="flex flex-col gap-[28px] py-[48px]" data-name="Growth Insights">
       <div className="mx-auto px-[20px] w-full max-w-[760px]">
-        <SectionTitle lead="Growth Insights That Drive" muted="Measurable Business Success" />
+        <SectionTitle title={settings.titles.insights} />
       </div>
 
       <div className="flex gap-[16px] mx-auto overflow-x-auto pb-[8px] px-[20px] scroll-px-[20px] snap-mandatory snap-x w-full max-w-[760px] [scrollbar-width:none]">
-        {latestPosts(3).map((post) => (
+        {latestPosts(3, posts).map((post) => (
           <a
-            key={post.slug}
+            key={post.id}
             href={postUrl(post)}
             className="flex flex-col group h-[300px] isolate justify-between overflow-hidden p-[20px] relative rounded-[20px] shadow-[0px_2px_6px_rgba(0,0,0,0.1)] shrink-0 snap-start w-[82%] max-w-[340px]"
           >

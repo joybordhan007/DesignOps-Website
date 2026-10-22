@@ -1,23 +1,17 @@
-import MobileHero, { Accent } from "../MobileHero";
-import ProjectCards, { workProjects } from "../ProjectCards";
+import { useContent } from "@/content/store";
+import MobileHero from "../MobileHero";
+import ProjectCards from "../ProjectCards";
 import GrowthInsights from "../GrowthInsights";
 import Reviews from "../Reviews";
 import CtaBanner from "../CtaBanner";
 import MobileFooter from "../MobileFooter";
 
 export default function Work() {
+  const { settings, projects } = useContent();
   return (
     <>
-      <MobileHero
-        video="pages.mp4"
-        title={
-          <>
-            Showcasing Our <Accent>Digital Product</Accent> Design Work
-          </>
-        }
-        text="A collection of projects that define our approach to digital product design. We solve complex problems with elegant solutions."
-      />
-      <ProjectCards images={workProjects} />
+      <MobileHero hero={settings.heroes.work} />
+      <ProjectCards projects={projects} />
       <GrowthInsights />
       <Reviews />
       <CtaBanner />

@@ -1,5 +1,9 @@
-// Site-wide footer, shared by every page. Edit the lists below to change
-// links, contact details or social profiles everywhere at once.
+// Site-wide footer, shared by every page. Contact details, social profiles,
+// the intro text and the service links come from the admin content.
+
+import { Fragment } from "react";
+import { serviceUrl } from "@/content/helpers";
+import { useContent } from "@/content/store";
 
 export const quickLinks = [
   { label: "Home", href: "/" },
@@ -14,24 +18,25 @@ export const supportLinks = [
   { label: "FAQ", href: "/contact#faq" },
 ];
 
-// Every service opens the service details page (the only one that exists so far).
-export const serviceLinks = [
-  { label: "Full-stack Development", href: "/services/ui-ux-design" },
-  { label: "UI/UX Design", href: "/services/ui-ux-design" },
-  { label: "Brand Design", href: "/services/ui-ux-design" },
-  { label: "Digital Marketing", href: "/services/ui-ux-design" },
-];
-
-export const socialLinks = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/143894150", icon: "/assets/shared/icons/linkedin.svg", iconClass: "size-[20px]" },
-  { label: "Facebook", href: "https://www.facebook.com/DesignOps.agency/", icon: "/assets/shared/icons/facebook.svg", iconClass: "h-[20px] w-[10.4px]" },
-];
-
-export const contact = {
-  phone: { label: "+880 1568 295845", href: "tel:+8801568295845" },
-  email: { label: "joybordhan223@gmail.com", href: "mailto:joybordhan223@gmail.com" },
-  address: "Eastern Housing. Block: C, Road: W2, House: 105 Mirpur 12 Dhaka",
-};
+/** Footer data shared by the desktop and mobile footers. */
+export function useFooter() {
+  const { settings, services } = useContent();
+  const { contact, footer } = settings;
+  return {
+    text: footer.text,
+    copyright: footer.copyright,
+    serviceLinks: services.map((service) => ({ label: service.title, href: serviceUrl(service) })),
+    socialLinks: [
+      { label: "LinkedIn", href: footer.linkedin, icon: "/assets/shared/icons/linkedin.svg", iconClass: "size-[20px]" },
+      { label: "Facebook", href: footer.facebook, icon: "/assets/shared/icons/facebook.svg", iconClass: "h-[20px] w-[10.4px]" },
+    ].filter((social) => social.href),
+    contact: {
+      phone: { label: contact.phone, href: `tel:${contact.phone.replace(/[^+\d]/g, "")}` },
+      email: { label: contact.email, href: `mailto:${contact.email}` },
+      address: contact.address,
+    },
+  };
+}
 
 const heading = "font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#dfdfdf] text-[20px] uppercase whitespace-nowrap";
 const link = "font-['Inter:Medium'] font-medium leading-[1.2] text-[#dfdfdf] text-[18px] whitespace-nowrap transition-colors hover:text-[#00b6ca]";
@@ -52,6 +57,7 @@ function LinkColumn({ title, links }: { title: string; links: { label: string; h
 }
 
 export default function Footer({ className }: { className?: string }) {
+  const { text, copyright, serviceLinks, socialLinks, contact } = useFooter();
   return (
     <div role="contentinfo" className={className || "bg-[#191919] h-[764px] overflow-clip relative rounded-[8px] w-[1872px]"} data-name="Footer">
       <div className="absolute flex h-[222px] items-start justify-between left-[156px] right-[156px] top-[40px] z-[1]">
@@ -61,9 +67,12 @@ export default function Footer({ className }: { className?: string }) {
               <img alt="DesignOps" className="absolute block inset-0 max-w-none size-full" src="/assets/shared/logos/designops-logo-footer.svg" />
             </a>
             <p className="font-['Inter:Regular'] font-normal leading-[1.3] text-[#dfdfdf] text-[20px]">
-              We design &amp; build software that sells. Full-stack
-              <br />
-              digital product agency for ambitious brands.
+              {text.split("\n").map((line, i) => (
+                <Fragment key={i}>
+                  {i > 0 && <br />}
+                  {line}
+                </Fragment>
+              ))}
             </p>
           </div>
           <div className="flex gap-[16px] items-center">
@@ -120,7 +129,7 @@ export default function Footer({ className }: { className?: string }) {
       <div className="absolute bottom-[68px] flex flex-col gap-[32px] items-center justify-center left-[156px] right-[156px]">
         <div className="h-px w-full" />
         <div className="flex items-start justify-between text-[18px] text-white w-full whitespace-nowrap">
-          <p className="font-['Inter:Regular'] font-normal leading-[1.2]">© 2026 DesignOps. All rights reserved.</p>
+          <p className="font-['Inter:Regular'] font-normal leading-[1.2]">{copyright}</p>
           <div className="flex font-['Inter:Medium'] font-medium gap-[16px] items-center">
             <p className="leading-[1.2]">Privacy Policy</p>
             <p className="leading-[1.2]">Terms of Service</p>

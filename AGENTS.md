@@ -21,6 +21,13 @@ This is the canonical project structure. Start with task-relevant files below. O
 - `vite.config.ts` - Vite configuration with React, Tailwind CSS v4, and Figma Make plugins plus the `@` alias for `src`
 - `.mise.toml` - Toolchain versions for Node.js and pnpm
 
+## Content, admin dashboard and server
+
+- All editable site content (texts, services, projects, blog posts, clients, reviews, FAQ, settings) is data typed in `src/content/types.ts`. Pages read it with `useContent()` (`src/content/store.ts`); never hard-code it in pages.
+- `src/content/defaultContent.json` is the starting content (also used when no server is running, e.g. in a static preview).
+- `src/websitepages/` are the desktop pages (1920px artboard, built from `src/websitepages/sections/`), `src/mobile/` the phone/tablet pages.
+- `src/admin/` is the dashboard at `/admin`; `server/index.js` is the Node/Express server (content API, login, uploads, serves `dist/`). See `server/README.md`.
+
 ## Dependencies
 
 - Runtime: React 19 and React DOM 19

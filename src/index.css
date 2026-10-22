@@ -24,6 +24,26 @@
   font-style: normal;
   font-weight: 700;
 }
+/* The Figma file uses Aileron in a few places, but no Aileron font is
+   available, so those texts fell back to a serif face. Map them to Inter. */
+@font-face {
+  font-family: "Aileron:Regular";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Aileron:SemiBold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Aileron:Bold";
+  src: url("https://static.figma.com/font/Inter_1") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+}
 @font-face {
   font-family: "Inter:Italic";
   src: url("https://static.figma.com/font/Inter_1") format("woff2");
@@ -163,28 +183,11 @@ body {
   line-height: 1.5;
 }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-}
-
-button {
-  color: inherit;
-}
-
 img {
   display: block;
   max-width: 100%;
 }
 
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
-}
 
 /* In the base layer so Tailwind font utilities on headings still win. */
 @layer base {

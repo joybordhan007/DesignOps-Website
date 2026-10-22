@@ -1,17 +1,10 @@
+import { projectUrl } from "@/content/helpers";
+import { useContent } from "@/content/store";
+import type { Project } from "@/content/types";
 import SectionTitle from "./SectionTitle";
 
 // "Turn your ideas into impactful solutions" project cards (Home and Work).
 // Each card links to the case study.
-
-export const homeProjects = Array.from({ length: 4 }, () => "/assets/shared/images/case-study-cover.webp");
-
-export const workProjects = [
-  ...homeProjects,
-  "/assets/work/c4c83.webp",
-  "/assets/work/97fa0.webp",
-  "/assets/work/5096b.webp",
-  "/assets/work/c4c83.webp",
-];
 
 function ViewCaseStudy() {
   return (
@@ -29,25 +22,27 @@ function ViewCaseStudy() {
   );
 }
 
-export default function ProjectCards({ images }: { images: string[] }) {
+export default function ProjectCards({ projects }: { projects: Project[] }) {
+  const { settings } = useContent();
+  if (!projects.length) return null;
   return (
     <section className="flex flex-col gap-[28px] mx-auto px-[20px] py-[48px] w-full max-w-[760px]" data-name="Projects">
-      <SectionTitle lead="Turn your ideas into" muted="impactful solutions like them!" />
+      <SectionTitle title={settings.titles.projects} />
       <div className="flex flex-col gap-[20px]">
-        {images.map((image, index) => (
+        {projects.map((project) => (
           <a
-            key={index}
-            href="/work/case-study"
+            key={project.id}
+            href={projectUrl(project)}
             className="bg-white block group p-[12px] rounded-[20px] shadow-[0px_1px_5px_rgba(0,0,0,0.1)] sticky top-[84px]"
           >
             <div className="bg-[#f6f6f6] flex flex-col overflow-hidden rounded-[10px]">
               <div className="aspect-[16/11] overflow-hidden">
-                <img alt="Mighty School LMS project preview" className="block object-cover size-full transition-transform duration-700 group-hover:scale-105" src={image} loading="lazy" />
+                <img alt={`${project.title} project preview`} className="block object-cover size-full transition-transform duration-700 group-hover:scale-105" src={project.cover} loading="lazy" />
               </div>
               <div className="flex flex-col gap-[20px] p-[18px]">
                 <div className="flex flex-col gap-[10px]">
-                  <p className="font-['Inter:Italic'] italic leading-[1.2] text-[#2f2f2f] text-[14px]">Mobile App Design</p>
-                  <h3 className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">Mighty School LMS</h3>
+                  <p className="font-['Inter:Italic'] italic leading-[1.2] text-[#2f2f2f] text-[14px]">{project.category}</p>
+                  <h3 className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.title}</h3>
                   <p className="font-['Inter:Regular'] leading-[1.4] text-[#3e3e3e] text-[14px]">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
                   </p>
@@ -55,11 +50,11 @@ export default function ProjectCards({ images }: { images: string[] }) {
                 <div className="flex gap-[40px]">
                   <div className="flex flex-col gap-[6px]">
                     <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">Pages in Projects</p>
-                    <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">100+</p>
+                    <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.pages}</p>
                   </div>
                   <div className="flex flex-col gap-[6px]">
                     <p className="font-['Inter:Regular'] leading-[1.3] text-[#3e3e3e] text-[12px]">Project Duration</p>
-                    <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">2 Months</p>
+                    <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#2f2f2f] text-[16px]">{project.duration}</p>
                   </div>
                 </div>
                 <ViewCaseStudy />

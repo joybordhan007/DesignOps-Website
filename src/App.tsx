@@ -1,6 +1,6 @@
 import { ComponentType, MouseEvent, Suspense, lazy, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
-import { findPost, latestPosts, postUrl } from "./data/blogPosts";
+import { findPost, findProject, findService } from "./content/helpers";
 import useScaledSticky from "./lib/useScaledSticky";
 import useMediaQuery from "./lib/useMediaQuery";
 import DesktopNav from "./components/DesktopNav";
@@ -43,11 +43,11 @@ const pages = {
 
   "/services": page(() => import("./websitepages/Services"), () => import("./mobile/pages/Services"), 6085),
 
-  "/services/ui-ux-design": page(() => import("./websitepages/UiUxDesign"), () => import("./mobile/pages/UiUxDesign"), 6457),
+  "/services/:slug": page(() => import("./websitepages/ServiceDetails"), () => import("./mobile/pages/ServiceDetails"), 6457),
 
   "/work": page(() => import("./websitepages/Work"), () => import("./mobile/pages/Work"), 8769),
 
-  "/work/case-study": page(() => import("./websitepages/CaseStudy"), () => import("./mobile/pages/CaseStudy"), 8007),
+  "/work/:slug": page(() => import("./websitepages/WorkDetails"), () => import("./mobile/pages/WorkDetails"), 8007),
 
   "/blog": page(() => import("./websitepages/Blog"), () => import("./mobile/pages/Blog"), 4008),
 
@@ -60,52 +60,28 @@ const pages = {
   "/404": page(() => import("./websitepages/NotFound"), () => import("./mobile/pages/NotFound"), 1960),
 }
 
-// Pages without a video hero use the cyan navbar.
-const brandRoutes = new Set<Route>(["/services/ui-ux-design", "/work/case-study", "/blog/:slug", "/contact"])
+// Pages that open with a video hero; the desktop navbar sits inside the hero there.
+const heroRoutes = new Set<Route>(["/", "/services", "/work", "/blog", "/company"])
 
 function matchRoute(path: string): Route {
-  if (path in pages && path !== "/blog/:slug") return path as Route
+  if (path in pages && !path.includes(":")) return path as Route
 
-  const post = /^\/blog\/([^/]+)\/?$/.exec(path)
+  const [, section, slug] = /^\/(services|work|blog)\/([^/]+)\/?$/.exec(path) ?? []
 
-  if (post && findPost(post[1])) return "/blog/:slug"
+  const name = decodeURIComponent(slug ?? "")
+
+  if (section === "services" && findService(name)) return "/services/:slug"
+
+  // "/work/case-study" is the old single case-study URL; it opens the first project.
+  if (section === "work" && (findProject(name) || name === "case-study")) return "/work/:slug"
+
+  if (section === "blog" && findPost(name)) return "/blog/:slug"
 
   return "/404"
 }
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
-}
-
-function routeForLabel(label: string): string | undefined {
-  const text = label.replace(/\s+/g, " ").trim().toLowerCase()
-
-  if (text.includes("view case study")) return "/work/case-study"
-
-  if (text.includes("read now")) return postUrl(latestPosts(1)[0])
-
-  if (text.includes("all articles")) return "/blog"
-
-  if (text.includes("ui/ux design") || text.includes("ui ux design"))
-    return "/services/ui-ux-design"
-
-  if (
-    text.includes("contact us") ||
-    text.includes("let’s talk") ||
-    text.includes("start a project")
-  ) {
-    return "/contact"
-  }
-
-  if (text === "services") return "/services"
-
-  if (text === "work") return "/work"
-
-  if (text === "blog") return "/blog"
-
-  if (text === "company") return "/company"
-
-  if (text === "home") return "/"
 }
 
 /** Rendered next to the page inside Suspense, so it only mounts once the page has loaded. */
@@ -233,6 +209,7 @@ export default function App() {
     showPage(next, hash)
   }
 
+  // In-site links switch pages without a full reload.
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     const anchor = (event.target as HTMLElement).closest<HTMLAnchorElement>(
       "a[href]",
@@ -253,44 +230,6 @@ export default function App() {
 
         navigate(target, hash)
       }
-
-      return
-    }
-
-    const target = event.target as HTMLElement
-
-    // Interactive controls (form fields, FAQ toggles) handle their own clicks.
-    if (target.closest("button, input, select, textarea, label, form, summary")) return
-
-    if (
-      target.closest('[data-name="Nav"]') &&
-      !target.closest('[data-name="Component 57"], [data-node-id="1:681"]')
-    ) {
-      return
-    }
-
-    let element: HTMLElement | null = target
-
-    for (
-      let depth = 0;
-      element && element !== event.currentTarget && depth < 7;
-      depth += 1
-    ) {
-      const label = element.textContent || ""
-
-      if (label.trim().length <= 100) {
-        const next = routeForLabel(label)
-
-        if (next) {
-          event.preventDefault()
-
-          navigate(next)
-
-          return
-        }
-      }
-
-      element = element.parentElement
     }
   }
 
@@ -311,7 +250,7 @@ export default function App() {
 
     return (
       <div className="bg-[#f5f5f5] min-h-svh overflow-x-clip" onClick={handleClick}>
-        <MobileNav path={path} brand={brandRoutes.has(route)} />
+        <MobileNav path={path} />
         <Suspense fallback={<div className="min-h-svh" />}>
           <Page key={path} />
           <Ready key={`ready-${path}`} onReady={onReady} />
@@ -328,7 +267,7 @@ export default function App() {
       style={{ height: height * scale }}
       onClick={handleClick}
     >
-      <DesktopNav path={path} brand={brandRoutes.has(route)} scale={scale} />
+      <DesktopNav path={path} hero={heroRoutes.has(route)} scale={scale} />
       <div
         ref={pageRef}
         className="figma-page-scale"

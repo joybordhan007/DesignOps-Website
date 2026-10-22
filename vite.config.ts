@@ -6,6 +6,9 @@ import path from 'node:path'
 import siteConfiguration from './.figma/make/site.json'
 
 
+const apiServer = `http://localhost:${process.env.API_PORT || 3001}`
+const apiProxy = { '/api': apiServer, '/uploads': apiServer }
+
 // Vite config — https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
@@ -34,6 +37,8 @@ react(),
       host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
+      // The admin API and uploaded files come from the Node server (npm run server).
+      proxy: apiProxy,
       watch: {
         ignored: [
           '**/.figma/**',
@@ -43,6 +48,7 @@ react(),
     preview: {
       host: process.env.FIGMA_DEV_SERVER_HOST || '0.0.0.0',
       port: parseInt(process.env.PORT || '8443'),
+      proxy: apiProxy,
     },
   }
 })

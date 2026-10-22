@@ -1,0 +1,68 @@
+# DesignOps — server & admin dashboard
+
+The website and its admin dashboard run from one small Node.js server
+(`server/index.js`). It serves the built site (`dist/`), stores everything the
+dashboard edits, and keeps uploaded images/videos.
+
+| What | Where |
+|---|---|
+| Admin dashboard | `https://your-domain/admin` |
+| Site content (texts, lists, settings) | `server/data/content.json` |
+| Contact-form messages | `server/data/messages.json` |
+| Admin account (password is hashed) | `server/data/admin.json` |
+| Uploaded images & videos | `server/uploads/` |
+
+`server/data/` and `server/uploads/` are created automatically on the first
+start (the content starts as a copy of `src/content/defaultContent.json`).
+They are **not** in git — back them up, and never overwrite them when you
+upload a new version of the site.
+
+## Run it on your computer
+
+```bash
+pnpm install          # or: npm install
+cp server/.env.example server/.env   # then put your admin email/password in it
+npm run build         # builds the site into dist/
+npm run server        # http://localhost:3001  (site + /admin)
+```
+
+While developing, `npm run dev` (Vite, port 8443) forwards `/api` and
+`/uploads` to the server, so run `npm run server` next to it.
+
+## Put it on cPanel hosting (Node.js)
+
+1. On your computer run `npm run build`.
+2. Upload these to a folder on the hosting, e.g. `designops` (File Manager or FTP):
+   `dist/`, `server/` (without `data/`, `uploads/`, `.env`), `src/content/defaultContent.json`,
+   `package.json`.
+3. cPanel → **Setup Node.js App** → **Create Application**
+   - Node.js version: **20** or newer
+   - Application mode: Production
+   - Application root: `designops`
+   - Application URL: your domain
+   - Application startup file: `server/index.js`
+4. In the same screen add **Environment variables**:
+   - `ADMIN_EMAIL` = your login email
+   - `ADMIN_PASSWORD` = your login password
+   - `ADMIN_NAME` = the name shown in the dashboard
+   - `SESSION_SECRET` = any long random text (optional but recommended)
+5. Click **Run NPM Install**, then **Restart**.
+6. Open `https://your-domain/admin` and sign in.
+
+The admin account is created from `ADMIN_EMAIL` / `ADMIN_PASSWORD` on the very
+first start. After that the password lives (hashed) in `server/data/admin.json`
+and is changed from the dashboard (profile menu → Change password). To reset a
+forgotten password, delete `server/data/admin.json` and restart the app — it is
+recreated from the environment variables.
+
+### Updating the site later
+
+Run `npm run build` again and upload the new `dist/` folder (and `server/` if it
+changed), then click **Restart** in Setup Node.js App. Your content, messages and
+uploads stay as they are.
+
+### Before going live
+
+`.figma/make/site.json` has `"robots": { "index": false }`, which tells search
+engines not to list the site. Set it to `true` and rebuild when you want Google
+to index it.

@@ -1,43 +1,31 @@
-const clientLogos = [
-  { src: "/assets/client-logos/mamother.png", alt: "Mamother" },
+import { useContent } from "@/content/store";
+import type { Client } from "@/content/types";
 
-  { src: "/assets/client-logos/speed.png", alt: "Speed" },
+// Endless sideways loop of client logos (from the admin "Clients" list).
 
-  { src: "/assets/client-logos/bangla-travel.png", alt: "Bangla Travel" },
-
-  {
-    src: "/assets/client-logos/imagine-interiors.png",
-    alt: "Imagine Interiors",
-  },
-
-  { src: "/assets/client-logos/client-mark.png", alt: "Client logo" },
-
-  { src: "/assets/client-logos/blucheez.svg", alt: "Blucheez" },
-]
-
-function LogoSet({ duplicate = false }: { duplicate?: boolean }) {
+function LogoSet({ clients, duplicate = false }: { clients: Client[]; duplicate?: boolean }) {
   return (
     <div className="client-logo-set" aria-hidden={duplicate}>
-      {clientLogos.map((logo) => (
-        <div className="client-logo-item" key={logo.src}>
-          <img src={logo.src} alt={duplicate ? "" : logo.alt} />
+      {clients.map((client) => (
+        <div className="client-logo-item" key={client.id}>
+          <img src={client.logo} alt={duplicate ? "" : client.name} loading="lazy" decoding="async" />
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export default function ClientLogoCarousel() {
+  const { clients } = useContent();
+  if (!clients.length) return null;
+  // Repeat short lists so one set is wider than the carousel and the loop has no gap.
+  const set = Array.from({ length: Math.max(1, Math.ceil(8 / clients.length)) }, () => clients).flat();
   return (
-    <div
-      className="client-logo-carousel"
-      role="region"
-      aria-label="Our clients"
-    >
+    <div className="client-logo-carousel" role="region" aria-label="Our clients">
       <div className="client-logo-track">
-        <LogoSet />
-        <LogoSet duplicate />
+        <LogoSet clients={set} />
+        <LogoSet clients={set} duplicate />
       </div>
     </div>
-  )
+  );
 }

@@ -31,23 +31,34 @@ export default function ContactForm() {
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
     setStatus("sending");
-    try {
-      const response = await fetch(ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          ...data,
-          _subject: `New inquiry from ${data.first_name} ${data.last_name} (DesignOps website)`,
-          _replyto: data.email,
-          _template: "table",
-          _captcha: "false",
-        }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || String(result.success) === "false") throw new Error(result.message || "Request failed");
+    // Saved on our server (shown in the admin dashboard) and emailed via FormSubmit;
+    // the inquiry counts as sent if either one succeeds. Both requests start right away.
+    const saved = fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.ok)
+      .catch(() => false);
+    const emailed = fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        ...data,
+        _subject: `New inquiry from ${data.first_name} ${data.last_name} (DesignOps website)`,
+        _replyto: data.email,
+        _template: "table",
+        _captcha: "false",
+      }),
+    })
+      .then(async (response) => response.ok && String((await response.json().catch(() => ({}))).success) !== "false")
+      .catch(() => false);
+    // Don't keep the visitor waiting on the email service once the server has it.
+    const ok = (await saved) || (await emailed);
+    if (ok) {
       setStatus("sent");
       form.reset();
-    } catch {
+    } else {
       setStatus("error");
     }
   };

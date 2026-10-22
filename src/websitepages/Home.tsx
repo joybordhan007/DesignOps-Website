@@ -1,786 +1,95 @@
 import ClientLogoCarousel from "@/components/ClientLogoCarousel";
 import CountUp from "@/components/CountUp";
-import HeroVideo from "@/components/HeroVideo";
+import Footer from "@/components/Footer";
+import Rich from "@/components/Rich";
 import ScienceTechDesign from "@/components/ScienceTechDesign";
 import ServiceCards from "@/components/ServiceCards";
-import WorkingProcessSteps from "@/components/WorkingProcessSteps";
-import LatestBlogCards from "@/components/LatestBlogCards";
-import Footer from "@/components/Footer";
-import ArrowButton from "@/components/ArrowButton";
+import { grouping } from "@/content/helpers";
+import { useContent } from "@/content/store";
+import type { Stat } from "@/content/types";
+import CtaSection from "./sections/CtaSection";
+import GrowthSection from "./sections/GrowthSection";
+import Heading, { Lines } from "./sections/Heading";
+import Hero from "./sections/Hero";
+import Page from "./sections/Page";
+import ProcessSection from "./sections/ProcessSection";
+import { StackedProjects } from "./sections/ProjectCards";
+import ReviewsSection from "./sections/ReviewsSection";
 
-const assetPathPrefix = "/assets/home";
-const imgArrowForwardLong = "/assets/shared/icons/arrow-forward-long.svg";
-const imgRectangle16 = "/assets/shared/images/case-study-cover.webp";
-const imgRectangle17 = "/assets/shared/images/reviewer-avatar.jpg";
-const imgImage = `${assetPathPrefix}/e8b66.webp`;
-const imgComponent3 = `${assetPathPrefix}/a024a.svg`;
-const imgArrowSubdirectoryForward = "/assets/shared/icons/arrow-subdirectory-light.svg";
-const imgUpworkLogo1 = `${assetPathPrefix}/010cd.svg`;
-const imgGroup2 = "/assets/shared/logos/fiverr-grey.svg";
-const imgGoogleGLogo1 = `${assetPathPrefix}/08bff.svg`;
-const imgStar1 = "/assets/shared/icons/star.svg";
-const imgGroup3 = "/assets/shared/icons/star-half.svg";
-const imgGroup4 = "/assets/shared/logos/fiverr.svg";
-
-type FrameProps = {
-  className?: string;
-  property1?: "Default";
-};
-
-function Frame({ className, property1 = "Default" }: FrameProps) {
+function StatCard({ stat, index, highlight }: { stat: Stat; index: number; highlight: boolean }) {
   return (
-    <ClientLogoCarousel />
-  );
-}
-
-type Component61Props = {
-  className?: string;
-  property1?: "View";
-};
-
-function Component61({ className, property1 = "View" }: Component61Props) {
-  return (
-    <a href="/work/case-study" className={className || "bg-[#171717] content-stretch flex gap-[10px] items-center pl-[18px] pr-[8px] py-[8px] relative rounded-[4px]"} data-node-id="1:154">
-      <div className="h-[18px] overflow-clip relative shrink-0 w-[149px]" data-node-id="1:155" data-name="Frame">
-        <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#f6f6f6] text-[16px] top-0 whitespace-nowrap" data-node-id="1:156">
-          <p className="leading-[1.2] mb-0">VIEW CASE STUDY</p>
-          <p className="leading-[1.2]">VIEW CASE STUDY</p>
-        </div>
-      </div>
-      <div className="bg-[#f6f6f6] content-stretch flex items-center p-[6px] relative rounded-[4px] shrink-0" data-node-id="1:157" data-name="Frame">
-        <div className="relative shrink-0 size-[18px]" data-node-id="1:158" data-name="arrow-forward-long">
-          <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
-        </div>
-      </div>
-    </a>
-  );
-}
-
-type Component58Props = {
-  className?: string;
-  property1?: "vIEW";
-};
-
-function Component58({ className, property1 = "vIEW" }: Component58Props) {
-  return (
-    <div className={className || "bg-[#00b6ca] content-stretch flex gap-[10px] items-center pl-[18px] pr-[12px] py-[12px] relative rounded-[4px]"} data-node-id="1:10">
-      <div className="h-[18px] overflow-clip relative shrink-0 w-[144px]" data-node-id="1:11" data-name="Frame">
-        <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#f6f6f6] text-[16px] top-0 whitespace-nowrap" data-node-id="1:12">
-          <p className="leading-[1.2] mb-0">START A PROJECT</p>
-          <p className="leading-[1.2]">START A PROJECT</p>
-        </div>
-      </div>
-      <div className="bg-[#f6f6f6] content-stretch flex items-center p-[8px] relative rounded-[4px] shrink-0" data-node-id="1:13" data-name="Frame">
-        <div className="relative shrink-0 size-[18px]" data-node-id="1:14" data-name="arrow-forward-long">
-          <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowForwardLong} />
-        </div>
+    <div
+      className={`drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] rounded-[24px] ${
+        highlight ? "bg-[#00b6ca] text-white" : "bg-white text-[#3e3e3e]"
+      }`}
+    >
+      <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[16px] w-full">/{String(index + 1).padStart(2, "0")}</p>
+      <div className="flex flex-col gap-[16px] items-start w-full">
+        <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[36px] w-full">
+          <CountUp value={stat.value} prefix={stat.prefix} suffix={stat.suffix} useGrouping={grouping(stat.value)} />
+          {stat.after}
+        </p>
+        <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[18px] w-full">
+          <Lines text={stat.label} />
+        </p>
       </div>
     </div>
   );
 }
 
 export default function Home() {
+  const { settings, achievements, services, projects } = useContent();
+  const stats = achievements.home;
+  const rows = Array.from({ length: Math.ceil(stats.length / 3) }, (_, r) => stats.slice(r * 3, r * 3 + 3));
+
   return (
-    <div className="bg-[#f5f5f5] figma-canvas relative w-[1920px] h-[13878px]" data-node-id="1:976" data-name="Home">
-      <div className="-translate-x-1/2 absolute bg-[#2b2b2b] h-[870px] left-1/2 overflow-clip rounded-[8px] top-[24px] w-[1872px]" data-node-id="1:977" data-name="Hero">
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute contents left-[calc(54.17%-66px)] top-[calc(50%+27.5px)]" data-node-id="1:978" data-name="image">
-          <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[980px] left-1/2 top-1/2 w-[1920px]" data-node-id="1:979" data-name="Video">
-            <HeroVideo name="home.mp4" />
-          </div>
-          <div className="absolute bg-gradient-to-r from-[16.438%] from-[rgba(0,0,0,0.74)] h-[980px] left-0 to-[rgba(0,0,0,0.2)] top-0 w-[1920px]" data-node-id="1:980" data-name="Effects" />
+    <Page name="Home">
+      <Hero hero={settings.heroes.home} />
+
+      <div className="h-[900px] mt-[80px] relative shrink-0 w-[1920px]" data-name="Vision">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[846px] left-[calc(50%-2px)] top-[calc(50%+88px)] w-[1582px]">
+          <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-bottom opacity-15 pointer-events-none size-full" src="/assets/home/e8b66.webp" />
         </div>
-        <div className="absolute content-stretch flex flex-col gap-[56px] items-start justify-center left-[156px] top-[306px]" data-node-id="1:981" data-name="Frame">
-          <div className="[word-break:break-word] content-stretch flex flex-col gap-[16px] items-start leading-[0] relative shrink-0 text-[#ededed] whitespace-nowrap" data-node-id="1:982" data-name="Frame">
-            <div className="flex flex-col font-['Noto_Sans:SemiBold'] font-semibold justify-center relative shrink-0 text-[0px] tracking-[1.28px]" data-node-id="1:983" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-              <p className="font-['Montserrat:SemiBold'] mb-0 text-[64px] whitespace-pre">
-                <span className="leading-[1.24]">{`We Design & `}</span>
-                <span className="leading-[1.24] text-[#00b6ca]">{`Build High `}</span>
-              </p>
-              <p className="font-['Montserrat:SemiBold'] text-[64px] whitespace-pre">
-                <span className="leading-[1.24] text-[#00b6ca]">Converting</span>
-                <span className="leading-[1.24]">{` Digital Products`}</span>
-              </p>
-            </div>
-            <div className="flex flex-col font-['Montserrat:Regular'] font-normal justify-center relative shrink-0 text-[28px]" data-node-id="1:984">
-              <p className="leading-[1.2]">{`UI/UX & Full-stack digital agency combining editorial aesthetics with engineering rigor.`}</p>
-            </div>
-          </div>
-          <Component58 className="bg-[#00b6ca] content-stretch flex gap-[10px] items-center pl-[18px] pr-[12px] py-[12px] relative rounded-[4px] shrink-0" />
-        </div>
-        <div className="-translate-x-1/2 absolute content-stretch flex gap-[16px] items-center left-[calc(50%+0.5px)] top-[830px]" data-node-id="1:986" data-name="Frame">
-          <p className="[word-break:break-word] font-['Noto_Sans:Light'] font-light leading-[1.2] relative shrink-0 text-[16px] text-white tracking-[3.52px] uppercase whitespace-nowrap" data-node-id="1:987" style={{ fontVariationSettings: '"CTGR" 0, "wdth" 100' }}>
-            Scroll Down
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute flex flex-col gap-[180px] items-center left-1/2 top-1/2 w-[1560px]">
+          <p className="capitalize font-['Poppins:SemiBold'] font-semibold leading-[1.3] text-[#2f2f2f] text-[48px] text-center tracking-[0.96px] w-[1560px]">
+            <Rich text={settings.vision} />
           </p>
-          <div className="h-[24px] relative shrink-0 w-[12px]" data-node-id="1:988" data-name="Component 3">
-            <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgComponent3} />
+          <div className="flex flex-col gap-[64px] items-start w-full">
+            <Heading title={settings.titles.clients} className="font-['Inter:Semi_Bold'] font-semibold" />
+            <ClientLogoCarousel />
           </div>
         </div>
       </div>
-      <div className="[word-break:break-word] absolute content-stretch flex flex-col gap-[64px] items-start leading-[0] left-[180px] not-italic top-[2034px] w-[1560px]" data-node-id="1:1005" data-name="Frame">
-        <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[1474px] whitespace-pre-wrap" data-node-id="1:1006">
-          <p className="font-['Inter:Bold'] font-bold mb-0">
-            <span className="leading-[1.2]">{`Bold UX design, billion-dollar proof. `}</span>
-            <span className="leading-[1.2] text-[#707070]">{`We measure `}</span>
-          </p>
-          <p className="font-['Inter:Bold'] font-bold text-[#707070]">
-            <span className="leading-[1.2]">{`impact, `}</span>
-            <span className="leading-[1.2] tracking-[0.32px]">not just ship pixels.</span>
-          </p>
-        </div>
-        <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full" data-node-id="1:1007" data-name="Frame">
-          <div className="content-stretch flex gap-[24px] items-center relative shrink-0 text-[#3e3e3e] w-full" data-node-id="1:1008" data-name="Frame">
-            <div className="bg-white content-stretch drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] relative rounded-[24px]" data-node-id="1:1009" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[16px] w-full" data-node-id="1:1010">
-                <p className="leading-[1.2]">/01</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1011" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1012">
-                  <p className="leading-[1.2]"><CountUp value={92} suffix="%" /></p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1013">
-                  <p className="leading-[1.2] mb-0">{`client satisfaction `}</p>
-                  <p className="leading-[1.2]">in post-project reviews.</p>
-                </div>
-              </div>
+
+      <div className="flex flex-col gap-[64px] items-start mt-[160px] shrink-0 w-[1560px]" data-name="Impact">
+        <Heading title={settings.titles.stats} />
+        <div className="flex flex-col gap-[24px] items-start w-full">
+          {rows.map((row, r) => (
+            <div key={r} className="flex gap-[24px] items-stretch w-full">
+              {row.map((stat, i) => {
+                const index = r * 3 + i;
+                return <StatCard key={stat.id} stat={stat} index={index} highlight={index === stats.length - 1} />;
+              })}
             </div>
-            <div className="bg-white content-stretch drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] relative rounded-[24px]" data-node-id="1:1014" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[16px] w-full" data-node-id="1:1015">
-                <p className="leading-[1.2]">/02</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1016" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1017">
-                  <p className="leading-[1.2]"><CountUp value={10} prefix="$" suffix="B+" /></p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1018">
-                  <p className="leading-[1.2] mb-0">{`valuation influenced `}</p>
-                  <p className="leading-[1.2]">by our design</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-white content-stretch drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] relative rounded-[24px]" data-node-id="1:1019" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[16px] w-full" data-node-id="1:1020">
-                <p className="leading-[1.2]">/03</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1021" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1022">
-                  <p className="leading-[1.2]"><CountUp value={2019} useGrouping={false} /></p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1023">
-                  <p className="leading-[1.2] mb-0">{`Founded, 6 years `}</p>
-                  <p className="leading-[1.2]">of experience</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-stretch flex gap-[24px] items-center relative shrink-0 w-full" data-node-id="1:1024" data-name="Frame">
-            <div className="bg-white content-stretch drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] relative rounded-[24px] text-[#3e3e3e]" data-node-id="1:1025" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[16px] w-full" data-node-id="1:1026">
-                <p className="leading-[1.2]">/04</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1027" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1028">
-                  <p className="leading-[1.2]"><CountUp value={25} suffix="M+" /></p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1029">
-                  <p className="leading-[1.2] mb-0">{`monthly visits `}</p>
-                  <p className="leading-[1.2]">on client platforms</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#00b6ca] content-stretch drop-shadow-[0px_1px_3px_rgba(0,0,0,0.04)] flex flex-[1_0_0] flex-col gap-[146px] items-start min-w-px px-[32px] py-[36px] relative rounded-[24px] text-white" data-node-id="1:1030" data-name="Frame">
-              <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[16px] w-full" data-node-id="1:1031">
-                <p className="leading-[1.2]">/05</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-start relative shrink-0 w-full" data-node-id="1:1032" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[36px] w-full" data-node-id="1:1033">
-                  <p className="leading-[1.2]"><CountUp value={500} suffix="+" /> global projects</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[18px] w-full whitespace-pre-wrap" data-node-id="1:1034">
-                  <p className="leading-[1.2] mb-0"><CountUp value={250} suffix="+" /> testimonials with</p>
-                  <p className="leading-[1.2]">trusted by google</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
-      <div className="-translate-x-1/2 absolute h-[3000px] left-1/2 top-[3058px] w-[1872px] science-scroll-stage">
+
+      <div className="h-[3000px] mt-[161px] relative shrink-0 w-[1872px] science-scroll-stage">
         <ScienceTechDesign />
       </div>
-      <div className="absolute content-stretch flex flex-col gap-[64px] items-center left-[180px] top-[6098px] w-[1560px]" data-node-id="1:1051" data-name="Frame">
-        <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1052">
-          <p className="mb-0">
-            <span className="leading-[1.2]">{`Our Services Focused on Strategy, `}</span>
-            <span className="leading-[1.2] text-[#707070]">{`Creativity, `}</span>
-          </p>
-          <p className="leading-[1.2] text-[#707070]">and Measurable Impact</p>
-        </div>
-        <ServiceCards className="relative shrink-0" />
+
+      <div className="flex flex-col gap-[64px] items-center mt-[40px] shrink-0 w-[1560px]" data-name="Services">
+        <Heading title={settings.titles.services} />
+        <ServiceCards services={services} className="relative shrink-0" />
       </div>
-      <div className="absolute block h-[2539px] left-[180px] pointer-events-none top-[7068px] w-[1560px]" data-node-id="1:1054" data-name="Frame">
-        <div className="absolute bottom-0 h-[2539px] left-0 top-0" data-node-id="1:1055">
-          <div className="content-stretch flex flex-col gap-[64px] items-start pointer-events-auto pt-[60px] sticky top-0 w-[1560px]" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] text-left tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1056">
-              <p className="mb-0">
-                <span className="leading-[1.2]">{`Turn your ideas into `}</span>
-                <span className="leading-[1.2] text-[#707070]">{`impactful `}</span>
-              </p>
-              <p className="leading-[1.2] text-[#707070]">solutions like them!</p>
-            </div>
-            <div className="bg-white content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex h-[520px] items-center justify-center p-[24px] relative rounded-[24px] shrink-0 w-[1560px]" data-node-id="1:1057" data-name="Frame">
-              <div className="bg-[#f6f6f6] content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px relative rounded-[8px]" data-node-id="1:1058" data-name="Frame">
-                <div className="content-stretch flex flex-col gap-[56px] h-[456px] items-start pb-[40px] pt-[10px] px-[24px] relative shrink-0 w-[708px]" data-node-id="1:1059" data-name="Frame">
-                  <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 text-left w-full" data-node-id="1:1060" data-name="Frame">
-                    <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1061">
-                      <p className="leading-[1.2]">Mobile App Design</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1062">
-                      <p className="leading-[1.2]">Mighty School LMS</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1063">
-                      <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
-                    </div>
-                  </div>
-                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative" data-node-id="1:1064" data-name="Frame">
-                    <div className="[word-break:break-word] content-stretch flex gap-[59px] items-center leading-[0] not-italic relative shrink-0 text-left" data-node-id="1:1065" data-name="Frame">
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-[147px]" data-node-id="1:1066" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1067">
-                          <p className="leading-[1.3]">Pages in Projects</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#2f2f2f] text-[24px] w-full" data-node-id="1:1068">
-                          <p className="leading-[1.2]">100+</p>
-                        </div>
-                      </div>
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0" data-node-id="1:1069" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] whitespace-nowrap" data-node-id="1:1070">
-                          <p className="leading-[1.3]">Project Duration</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center min-w-full relative shrink-0 text-[#2f2f2f] text-[24px] w-[min-content]" data-node-id="1:1071">
-                          <p className="leading-[1.2]">2 Months</p>
-                        </div>
-                      </div>
-                    </div>
-                    <Component61 className="bg-[#171717] content-stretch flex gap-[10px] items-center pl-[18px] pr-[8px] py-[8px] relative rounded-[4px] shrink-0" />
-                  </div>
-                </div>
-                <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1073">
-                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 h-[2016px] left-0 top-[523px]" data-node-id="1:1074">
-          <div className="h-[816px] pointer-events-auto sticky top-0 w-[1560px]" data-name="Frame">
-            <div className="absolute bg-white content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex h-[520px] items-center justify-center left-0 p-[24px] rounded-[24px] top-[296px] w-[1560px]" data-node-id="1:1075" data-name="Frame">
-              <div className="bg-[#f6f6f6] content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px relative rounded-[8px]" data-node-id="1:1076" data-name="Frame">
-                <div className="content-stretch flex flex-col gap-[56px] h-[456px] items-start pb-[40px] pt-[10px] px-[24px] relative shrink-0 w-[708px]" data-node-id="1:1077" data-name="Frame">
-                  <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 text-left w-full" data-node-id="1:1078" data-name="Frame">
-                    <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1079">
-                      <p className="leading-[1.2]">Mobile App Design</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1080">
-                      <p className="leading-[1.2]">Mighty School LMS</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1081">
-                      <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
-                    </div>
-                  </div>
-                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative" data-node-id="1:1082" data-name="Frame">
-                    <div className="[word-break:break-word] content-stretch flex gap-[59px] items-center leading-[0] not-italic relative shrink-0 text-left" data-node-id="1:1083" data-name="Frame">
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-[147px]" data-node-id="1:1084" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1085">
-                          <p className="leading-[1.3]">Pages in Projects</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#2f2f2f] text-[24px] w-full" data-node-id="1:1086">
-                          <p className="leading-[1.2]">100+</p>
-                        </div>
-                      </div>
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0" data-node-id="1:1087" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] whitespace-nowrap" data-node-id="1:1088">
-                          <p className="leading-[1.3]">Project Duration</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center min-w-full relative shrink-0 text-[#2f2f2f] text-[24px] w-[min-content]" data-node-id="1:1089">
-                          <p className="leading-[1.2]">2 Months</p>
-                        </div>
-                      </div>
-                    </div>
-                    <Component61 className="bg-[#171717] content-stretch flex gap-[10px] items-center pl-[18px] pr-[8px] py-[8px] relative rounded-[4px] shrink-0" />
-                  </div>
-                </div>
-                <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1091">
-                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 h-[1491px] left-0 top-[1048px]" data-node-id="1:1092">
-          <div className="h-[891px] pointer-events-auto sticky top-0 w-[1560px]" data-name="Frame">
-            <div className="absolute bg-white content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex h-[520px] items-center justify-center left-0 p-[24px] rounded-[24px] top-[371px] w-[1560px]" data-node-id="1:1093" data-name="Frame">
-              <div className="bg-[#f6f6f6] content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px relative rounded-[8px]" data-node-id="1:1094" data-name="Frame">
-                <div className="content-stretch flex flex-col gap-[56px] h-[456px] items-start pb-[40px] pt-[10px] px-[24px] relative shrink-0 w-[708px]" data-node-id="1:1095" data-name="Frame">
-                  <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 text-left w-full" data-node-id="1:1096" data-name="Frame">
-                    <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1097">
-                      <p className="leading-[1.2]">Mobile App Design</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1098">
-                      <p className="leading-[1.2]">Mighty School LMS</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1099">
-                      <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
-                    </div>
-                  </div>
-                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative" data-node-id="1:1100" data-name="Frame">
-                    <div className="[word-break:break-word] content-stretch flex gap-[59px] items-center leading-[0] not-italic relative shrink-0 text-left" data-node-id="1:1101" data-name="Frame">
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-[147px]" data-node-id="1:1102" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1103">
-                          <p className="leading-[1.3]">Pages in Projects</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#2f2f2f] text-[24px] w-full" data-node-id="1:1104">
-                          <p className="leading-[1.2]">100+</p>
-                        </div>
-                      </div>
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0" data-node-id="1:1105" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] whitespace-nowrap" data-node-id="1:1106">
-                          <p className="leading-[1.3]">Project Duration</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center min-w-full relative shrink-0 text-[#2f2f2f] text-[24px] w-[min-content]" data-node-id="1:1107">
-                          <p className="leading-[1.2]">2 Months</p>
-                        </div>
-                      </div>
-                    </div>
-                    <Component61 className="bg-[#171717] content-stretch flex gap-[10px] items-center pl-[18px] pr-[8px] py-[8px] relative rounded-[4px] shrink-0" />
-                  </div>
-                </div>
-                <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1109">
-                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="absolute bottom-0 h-[979px] left-0 top-[1560px]" data-node-id="1:1110">
-          <div className="h-[979px] pointer-events-auto sticky top-0 w-[1560px]" data-name="Frame">
-            <div className="absolute bg-white content-stretch drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex h-[520px] items-center justify-center left-0 p-[24px] rounded-[24px] top-[459px] w-[1560px]" data-node-id="1:1111" data-name="Frame">
-              <div className="bg-[#f6f6f6] content-stretch flex flex-[1_0_0] h-full items-center justify-between min-w-px relative rounded-[8px]" data-node-id="1:1112" data-name="Frame">
-                <div className="content-stretch flex flex-col gap-[56px] h-[456px] items-start pb-[40px] pt-[10px] px-[24px] relative shrink-0 w-[708px]" data-node-id="1:1113" data-name="Frame">
-                  <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-start leading-[0] relative shrink-0 text-left w-full" data-node-id="1:1114" data-name="Frame">
-                    <div className="flex flex-col font-['Inter:Italic'] font-normal italic justify-center relative shrink-0 text-[#2f2f2f] text-[16px] w-full" data-node-id="1:1115">
-                      <p className="leading-[1.2]">Mobile App Design</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center not-italic relative shrink-0 text-[#2f2f2f] text-[28px] w-full" data-node-id="1:1116">
-                      <p className="leading-[1.2]">Mighty School LMS</p>
-                    </div>
-                    <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center not-italic relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1117">
-                      <p className="leading-[1.3]">{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,`}</p>
-                    </div>
-                  </div>
-                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative" data-node-id="1:1118" data-name="Frame">
-                    <div className="[word-break:break-word] content-stretch flex gap-[59px] items-center leading-[0] not-italic relative shrink-0 text-left" data-node-id="1:1119" data-name="Frame">
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-[147px]" data-node-id="1:1120" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] w-full" data-node-id="1:1121">
-                          <p className="leading-[1.3]">Pages in Projects</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#2f2f2f] text-[24px] w-full" data-node-id="1:1122">
-                          <p className="leading-[1.2]">100+</p>
-                        </div>
-                      </div>
-                      <div className="content-stretch flex flex-col gap-[8px] items-start relative shrink-0" data-node-id="1:1123" data-name="Frame">
-                        <div className="flex flex-col font-['Inter:Regular'] font-normal justify-center relative shrink-0 text-[#3e3e3e] text-[18px] whitespace-nowrap" data-node-id="1:1124">
-                          <p className="leading-[1.3]">Project Duration</p>
-                        </div>
-                        <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center min-w-full relative shrink-0 text-[#2f2f2f] text-[24px] w-[min-content]" data-node-id="1:1125">
-                          <p className="leading-[1.2]">2 Months</p>
-                        </div>
-                      </div>
-                    </div>
-                    <Component61 className="bg-[#171717] content-stretch flex gap-[10px] items-center pl-[18px] pr-[8px] py-[8px] relative rounded-[4px] shrink-0" />
-                  </div>
-                </div>
-                <div className="h-full relative rounded-[8px] shrink-0 w-[756px]" data-node-id="1:1127">
-                  <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[8px] size-full" src={imgRectangle16} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] h-[1080px] left-1/2 overflow-clip rounded-[8px] top-[9767px] w-[1872px]" data-node-id="1:1128" data-name="Frame">
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[854px] left-1/2 top-1/2 w-[1560px]" data-node-id="I1:1128;40141:756" data-name="Frame">
-          <div className="-translate-y-1/2 [word-break:break-word] absolute flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] left-0 not-italic text-[#f9f9f9] text-[40px] top-[48px] tracking-[0.8px] w-[1560px] whitespace-pre-wrap" data-node-id="I1:1128;40141:757">
-            <p className="mb-0">
-              <span className="leading-[1.2]">Our Working Process That Drives</span>
-              <span className="leading-[1.2] text-[#a9a9a9]">{` Growth `}</span>
-            </p>
-            <p className="leading-[1.2] text-[#a9a9a9]">With Clear Direction</p>
-          </div>
-          <WorkingProcessSteps />
-        </div>
-      </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[11007px] w-[1560px]" data-node-id="1:1129" data-name="Frame">
-        <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1130">
-          <p className="mb-0">
-            <span className="leading-[1.2]">{`Growth Insights That Drive `}</span>
-            <span className="leading-[1.2] text-[#707070]">{`Measurable `}</span>
-          </p>
-          <p className="leading-[1.2] text-[#707070]">{`Business Success `}</p>
-        </div>
-        <LatestBlogCards />
-        <ArrowButton href="/blog" label="ALL ARTICLES" />
-      </div>
-      <div className="-translate-x-1/2 absolute content-stretch flex flex-col gap-[64px] items-center left-1/2 top-[11799px] w-[1560px]" data-node-id="1:1136" data-name="Frame">
-        <div className="[word-break:break-word] flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[min-content] whitespace-pre-wrap" data-node-id="1:1137">
-          <p className="mb-0">
-            <span className="leading-[1.2]">{`Find your best design into us. `}</span>
-            <span className="leading-[1.2] text-[#707070]">{`We `}</span>
-          </p>
-          <p className="leading-[1.2] text-[#707070]">guarantee next success is yours!</p>
-        </div>
-        <div className="bg-white content-stretch flex h-[513px] items-center overflow-clip relative shadow-[0px_1px_6px_0px_rgba(0,0,0,0.1)] shrink-0 w-[1560px]" data-node-id="1:1138" data-name="Frame">
-<div className="bg-white z-[1] border-[rgba(0,0,0,0.1)] border-r border-solid content-stretch flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1139" data-name="Frame">
-            <div className="content-stretch flex items-center justify-between opacity-0 relative shrink-0 w-full" data-node-id="1:1140" data-name="Frame">
-              <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1141" data-name="Upwork-logo 1">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
-              </div>
-              <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1144" data-name="Group">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup2} />
-              </div>
-              <div className="relative shrink-0 size-[24px]" data-node-id="1:1149" data-name="Google__G__logo 1">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
-              </div>
-            </div>
-            <div className="content-stretch flex flex-col gap-[24px] items-center relative shrink-0 w-[200px]" data-node-id="1:1155" data-name="Frame">
-              <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#424242] text-[100px] text-center tracking-[2px] w-full" data-node-id="1:1156">
-                <p className="leading-[1.2]">4.9</p>
-              </div>
-              <div className="content-stretch flex flex-col gap-[16px] items-center relative shrink-0 w-full" data-node-id="1:1157" data-name="Frame">
-                <div className="content-stretch flex items-center relative shrink-0 w-full" data-node-id="1:1158" data-name="Star">
-                  <div className="relative shrink-0 size-[40px]" data-node-id="1:1159">
-                    <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
-                    </div>
-                  </div>
-                  <div className="relative shrink-0 size-[40px]" data-node-id="1:1160">
-                    <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
-                    </div>
-                  </div>
-                  <div className="relative shrink-0 size-[40px]" data-node-id="1:1161">
-                    <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
-                    </div>
-                  </div>
-                  <div className="relative shrink-0 size-[40px]" data-node-id="1:1162">
-                    <div className="absolute inset-[4.47%_6.6%_12.78%_6.6%]">
-                      <img alt="" loading="lazy" decoding="async" className="block max-w-none size-full" src={imgStar1} />
-                    </div>
-                  </div>
-                  <div className="relative shrink-0 size-[40px]" data-node-id="1:1163">
-                    <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup3} />
-                  </div>
-                </div>
-                <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] not-italic relative shrink-0 text-[#424242] text-[28px] text-center w-full" data-node-id="1:1166">
-                  <p className="leading-[1.2]">200+ reviews</p>
-                </div>
-              </div>
-            </div>
-            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1:1167" data-name="Frame">
-              <div className="h-[40px] relative shrink-0 w-[80px]" data-node-id="1:1168" data-name="Upwork-logo 1">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgUpworkLogo1} />
-              </div>
-              <div className="h-[22px] relative shrink-0 w-[83.207px]" data-node-id="1:1171" data-name="Group">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGroup4} />
-              </div>
-              <div className="relative shrink-0 size-[24px]" data-node-id="1:1176" data-name="Google__G__logo 1">
-                <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgGoogleGLogo1} />
-              </div>
-            </div>
-          </div>
-<div className="flex-[1_0_0] h-full min-w-px overflow-clip relative review-marquee">
-<div className="flex h-full review-marquee-track w-max">
-<div className="flex h-full review-marquee-set shrink-0">
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1182" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1183">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1184">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1185" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1186">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1187" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1188">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1189">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1190" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1191">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1192">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1193" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1194">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1195" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1196">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1197">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1198" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1199">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1200">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1201" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1202">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1203" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1204">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1205">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1206" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1207">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1208">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1209" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1210">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1211" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1212">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1213">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1214" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1215">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1216">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1217" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1218">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1219" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1220">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1221">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-</div>
-<div className="flex h-full review-marquee-set shrink-0" aria-hidden="true">
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1182" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1183">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1184">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1185" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1186">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1187" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1188">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1189">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1190" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1191">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1192">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1193" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1194">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1195" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1196">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1197">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1198" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1199">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1200">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1201" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1202">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1203" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1204">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1205">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1206" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1207">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1208">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1209" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1210">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1211" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1212">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1213">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-<div className="content-stretch flex flex-col h-full items-start justify-between px-[32px] py-[40px] relative shrink-0 w-[390px]" data-node-id="1:1214" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#2f2f2f] text-[18px] w-[min-content]" data-node-id="1:1215">
-              <p className="leading-[1.2]">TechFlow Inc.</p>
-            </div>
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Medium'] font-medium justify-center leading-[0] min-w-full not-italic relative shrink-0 text-[#222] text-[24px] w-[min-content]" data-node-id="1:1216">
-              <p className="leading-[1.3]">{`"DesignOps didn't just build our platform; they redefined our entire brand strategy. The attention to detail is unmatched."`}</p>
-            </div>
-            <div className="content-stretch flex gap-[12px] items-start relative shrink-0" data-node-id="1:1217" data-name="Frame">
-              <div className="relative rounded-[999px] shrink-0 size-[50px]" data-node-id="1:1218">
-                <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[999px] size-full" src={imgRectangle17} />
-              </div>
-              <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start leading-[0] not-italic relative shrink-0 w-[123px]" data-node-id="1:1219" data-name="Frame">
-                <div className="flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center relative shrink-0 text-[#2f2f2f] text-[18px] text-center w-full" data-node-id="1:1220">
-                  <p className="leading-[1.2]">Sarah Jenkins</p>
-                </div>
-                <div className="flex flex-col font-['Inter:Medium'] font-medium justify-center relative shrink-0 text-[#505050] text-[16px] w-full" data-node-id="1:1221">
-                  <p className="leading-[1.2]">CTO</p>
-                </div>
-              </div>
-            </div>
-          </div>
-</div>
-</div>
-</div>
-</div>
-      </div>
-      <div className="-translate-x-1/2 absolute bg-[#191919] content-stretch flex flex-col gap-[32px] items-center left-1/2 py-[78px] rounded-[8px] top-[12632px] w-[1560px]" data-node-id="1:1222" data-name="Frame">
-        <div className="[word-break:break-word] content-stretch flex flex-col gap-[24px] items-center leading-[0] not-italic relative shrink-0 text-center w-full" data-node-id="1:1223" data-name="Frame">
-          <div className="flex flex-col font-['Inter:Bold'] font-bold justify-center min-w-full relative shrink-0 text-[40px] text-white w-[min-content] whitespace-pre-wrap" data-node-id="1:1224">
-            <p className="mb-0">
-              <span className="leading-[1.2]">{`Ready to Build `}</span>
-              <span className="leading-[1.2] text-[#00b6ca]">{`Something `}</span>
-            </p>
-            <p>
-              <span className="leading-[1.2] text-[#00b6ca]">{`Great `}</span>
-              <span className="leading-[1.2]">and Scalable?</span>
-            </p>
-          </div>
-          <div className="flex flex-col font-['Aileron:Regular'] justify-center relative shrink-0 text-[#e8e8e8] text-[20px] w-[1189px]" data-node-id="1:1225">
-            <p className="leading-[1.5]">{`We're currently accepting new projects. Let's turn your vision into a high-performing digital product.`}</p>
-          </div>
-        </div>
-        <div className="bg-[#00b6ca] content-stretch drop-shadow-[0px_2px_3px_rgba(0,0,0,0.1)] flex gap-[6px] items-center px-[26px] py-[14px] relative rounded-[4px] shrink-0" data-node-id="1:1226" data-name="Component 57">
-          <div className="h-[18px] overflow-clip relative shrink-0 w-[86px]" data-node-id="I1:1226;40959:4952" data-name="Frame">
-            <div className="[word-break:break-word] absolute font-['Inter:Medium'] font-medium leading-[0] left-0 not-italic text-[#f6f6f6] text-[16px] top-0 whitespace-nowrap" data-node-id="I1:1226;40959:4953">
-              <p className="leading-[1.2] mb-0">LET’S TALK</p>
-              <p className="leading-[1.2]">LET’S TALK</p>
-            </div>
-          </div>
-          <div className="overflow-clip relative shrink-0 size-[18px]" data-node-id="I1:1226;40959:5020" data-name="Frame">
-            <div className="absolute left-0 size-[18px] top-0" data-node-id="I1:1226;40959:5021" data-name="arrow-subdirectory-forward">
-              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-            </div>
-            <div className="absolute left-0 size-[18px] top-[20px]" data-node-id="I1:1226;40959:5022" data-name="arrow-subdirectory-forward">
-              <img alt="" loading="lazy" decoding="async" className="absolute block inset-0 max-w-none size-full" src={imgArrowSubdirectoryForward} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <Footer className="-translate-x-1/2 absolute bg-[#191919] bottom-[18px] h-[764px] left-1/2 overflow-clip rounded-[8px] w-[1872px]" />
-      <div className="-translate-x-1/2 absolute h-[900px] left-1/2 top-[974px] w-[1920px]" data-node-id="1:1228" data-name="Frame">
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[846px] left-[calc(50%-2px)] top-[calc(50%+88px)] w-[1582px]" data-node-id="1:1229" data-name="Image">
-          <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-bottom opacity-15 pointer-events-none size-full" src={imgImage} />
-        </div>
-        <div className="-translate-x-1/2 -translate-y-1/2 absolute content-stretch flex flex-col gap-[180px] items-center left-1/2 top-1/2 w-[1560px]" data-node-id="1:1230" data-name="Frame">
-          <div className="[word-break:break-word] capitalize flex flex-col font-['Inter:Bold'] font-bold justify-center leading-[0] not-italic relative shrink-0 text-[#2f2f2f] text-[0px] text-center tracking-[0.96px] w-[1560px] whitespace-pre-wrap" data-node-id="1:1231">
-            <p className="font-['Poppins:SemiBold'] mb-0 text-[48px]">
-              <span className="leading-[1.3]">{`We aspire to be a driving `}</span>
-              <span className="leading-[1.3] text-[#00b6ca]">force</span>
-              <span className="leading-[1.3]">{` behind a `}</span>
-            </p>
-            <p className="font-['Poppins:SemiBold'] mb-0 text-[48px]">
-              <span className="leading-[1.3]">{`future where `}</span>
-              <span className="leading-[1.3] text-[#00b6ca]">design</span>
-              <span className="leading-[1.3]">{` is a powerful catalyst for `}</span>
-            </p>
-            <p className="font-['Poppins:SemiBold'] leading-[1.3] text-[48px]">{`positive change. `}</p>
-          </div>
-          <div className="content-stretch flex flex-col gap-[64px] items-start relative shrink-0 w-full" data-node-id="1:1232" data-name="Frame">
-            <div className="[word-break:break-word] flex flex-col font-['Inter:Semi_Bold'] font-semibold justify-center leading-[0] not-italic relative shrink-0 text-[#3e3e3e] text-[40px] tracking-[0.8px] w-[1474px] whitespace-pre-wrap" data-node-id="1:1233">
-              <p className="mb-0">
-                <span className="leading-[1.2]">{`Our Clients We’re `}</span>
-                <span className="leading-[1.2] text-[#707070]">{`Proud to `}</span>
-              </p>
-              <p className="leading-[1.2] text-[#707070]">Collaborate With</p>
-            </div>
-            <Frame className="h-[140px] overflow-clip relative shrink-0 w-[1560px]" />
-          </div>
-        </div>
-      </div>
-    </div>
+
+      <StackedProjects projects={projects.filter((project) => project.featured)} />
+      <ProcessSection />
+      <GrowthSection />
+      <ReviewsSection />
+      <CtaSection />
+      <Footer className="bg-[#191919] h-[764px] mt-[80px] overflow-clip relative rounded-[8px] shrink-0 w-[1872px]" />
+    </Page>
   );
-}
+}
