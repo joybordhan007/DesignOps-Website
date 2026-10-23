@@ -30,6 +30,8 @@ export function reportVisit(path: string) {
     newVisitor: firstTime(() => localStorage, "do-visit-day", today()),
     newSession,
     referrer: newSession ? document.referrer : "",
+    // Ad links usually say where they came from (?utm_source=facebook), even when the browser hides the referrer.
+    utmSource: newSession ? new URLSearchParams(window.location.search).get("utm_source") ?? "" : "",
   });
   try {
     if (navigator.sendBeacon?.("/api/visit", new Blob([body], { type: "application/json" }))) return;

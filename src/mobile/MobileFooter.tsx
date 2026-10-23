@@ -88,8 +88,12 @@ export default function MobileFooter() {
           <div className="border-[rgba(255,255,255,0.15)] border-t flex flex-col gap-[12px] pt-[20px] text-[12px] text-white md:flex-row md:justify-between">
             <p className="font-['Inter:Regular'] leading-[1.2]">{copyright}</p>
             <div className="flex font-['Inter:Medium'] font-medium gap-[16px]">
-              <p className="leading-[1.2]">{labels.privacy}</p>
-              <p className="leading-[1.2]">{labels.terms}</p>
+              <a href="/privacy" className="leading-[1.2] hover:text-[#00b6ca]">
+                {labels.privacy}
+              </a>
+              <a href="/terms" className="leading-[1.2] hover:text-[#00b6ca]">
+                {labels.terms}
+              </a>
             </div>
           </div>
         </div>

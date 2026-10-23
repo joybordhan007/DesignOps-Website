@@ -1,7 +1,8 @@
 import { useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
-// Small SVG charts for the dashboard: line, stacked bars, donut and horizontal
-// bars. Each has a legend (2+ series) and a hover tooltip; colours are passed in.
+// Small SVG charts for the dashboard: line, stacked bars, donut, horizontal
+// bars and sparklines. Each has a legend (2+ series) and a hover tooltip;
+// colours are passed in.
 
 export type Series = { name: string; color: string; values: number[] };
 
@@ -254,23 +255,71 @@ export function Donut({ parts, label, size = 168 }: { parts: { name: string; col
   );
 }
 
-/** Labelled horizontal bars (one series), value at the end of each row. */
-export function BarList({ rows, color, empty = "No data yet." }: { rows: { label: ReactNode; value: number; key: string }[]; color: string; empty?: string }) {
+/**
+ * Labelled horizontal bars (one series): an optional icon, a second line under
+ * the label, and the value with its share of `total` at the end of each row.
+ */
+export function BarList({
+  rows,
+  color,
+  total,
+  empty = "No data yet.",
+}: {
+  rows: { label: ReactNode; value: number; key: string; icon?: ReactNode; detail?: ReactNode }[];
+  color: string;
+  total?: number;
+  empty?: string;
+}) {
   const max = Math.max(1, ...rows.map((r) => r.value));
-  if (!rows.some((r) => r.value)) return <p className={`${font} text-[#8a8a8a] text-[14px]`}>{empty}</p>;
+  if (!rows.some((r) => r.value)) return <p className={`${font} py-[24px] text-center text-[#8a8a8a] text-[14px]`}>{empty}</p>;
   return (
-    <ul className="flex flex-col gap-[12px]">
+    <ul className="flex flex-col gap-[14px]">
       {rows.map((row) => (
-        <li key={row.key} className="flex flex-col gap-[6px]" title={`${row.value}`}>
-          <span className={`${font} flex justify-between text-[#3e3e3e] text-[13px]`}>
-            <span className="min-w-0 truncate">{row.label}</span>
-            <span className="font-['Inter:Semi_Bold'] font-semibold pl-[8px] text-[#191919]">{row.value}</span>
-          </span>
-          <span className="bg-[#f3f3f3] block h-[8px] overflow-hidden rounded-full">
-            <span className="block h-full rounded-full transition-[width] duration-500" style={{ width: `${(row.value / max) * 100}%`, background: color }} />
+        <li key={row.key} className="flex gap-[12px] items-center" title={`${row.value}`}>
+          {row.icon}
+          <span className="flex flex-1 flex-col gap-[6px] min-w-0">
+            <span className={`${font} flex gap-[8px] items-baseline justify-between text-[#3e3e3e] text-[13px]`}>
+              <span className="flex flex-col min-w-0">
+                <span className="text-[#222] truncate">{row.label}</span>
+                {row.detail && <span className="text-[#9a9a9a] text-[11px] truncate">{row.detail}</span>}
+              </span>
+              <span className="flex gap-[8px] items-baseline shrink-0">
+                <span className="font-['Inter:Semi_Bold'] font-semibold text-[#191919]">{row.value.toLocaleString("en-US")}</span>
+                {total ? <span className="text-[#8a8a8a] text-[12px] w-[38px] text-right">{Math.round((row.value / total) * 100)}%</span> : null}
+              </span>
+            </span>
+            <span className="bg-[#f3f3f3] block h-[6px] overflow-hidden rounded-full">
+              <span className="block h-full rounded-full transition-[width] duration-500" style={{ width: `${(row.value / max) * 100}%`, background: color }} />
+            </span>
           </span>
         </li>
       ))}
     </ul>
+  );
+}
+
+/** A tiny trend line with a soft fill, for stat cards (no axes; the card shows the number). */
+export function Sparkline({ values, color, height = 40 }: { values: number[]; color: string; height?: number }) {
+  const id = useId().replace(/[^a-zA-Z0-9-]/g, "");
+  const [ref, width] = useWidth<HTMLDivElement>();
+  const max = Math.max(1, ...values);
+  const x = (i: number) => (values.length > 1 ? (width * i) / (values.length - 1) : width / 2);
+  const y = (v: number) => 2 + (height - 4) * (1 - v / max);
+  const line = values.map((v, i) => `${i ? "L" : "M"}${x(i)},${y(v)}`).join("");
+  return (
+    <div ref={ref} className="w-full" style={{ height }} aria-hidden="true">
+      {width > 0 && values.length > 0 && (
+        <svg width={width} height={height} className="block overflow-visible">
+          <defs>
+            <linearGradient id={`${id}spark`} x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stopColor={color} stopOpacity={0.18} />
+              <stop offset="1" stopColor={color} stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <path d={`${line}L${x(values.length - 1)},${height}L${x(0)},${height}Z`} fill={`url(#${id}spark)`} />
+          <path d={line} fill="none" stroke={color} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+        </svg>
+      )}
+    </div>
   );
 }

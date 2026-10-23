@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType, type FormEvent } from "react";
-import { useContent } from "@/content/store";
+import { useCallback, useEffect, useRef, useState, type ComponentType, type FormEvent } from "react";
 import type { Message, PendingReview } from "@/content/types";
 import { api, ApiError, type AdminUser } from "./api";
 import { confirmLeave, ToastHost, toast } from "./editor";
 import { inputClass as inputClassName } from "./fields";
+import AdminSearch from "./search";
 import {
   AchievementIcon,
   AnalyticsIcon,
@@ -20,7 +20,6 @@ import {
   MenuIcon,
   MessageIcon,
   ReviewIcon,
-  SearchIcon,
   ServicesIcon,
   SettingsIcon,
   WorkIcon,
@@ -82,6 +81,9 @@ const NAV = NAV_GROUPS.flatMap((group) => group.items);
 
 const LOGO = "/assets/shared/logos/designops-logo.svg";
 const LOGO_LIGHT = "/assets/shared/logos/designops-logo-footer.svg";
+
+/** The current address (path, ?query and #section). */
+const here = () => window.location.pathname + window.location.search + window.location.hash;
 
 function currentSection() {
   return window.location.pathname.replace(/^\/admin\/?/, "").split("/")[0];
@@ -162,64 +164,6 @@ function useOutsideClose(open: boolean, close: () => void) {
   return ref;
 }
 
-function Search({ navigate }: { navigate: (to: string) => void }) {
-  const content = useContent();
-  const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false);
-  const close = useCallback(() => setOpen(false), []);
-  const ref = useOutsideClose(open, close);
-
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (q.length < 2) return [];
-    const all = [
-      ...content.services.map((s) => ({ section: "services", kind: "Service", id: s.id, title: s.title })),
-      ...content.projects.map((p) => ({ section: "work", kind: "Work", id: p.id, title: `${p.title} · ${p.category}` })),
-      ...content.posts.map((p) => ({ section: "blog", kind: "Blog", id: p.id, title: p.title })),
-      ...content.faqs.map((f) => ({ section: "faq", kind: "FAQ", id: f.id, title: f.question })),
-      ...content.clients.map((c) => ({ section: "clients", kind: "Client", id: c.id, title: c.name })),
-      ...content.reviews.map((r) => ({ section: "reviews", kind: "Review", id: r.id, title: `${r.name} · ${r.company}` })),
-    ];
-    return all.filter((item) => item.title.toLowerCase().includes(q)).slice(0, 8);
-  }, [query, content]);
-
-  return (
-    <div ref={ref} className="flex-1 max-w-[1000px] relative">
-      <label className="bg-white flex gap-[10px] h-[56px] items-center px-[16px] rounded-[8px]">
-        <SearchIcon size={22} className="shrink-0 text-[#3e3e3e]" />
-        <input
-          className="bg-transparent font-['Inter:Regular'] outline-none text-[#222] text-[16px] w-full placeholder:text-[#9a9a9a]"
-          placeholder="Search here..."
-          value={query}
-          onChange={(e) => (setQuery(e.target.value), setOpen(true))}
-          onFocus={() => setOpen(true)}
-        />
-      </label>
-      {open && query.trim().length >= 2 && (
-        <ul className="absolute bg-white left-0 mt-[6px] overflow-hidden right-0 rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.12)] z-[40]">
-          {results.map((item) => (
-            <li key={`${item.section}-${item.id}`}>
-              <button
-                type="button"
-                className="cursor-pointer flex gap-[10px] items-center px-[16px] py-[10px] text-left w-full hover:bg-[#f4fbfc]"
-                onClick={() => {
-                  setOpen(false);
-                  setQuery("");
-                  navigate(`/admin/${item.section}?item=${item.id}`);
-                }}
-              >
-                <span className="bg-[#e9f9fb] font-['Inter:Medium'] font-medium px-[8px] py-[2px] rounded-full shrink-0 text-[#00a0b2] text-[11px]">{item.kind}</span>
-                <span className="font-['Inter:Regular'] text-[#222] text-[14px] truncate">{item.title}</span>
-              </button>
-            </li>
-          ))}
-          {!results.length && <li className="font-['Inter:Regular'] px-[16px] py-[12px] text-[#8a8a8a] text-[14px]">No matches.</li>}
-        </ul>
-      )}
-    </div>
-  );
-}
-
 function Badge({ count }: { count: number }) {
   if (!count) return null;
   return (
@@ -229,7 +173,23 @@ function Badge({ count }: { count: number }) {
   );
 }
 
-function TopBar({ user, unread, navigate, onMenu, onSignOut }: { user: AdminUser; unread: number; navigate: (to: string) => void; onMenu: () => void; onSignOut: () => void }) {
+function TopBar({
+  user,
+  unread,
+  messages,
+  pendingReviews,
+  navigate,
+  onMenu,
+  onSignOut,
+}: {
+  user: AdminUser;
+  unread: number;
+  messages: Message[];
+  pendingReviews: PendingReview[];
+  navigate: (to: string) => void;
+  onMenu: () => void;
+  onSignOut: () => void;
+}) {
   const [menu, setMenu] = useState(false);
   const closeMenu = useCallback(() => setMenu(false), []);
   const menuRef = useOutsideClose(menu, closeMenu);
@@ -239,7 +199,7 @@ function TopBar({ user, unread, navigate, onMenu, onSignOut }: { user: AdminUser
       <button type="button" aria-label="Open menu" className="cursor-pointer lg:hidden p-[6px]" onClick={onMenu}>
         <MenuIcon size={24} />
       </button>
-      <Search navigate={navigate} />
+      <AdminSearch navigate={navigate} messages={messages} pendingReviews={pendingReviews} />
       <div className="flex gap-[28px] items-center ml-auto max-sm:gap-[16px]">
         <button type="button" aria-label={`Messages (${unread} unread)`} className="cursor-pointer relative text-[#191919] hover:text-[#00b6ca]" onClick={() => navigate("/admin/messages")}>
           <MessageIcon size={28} />
@@ -354,7 +314,9 @@ export default function AdminApp() {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [checking, setChecking] = useState(true);
   const [serverDown, setServerDown] = useState(false);
-  const [location, setLocation] = useState(() => window.location.pathname + window.location.search);
+  const [location, setLocation] = useState(here);
+  // Bumped on every navigation, so opening a Website Settings section (#…) from the search works even when that page is already open.
+  const [visit, setVisit] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
   const [pendingReviews, setPendingReviews] = useState<PendingReview[]>([]);
   const [contentLoaded, setContentLoaded] = useState(false);
@@ -367,7 +329,7 @@ export default function AdminApp() {
       .then(setUser)
       .catch((e: ApiError) => setServerDown(e.status === 0 || e.status === 404))
       .finally(() => setChecking(false));
-    const onPop = () => setLocation(window.location.pathname + window.location.search);
+    const onPop = () => setLocation(here());
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
@@ -394,10 +356,11 @@ export default function AdminApp() {
   }, [user, reloadMessages, reloadPendingReviews]);
 
   const navigate = useCallback((to: string) => {
-    if (to === window.location.pathname + window.location.search) return;
+    if (to === here()) return;
     if (!confirmLeave()) return;
     window.history.pushState({}, "", to);
     setLocation(to);
+    setVisit((n) => n + 1);
     setMenuOpen(false);
     window.scrollTo({ top: 0 });
   }, []);
@@ -420,7 +383,7 @@ export default function AdminApp() {
 
   if (!contentLoaded) return null;
 
-  const [pathname, search] = location.split("?");
+  const [pathname, search] = location.split("#")[0].split("?");
   const rawSection = pathname.replace(/^\/admin\/?/, "").split("/")[0] || currentSection();
   const section = ALIASES[rawSection] ?? rawSection;
   const entry = NAV.find((item) => item.path === section) ?? NAV[0];
@@ -440,13 +403,13 @@ export default function AdminApp() {
     <div className="bg-[#f5f5f5] min-h-svh">
       <Sidebar section={section === "profile" ? "profile" : entry.path} navigate={navigate} open={menuOpen} onClose={() => setMenuOpen(false)} counts={{ messages: unread, reviews: pendingReviews.length }} />
       <div className="lg:pl-[350px]">
-        <TopBar user={user} unread={unread} navigate={navigate} onMenu={() => setMenuOpen(true)} onSignOut={signOut} />
+        <TopBar user={user} unread={unread} messages={messages} pendingReviews={pendingReviews} navigate={navigate} onMenu={() => setMenuOpen(true)} onSignOut={signOut} />
         <main className="pb-[60px] px-[50px] max-lg:px-[16px]">
           {/* The profile page is opened from the account menu, not the sidebar. */}
           {section === "profile" ? (
             <ProfilePage user={user} onChange={setUser} />
           ) : (
-            <Page key={entry.path} messages={messages} reloadMessages={reloadMessages} pendingReviews={pendingReviews} reloadPendingReviews={reloadPendingReviews} focusId={focusId} navigate={navigate} />
+            <Page key={entry.path === "settings" ? `settings-${visit}` : entry.path} messages={messages} reloadMessages={reloadMessages} pendingReviews={pendingReviews} reloadPendingReviews={reloadPendingReviews} focusId={focusId} navigate={navigate} />
           )}
         </main>
       </div>

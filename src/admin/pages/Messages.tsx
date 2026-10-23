@@ -113,7 +113,11 @@ export default function MessagesPage(props: PageProps) {
   const unread = props.messages.filter((m) => !m.read).length;
   return (
     <div className="flex flex-col gap-[20px]">
-      <PageHeader title="Messages" description={`Inquiries sent through the website's contact form${unread ? ` · ${unread} unread` : ""}.`} />
+      <PageHeader title="Messages" description={`Inquiries sent through the website's contact form${unread ? ` · ${unread} unread` : ""}.`}>
+        <button type="button" className={secondaryButton} onClick={() => props.navigate("/admin/settings#email")}>
+          <MailIcon size={16} /> Email notifications
+        </button>
+      </PageHeader>
       <Inbox {...props} />
     </div>
   );

@@ -42,6 +42,20 @@ export type DayVisits = {
   devices: Record<string, number>;
 };
 
+/** Email notification settings (server/mail.js); the password is never sent back. */
+export type MailSettings = {
+  enabled: boolean;
+  /** Comma-separated; empty = the contact email from Website Settings. */
+  to: string;
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  from: string;
+  passSet: boolean;
+  lastResult: { ok: boolean; at: string; error?: string } | null;
+};
+
 export const api = {
   me: () => request<AdminUser>("/api/auth/me"),
   login: (email: string, password: string, remember: boolean) =>
@@ -70,6 +84,11 @@ export const api = {
 
   /** Visit counts per day (YYYY-MM-DD), for the dashboard reports. */
   visits: () => request<Record<string, DayVisits>>("/api/admin/visits"),
+
+  mail: () => request<MailSettings>("/api/admin/mail"),
+  /** `pass` empty keeps the saved password. */
+  saveMail: (mail: Omit<MailSettings, "passSet" | "lastResult"> & { pass: string }) => request<MailSettings>("/api/admin/mail", { method: "PUT", body: JSON.stringify(mail) }),
+  testMail: () => request<{ ok: true; to: string[] }>("/api/admin/mail/test", { method: "POST" }),
 
   pendingReviews: () => request<PendingReview[]>("/api/admin/reviews/pending"),
   /** Publishes a pending review on the website. */

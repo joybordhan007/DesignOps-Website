@@ -61,6 +61,10 @@ const pages = {
 
   "/contact": page(() => import("./websitepages/Contact"), () => import("./mobile/pages/Contact"), 5003),
 
+  "/privacy": page(() => import("./websitepages/Privacy"), () => import("./mobile/pages/Privacy"), 3600),
+
+  "/terms": page(() => import("./websitepages/Terms"), () => import("./mobile/pages/Terms"), 3600),
+
   "/404": page(() => import("./websitepages/NotFound"), () => import("./mobile/pages/NotFound"), 1960),
 }
 

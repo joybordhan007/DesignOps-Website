@@ -192,6 +192,8 @@ export type Labels = {
     text: string;
     popular: string;
   };
+  /** Privacy Policy and Terms of Service pages. */
+  legal: { badge: string; updated: string; alsoRead: string };
   reviews: {
     empty: string;
     /** Under the rating card stars; {n} = number of published reviews. */
@@ -271,6 +273,17 @@ export type Settings = {
   reviewsPage: { title: string; subtitle: string };
   labels: Labels;
   tracking: Tracking;
+  legal: Record<"privacy" | "terms", LegalPage>;
+};
+
+/** Privacy Policy / Terms of Service page. */
+export type LegalPage = {
+  title: string;
+  /** YYYY-MM-DD, shown as "Last updated". */
+  updated: string;
+  intro: string;
+  /** Same format as a blog article: "## " headings (listed in the contents), "- " list items. */
+  body: string;
 };
 
 export type SocialPlatform =

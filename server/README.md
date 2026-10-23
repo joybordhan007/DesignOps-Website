@@ -12,6 +12,8 @@ dashboard edits, and keeps uploaded images/videos.
 | Reviews waiting for approval | `server/data/pending-reviews.json` |
 | Photos sent with visitor reviews | `server/uploads/reviews/` |
 | Admin account (password is hashed) | `server/data/admin.json` |
+| Email settings for contact messages (incl. SMTP password) | `server/data/mail.json` |
+| Visit counts for the dashboard reports | `server/data/visits.json` |
 | Uploaded images & videos | `server/uploads/` |
 
 `server/data/` and `server/uploads/` are created automatically on the first
@@ -23,6 +25,11 @@ upload a new version of the site.
 dashboard under *Tracking & Analytics*. The server writes the tags into every
 website page it sends (`server/tracking.js`), never into `/admin`; the site
 then reports page changes and conversions (`src/lib/tracking.ts`).
+
+**Contact form email:** every message is saved for the dashboard and, when
+switched on, emailed (`server/mail.js`). Set the recipients and the sending
+account (SMTP, e.g. your hosting email) in the dashboard under *Website
+Settings → Email notifications*, then use *Send test email* to check it.
 
 ## Run it on your computer
 

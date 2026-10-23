@@ -120,8 +120,12 @@ export default function Footer({ className }: { className?: string }) {
         <div className="flex items-start justify-between text-[18px] text-white w-full whitespace-nowrap">
           <p className="font-['Inter:Regular'] font-normal leading-[1.2]">{copyright}</p>
           <div className="flex font-['Inter:Medium'] font-medium gap-[16px] items-center">
-            <p className="leading-[1.2]">{labels.privacy}</p>
-            <p className="leading-[1.2]">{labels.terms}</p>
+            <a href="/privacy" className="leading-[1.2] hover:text-[#00b6ca]">
+              {labels.privacy}
+            </a>
+            <a href="/terms" className="leading-[1.2] hover:text-[#00b6ca]">
+              {labels.terms}
+            </a>
           </div>
         </div>
       </div>

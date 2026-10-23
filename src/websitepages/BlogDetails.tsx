@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import ArticleBody, { parseArticle } from "@/components/ArticleBody";
 import Footer from "@/components/Footer";
 import { formatDate } from "@/content/helpers";
 import { currentPost } from "@/content/route";
 import { useContent } from "@/content/store";
+import useActiveHeading from "@/lib/useActiveHeading";
 import GrowthSection from "./sections/GrowthSection";
 import Page from "./sections/Page";
 import TalkButton from "./sections/TalkButton";
@@ -16,25 +17,6 @@ const articleStyles = {
   list: "flex flex-col font-['Inter:Regular'] gap-[8px] leading-[1.5] list-disc pl-[24px] text-[#595959] text-[18px]",
   image: "block h-[387px] object-cover rounded-[8px] w-full",
 };
-
-/** Id of the last heading scrolled past, for highlighting the table of contents. */
-function useActiveHeading(ids: string[]) {
-  const [active, setActive] = useState(ids[0]);
-  useEffect(() => {
-    const update = () => {
-      let current = ids[0];
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top < 160) current = id;
-      }
-      setActive(current);
-    };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, [ids]);
-  return active;
-}
 
 // Blog post page (/blog/:slug).
 export default function BlogDetails() {

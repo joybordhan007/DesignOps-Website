@@ -1,51 +1,28 @@
 import { useEffect, useMemo, useState, type ComponentType, type ReactNode } from "react";
 import { trackingIds } from "../../../server/tracking.js";
+import SocialIcon from "@/components/SocialIcon";
 import { formatDate, sortedPosts } from "@/content/helpers";
 import { useContent } from "@/content/store";
+import type { Content, SocialPlatform } from "@/content/types";
 import type { PageProps } from "../AdminApp";
 import { api, type DayVisits } from "../api";
-import { BarList, Donut, Legend, LineChart, StackedBars } from "../charts";
-import { card, secondaryButton } from "../editor";
-import { ArrowRightIcon, BlogIcon, CheckIcon, FaqIcon, PlusIcon, ServicesIcon, StarIcon, WorkIcon } from "../icons";
+import { BarList, Donut, Legend, LineChart, Sparkline, StackedBars } from "../charts";
+import { secondaryButton } from "../editor";
+import { AnalyticsIcon, ArrowRightIcon, BlogIcon, CheckIcon, ClientIcon, EyeIcon, FaqIcon, MessageIcon, PlusIcon, ServicesIcon, StarIcon, WorkIcon } from "../icons";
 
-// Dashboard: totals, visitors, activity charts, inbox, content reports, setup
-// checklist and the latest messages and content. One time filter (7 days up to
+// Dashboard: website traffic first (page views, visitors, pages, sources,
+// devices), then messages, content and setup. One time filter (7 days up to
 // 12 months) applies to every chart and report.
 
-// Validated categorical palette (identity, fixed order); cyan is the brand colour.
-const C = {
-  messages: "#00a0b2",
-  reviews: "#eb6834",
-  views: "#2a78d6",
-  visitors: "#00a0b2",
-  blog: "#2a78d6",
-  work: "#eb6834",
-  services: "#1baf7a",
-  reviewsBar: "#6250d6",
-  read: "#d4d4d4",
-  mobile: "#00a0b2",
-  tablet: "#eda100",
-  desktop: "#2a78d6",
-};
+// Validated categorical palette (fixed order: blue, orange, aqua, yellow), see the dataviz skill.
+const SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"] as const;
+const ACCENT = "#00a0b2";
+const NEUTRAL = "#d4d4d4";
 
-const heading = "font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[18px]";
+const panel = "bg-white border border-[#ebebeb] rounded-[14px]";
+const heading = "font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[16px]";
 const sub = "font-['Inter:Regular'] text-[#8a8a8a] text-[13px]";
 const linkButton = "cursor-pointer flex font-['Inter:Medium'] font-medium gap-[4px] items-center shrink-0 text-[#00a0b2] text-[13px] hover:underline";
-
-function StatCard({ label, value, note, icon: Icon, tint, onClick }: { label: string; value: number; note: string; icon: ComponentType<{ size?: number }>; tint: string; onClick: () => void }) {
-  return (
-    <button type="button" onClick={onClick} className={`${card} cursor-pointer flex group h-[112px] items-center justify-between px-[24px] text-left transition-shadow hover:shadow-[0px_6px_20px_rgba(0,0,0,0.08)]`}>
-      <span className="flex flex-col gap-[8px] min-w-0">
-        <span className="font-['Inter:Medium'] font-medium text-[#191919] text-[16px]">{label}</span>
-        <span className="font-['Inter:Medium'] font-medium leading-none text-[#191919] text-[34px]">{String(value).padStart(2, "0")}</span>
-        <span className={`${sub} !text-[12px] truncate`}>{note}</span>
-      </span>
-      <span className="flex items-center justify-center rounded-full shrink-0 size-[64px] transition-transform group-hover:scale-105" style={{ background: `${tint}1a`, color: tint }}>
-        <Icon size={30} />
-      </span>
-    </button>
-  );
-}
 
 function CardHeader({ title, note, children }: { title: string; note?: string; children?: ReactNode }) {
   return (
@@ -59,21 +36,76 @@ function CardHeader({ title, note, children }: { title: string; note?: string; c
   );
 }
 
-/** A number with its change against the period before. */
-function Kpi({ label, value, previous, format = String }: { label: string; value: number; previous: number | null; format?: (n: number) => string }) {
-  const change = previous ? Math.round(((value - previous) / previous) * 100) : null;
+function SectionTitle({ children }: { children: ReactNode }) {
+  return <h2 className="font-['Inter:Semi_Bold'] font-semibold pt-[8px] text-[#9a9a9a] text-[12px] tracking-[1.2px] uppercase">{children}</h2>;
+}
+
+/** Change against the period before, as a small coloured pill. */
+function Delta({ value, previous }: { value: number; previous: number }) {
+  if (!previous) return <span className="bg-[#f3f3f3] font-['Inter:Medium'] font-medium px-[8px] py-[2px] rounded-full text-[#8a8a8a] text-[12px]">New</span>;
+  const change = Math.round(((value - previous) / previous) * 100);
+  const up = change >= 0;
   return (
-    <div className="flex flex-col gap-[4px] min-w-[120px]">
-      <span className={sub}>{label}</span>
-      <span className="flex flex-wrap gap-x-[8px] items-baseline">
-        <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[26px]">{format(value)}</span>
-        {change !== null && (
-          <span className={`font-['Inter:Medium'] font-medium text-[12px] ${change >= 0 ? "text-[#1a7f45]" : "text-[#c62828]"}`} title="Compared with the period before">
-            {change >= 0 ? "▲" : "▼"} {Math.abs(change)}%
-          </span>
-        )}
-      </span>
+    <span className={`font-['Inter:Semi_Bold'] font-semibold px-[8px] py-[2px] rounded-full text-[12px] ${up ? "bg-[#e7f7ee] text-[#1a7f45]" : "bg-[#fdecec] text-[#c62828]"}`}>
+      {up ? "↑" : "↓"} {Math.abs(change)}%
+    </span>
+  );
+}
+
+/** Headline number with its trend and change against the period before. */
+function KpiCard({
+  label,
+  value,
+  previous,
+  trend,
+  icon: Icon,
+  format = (n) => n.toLocaleString("en-US"),
+  period,
+}: {
+  label: string;
+  value: number;
+  previous: number;
+  trend: number[];
+  icon: ComponentType<{ size?: number }>;
+  format?: (n: number) => string;
+  period: string;
+}) {
+  return (
+    <div className={`${panel} flex flex-col gap-[10px] overflow-hidden pt-[18px] px-[20px]`}>
+      <div className="flex gap-[10px] items-center justify-between">
+        <span className="font-['Inter:Medium'] font-medium text-[#505050] text-[14px]">{label}</span>
+        <span className="bg-[#e9f9fb] flex items-center justify-center rounded-[8px] size-[32px] text-[#00a0b2]">
+          <Icon size={17} />
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-x-[10px] gap-y-[4px] items-center">
+        <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[30px]">{format(value)}</span>
+        <Delta value={value} previous={previous} />
+      </div>
+      <span className={`${sub} !text-[12px]`}>vs previous {period}</span>
+      <div className="-mx-[20px]">
+        <Sparkline values={trend} color={ACCENT} height={44} />
+      </div>
     </div>
+  );
+}
+
+/** Totals of the website's content, small and clickable. */
+function ContentCard({ label, value, note, icon: Icon, onClick }: { label: string; value: number; note: string; icon: ComponentType<{ size?: number }>; onClick: () => void }) {
+  return (
+    <button type="button" onClick={onClick} className={`${panel} cursor-pointer flex gap-[14px] group items-center p-[16px] text-left transition-colors hover:border-[#bfe9ee]`}>
+      <span className="bg-[#f4f4f4] flex items-center justify-center rounded-[10px] shrink-0 size-[44px] text-[#3e3e3e] transition-colors group-hover:bg-[#e9f9fb] group-hover:text-[#00a0b2]">
+        <Icon size={22} />
+      </span>
+      <span className="flex flex-col gap-[2px] min-w-0">
+        <span className="flex gap-[8px] items-baseline">
+          <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[22px]">{value}</span>
+          <span className="font-['Inter:Medium'] font-medium text-[#505050] text-[14px]">{label}</span>
+        </span>
+        <span className={`${sub} !text-[12px] truncate`}>{note}</span>
+      </span>
+      <ArrowRightIcon size={16} className="ml-auto shrink-0 text-[#c4c4c4] transition-colors group-hover:text-[#00a0b2]" />
+    </button>
   );
 }
 
@@ -93,13 +125,13 @@ const RANGE_KEY = "admin-dashboard-range";
 
 function RangeFilter({ value, onChange }: { value: Range; onChange: (range: Range) => void }) {
   return (
-    <div className="bg-white flex flex-wrap gap-[2px] p-[4px] rounded-[8px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]" role="group" aria-label="Time range">
+    <div className="bg-white border border-[#ebebeb] flex flex-wrap gap-[2px] p-[4px] rounded-full" role="group" aria-label="Time range">
       {RANGES.map((range) => (
         <button
           key={range.key}
           type="button"
           aria-pressed={value.key === range.key}
-          className={`cursor-pointer font-['Inter:Medium'] font-medium px-[12px] py-[6px] rounded-[6px] text-[13px] ${value.key === range.key ? "bg-[#00b6ca] text-white" : "text-[#3e3e3e] hover:bg-[#f4fbfc]"}`}
+          className={`cursor-pointer font-['Inter:Medium'] font-medium px-[14px] py-[6px] rounded-full text-[13px] transition-colors ${value.key === range.key ? "bg-[#191919] text-white" : "text-[#505050] hover:bg-[#f4f4f4]"}`}
           onClick={() => onChange(range)}
         >
           {range.label}
@@ -143,9 +175,11 @@ function useBuckets(range: Range) {
       }
       return counts;
     };
+    const short = { month: "short", day: "numeric" } as const;
     return {
-      labels: starts.map((d) => d.toLocaleDateString("en-US", byDay ? { month: "short", day: "numeric" } : { month: "short" })),
+      labels: starts.map((d) => d.toLocaleDateString("en-US", byDay ? short : { month: "short" })),
       titles: starts.map((d) => d.toLocaleDateString("en-US", byDay ? { weekday: "short", month: "long", day: "numeric" } : { month: "long", year: "numeric" })),
+      span: `${start.toLocaleDateString("en-US", short)} – ${now.toLocaleDateString("en-US", { ...short, year: "numeric" })}`,
       index,
       inPrevious,
       countBy,
@@ -181,15 +215,67 @@ function sumVisits(visits: Record<string, DayVisits>, buckets: ReturnType<typeof
   return { views, visitors, pages, sources, devices, previous };
 }
 
-const top = (counts: Record<string, number>, n: number, label: (key: string) => string = (key) => key) =>
-  Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, n)
-    .map(([key, value]) => ({ key, label: label(key), value }));
-
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
 
 const daysAgo = (date: string, days: number) => Boolean(date) && Date.now() - parseDate(date).getTime() <= days * 86_400_000;
+
+// ---------------------------------------------------------------- names for pages and sources
+
+/** "/services/ui-ux-design" → "UI/UX Design" (falls back to the address). */
+function pageNamer(content: Content) {
+  const { nav } = content.settings.labels;
+  const names: Record<string, string> = {
+    "/": nav.home,
+    "/services": nav.services,
+    "/work": nav.work,
+    "/blog": nav.blog,
+    "/company": nav.company,
+    "/reviews": nav.reviews,
+    "/contact": content.settings.labels.footer.contactUs,
+    "/privacy": content.settings.legal.privacy.title,
+    "/terms": content.settings.legal.terms.title,
+  };
+  for (const s of content.services) names[`/services/${s.slug}`] = s.title;
+  for (const p of content.projects) names[`/work/${p.slug}`] = p.title;
+  for (const p of content.posts) names[`/blog/${p.slug}`] = p.title;
+  return (path: string) => names[path.replace(/\/$/, "") || "/"] ?? path;
+}
+
+/** Referrer hosts and utm_source values grouped under one friendly name. */
+const SOURCES: [RegExp, string, SocialPlatform?][] = [
+  [/^direct$/, "Direct"],
+  [/(^|\.)google\.|^google$|^adwords$|^gads$/, "Google"],
+  [/facebook|^fb$|^fb\.|^meta$/, "Facebook", "facebook"],
+  [/instagram|^ig$/, "Instagram", "instagram"],
+  [/linkedin|^lnkd\.in$/, "LinkedIn", "linkedin"],
+  [/^t\.co$|twitter|^x\.com$|^x$/, "X (Twitter)", "x"],
+  [/youtube|^youtu\.be$/, "YouTube", "youtube"],
+  [/tiktok/, "TikTok", "tiktok"],
+  [/whatsapp|^wa\.me$/, "WhatsApp", "whatsapp"],
+  [/pinterest/, "Pinterest", "pinterest"],
+  [/behance/, "Behance", "behance"],
+  [/dribbble/, "Dribbble", "dribbble"],
+  [/github/, "GitHub", "github"],
+  [/telegram|^t\.me$/, "Telegram", "telegram"],
+  [/(^|\.)medium\.com$|^medium$/, "Medium", "medium"],
+  [/(^|\.)bing\.|^bing$/, "Bing"],
+  [/duckduckgo/, "DuckDuckGo"],
+  [/(^|\.)yahoo\./, "Yahoo"],
+  [/chatgpt|openai/, "ChatGPT"],
+];
+
+function sourceInfo(key: string) {
+  const match = SOURCES.find(([pattern]) => pattern.test(key.toLowerCase()));
+  return match ? { name: match[1], platform: match[2] } : { name: key, platform: undefined };
+}
+
+function SourceIcon({ name, platform }: { name: string; platform?: SocialPlatform }) {
+  return (
+    <span className="bg-[#f4f4f4] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-[8px] shrink-0 size-[32px] text-[#3e3e3e] text-[13px]">
+      {platform ? <SocialIcon platform={platform} size={16} /> : name === "Direct" ? <ArrowRightIcon size={15} /> : name.slice(0, 1).toUpperCase()}
+    </span>
+  );
+}
 
 // ---------------------------------------------------------------- page
 
@@ -220,43 +306,60 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
       .catch(() => setVisits({}));
   }, []);
   const traffic = useMemo(() => sumVisits(visits ?? {}, buckets), [visits, buckets]);
+  const pageName = useMemo(() => pageNamer(content), [content]);
 
   const unread = messages.filter((m) => !m.read).length;
   const recentMessages = messages.slice(0, 5);
   const recentPosts = sortedPosts(content.posts).slice(0, 3);
   const recentProjects = content.projects.slice(-3).reverse();
+  const period = range.label;
 
-  // Visitors.
+  // Traffic.
   const totalViews = sum(traffic.views);
   const totalVisitors = sum(traffic.visitors);
+  const perVisitor = (views: number, people: number) => (people ? views / people : 0);
   const messageDates = messages.map((m) => m.createdAt);
-  const messagesInRange = sum(buckets.countBy(messageDates));
-  const messagesBefore = buckets.countPrevious(messageDates);
-  const conversion = totalVisitors ? (messagesInRange / totalVisitors) * 100 : 0;
-  const conversionBefore = traffic.previous.visitors ? (messagesBefore / traffic.previous.visitors) * 100 : null;
-  const devices = (["mobile", "tablet", "desktop"] as const).map((key) => ({ name: key[0].toUpperCase() + key.slice(1), color: C[key], value: traffic.devices[key] ?? 0 }));
-  const pageName = (path: string) => (path === "/" ? "Home" : path);
-
-  // Activity: messages and reviews (published + waiting).
-  const reviewDates = [...content.reviews.map((r) => r.createdAt), ...pendingReviews.map((r) => r.createdAt)];
   const messageCounts = buckets.countBy(messageDates);
+  const noVisitsYet = visits !== null && !Object.keys(visits).length;
+
+  const deviceTotal = sum(Object.values(traffic.devices));
+  const devices = (["desktop", "mobile", "tablet"] as const).map((key, i) => ({ name: key[0].toUpperCase() + key.slice(1), color: SERIES[i], value: traffic.devices[key] ?? 0 }));
+
+  const pageRows = Object.entries(traffic.pages)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([path, value]) => ({ key: path, label: pageName(path), detail: path, value }));
+
+  const sourceTotals: Record<string, { value: number; platform?: SocialPlatform }> = {};
+  for (const [key, value] of Object.entries(traffic.sources)) {
+    const { name, platform } = sourceInfo(key);
+    sourceTotals[name] = { value: (sourceTotals[name]?.value ?? 0) + value, platform };
+  }
+  const sessions = sum(Object.values(sourceTotals).map((s) => s.value));
+  const sourceRows = Object.entries(sourceTotals)
+    .sort((a, b) => b[1].value - a[1].value)
+    .slice(0, 8)
+    .map(([name, { value, platform }]) => ({ key: name, label: name, value, icon: <SourceIcon name={name} platform={platform} /> }));
+
+  // Messages and reviews (published + waiting).
+  const reviewDates = [...content.reviews.map((r) => r.createdAt), ...pendingReviews.map((r) => r.createdAt)];
   const reviewCounts = buckets.countBy(reviewDates);
 
   const contentSeries = [
-    { name: "Blog posts", color: C.blog, values: buckets.countBy(content.posts.map((p) => p.date || p.createdAt)) },
-    { name: "Projects", color: C.work, values: buckets.countBy(content.projects.map((p) => p.createdAt)) },
-    { name: "Services", color: C.services, values: buckets.countBy(content.services.map((s) => s.createdAt)) },
-    { name: "Reviews", color: C.reviewsBar, values: buckets.countBy(content.reviews.map((r) => r.createdAt)) },
+    { name: "Blog posts", color: SERIES[0], values: buckets.countBy(content.posts.map((p) => p.date || p.createdAt)) },
+    { name: "Projects", color: SERIES[1], values: buckets.countBy(content.projects.map((p) => p.createdAt)) },
+    { name: "Services", color: SERIES[2], values: buckets.countBy(content.services.map((s) => s.createdAt)) },
+    { name: "Reviews", color: SERIES[3], values: buckets.countBy(content.reviews.map((r) => r.createdAt)) },
   ];
   const contentTotal = contentSeries.reduce((total, s) => total + sum(s.values), 0);
 
   const ratings = [5, 4, 3, 2, 1].map((stars) => ({ key: String(stars), value: content.reviews.filter((r) => Math.round(r.rating) === stars).length, label: `${stars} star${stars > 1 ? "s" : ""}` }));
   const average = content.reviews.length ? content.reviews.reduce((total, r) => total + r.rating, 0) / content.reviews.length : 0;
 
-  const categories = top(
-    content.posts.flatMap((p) => p.categories).reduce<Record<string, number>>((all, c) => ({ ...all, [c]: (all[c] ?? 0) + 1 }), {}),
-    5,
-  );
+  const categories = Object.entries(content.posts.flatMap((p) => p.categories).reduce<Record<string, number>>((all, c) => ({ ...all, [c]: (all[c] ?? 0) + 1 }), {}))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([label, value]) => ({ key: label, label, value }));
 
   const hidden = (items: { active: boolean }[]) => items.filter((item) => !item.active).length;
   const newThisMonth = (items: { createdAt: string }[]) => items.filter((item) => daysAgo(item.createdAt, 30)).length;
@@ -270,93 +373,117 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
   const checklist = [
     { done: Boolean(ids.gtmId), label: "Google Tag Manager connected", to: "/admin/tracking" },
     { done: Boolean(ids.metaPixelId), label: "Meta Pixel connected", to: "/admin/tracking" },
-    { done: Boolean(content.settings.seo.description.trim()), label: "Search description written", to: "/admin/settings" },
-    { done: socials >= 3, label: `Social links in the footer (${socials})`, to: "/admin/settings" },
+    { done: Boolean(content.settings.seo.description.trim()), label: "Search description written", to: "/admin/settings#seo" },
+    { done: socials >= 3, label: `Social links in the footer (${socials})`, to: "/admin/settings#footer" },
     { done: pendingReviews.length === 0, label: pendingReviews.length ? `${pendingReviews.length} review${pendingReviews.length > 1 ? "s" : ""} waiting for approval` : "No reviews waiting", to: "/admin/reviews" },
     { done: unread === 0, label: unread ? `${unread} unread message${unread > 1 ? "s" : ""}` : "Inbox is clear", to: "/admin/messages" },
   ];
   const doneCount = checklist.filter((c) => c.done).length;
-  const period = `last ${range.label}`;
 
   return (
-    <div className="flex flex-col gap-[24px]">
+    <div className="flex flex-col gap-[20px]">
       {/* Title + time filter */}
       <div className="flex flex-wrap gap-[16px] items-end justify-between">
         <div className="flex flex-col gap-[4px]">
-          <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#191919] text-[24px]">Dashboard</h1>
-          <p className={sub}>Reports for the {period}.</p>
+          <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#191919] text-[26px]">Dashboard</h1>
+          <p className={sub}>
+            Last {period} · {buckets.span}
+          </p>
         </div>
         <RangeFilter value={range} onChange={pickRange} />
       </div>
 
-      {/* Totals */}
-      <div className="gap-[24px] grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total Services" value={content.services.length} note={note(content.services)} icon={ServicesIcon} tint="#2f7df6" onClick={() => navigate("/admin/services")} />
-        <StatCard label="Total Work" value={content.projects.length} note={note(content.projects)} icon={WorkIcon} tint="#d63aa8" onClick={() => navigate("/admin/work")} />
-        <StatCard label="Total Blog" value={content.posts.length} note={note(content.posts)} icon={BlogIcon} tint="#5b4bdb" onClick={() => navigate("/admin/blog")} />
-        <StatCard label="Total FAQ" value={content.faqs.length} note="Questions on the Contact page" icon={FaqIcon} tint="#e2533b" onClick={() => navigate("/admin/faq")} />
+      {/* ---------------- Traffic */}
+      <SectionTitle>Website traffic</SectionTitle>
+
+      {noVisitsYet && (
+        <p className="bg-[#e9f9fb] border border-[#bfe9ee] font-['Inter:Regular'] leading-[1.5] px-[16px] py-[12px] rounded-[10px] text-[#00687a] text-[14px]">
+          Visit counting is on. Page views, visitors, pages, sources and devices appear here as soon as people open the website.
+        </p>
+      )}
+
+      <div className="gap-[16px] grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4">
+        <KpiCard label="Page views" value={totalViews} previous={traffic.previous.views} trend={traffic.views} icon={EyeIcon} period={period} />
+        <KpiCard label="Visitors" value={totalVisitors} previous={traffic.previous.visitors} trend={traffic.visitors} icon={ClientIcon} period={period} />
+        <KpiCard
+          label="Pages per visitor"
+          value={perVisitor(totalViews, totalVisitors)}
+          previous={perVisitor(traffic.previous.views, traffic.previous.visitors)}
+          trend={traffic.views.map((v, i) => perVisitor(v, traffic.visitors[i]))}
+          icon={AnalyticsIcon}
+          format={(n) => n.toFixed(1)}
+          period={period}
+        />
+        <KpiCard label="Messages" value={sum(messageCounts)} previous={buckets.countPrevious(messageDates)} trend={messageCounts} icon={MessageIcon} period={period} />
       </div>
 
-      {/* Visitors + devices */}
-      <div className="gap-[24px] grid grid-cols-1 xl:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-        <section className={`${card} flex flex-col gap-[18px] min-h-[400px] p-[24px]`}>
-          <CardHeader title="Website visitors" note={`Page views and visitors · ${period}`}>
+      <div className="gap-[16px] grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
+          <CardHeader title="Traffic overview" note={range.unit === "day" ? "Per day" : "Per month"}>
             <Legend
               series={[
-                { name: "Page views", color: C.views },
-                { name: "Visitors", color: C.visitors },
+                { name: "Page views", color: SERIES[0], value: totalViews.toLocaleString("en-US") },
+                { name: "Visitors", color: SERIES[1], value: totalVisitors.toLocaleString("en-US") },
               ]}
             />
           </CardHeader>
-          <div className="flex flex-wrap gap-x-[40px] gap-y-[16px]">
-            <Kpi label="Page views" value={totalViews} previous={traffic.previous.views || null} />
-            <Kpi label="Visitors" value={totalVisitors} previous={traffic.previous.visitors || null} />
-            <Kpi label="Messages" value={messagesInRange} previous={messagesBefore || null} />
-            <Kpi label="Visitors who wrote" value={conversion} previous={conversionBefore || null} format={(n) => `${n.toFixed(1)}%`} />
-          </div>
-          {visits && !Object.keys(visits).length ? (
-            <p className="bg-[#f7f7f7] font-['Inter:Regular'] mt-auto px-[16px] py-[40px] rounded-[8px] text-[#707070] text-[14px] text-center">Visits are counted from now on; the chart fills in as people visit the website.</p>
-          ) : (
-            <LineChart
-              labels={buckets.labels}
-              titles={buckets.titles}
-              series={[
-                { name: "Page views", color: C.views, values: traffic.views },
-                { name: "Visitors", color: C.visitors, values: traffic.visitors },
-              ]}
-            />
-          )}
+          <LineChart
+            labels={buckets.labels}
+            titles={buckets.titles}
+            height={280}
+            series={[
+              { name: "Page views", color: SERIES[0], values: traffic.views },
+              { name: "Visitors", color: SERIES[1], values: traffic.visitors },
+            ]}
+          />
         </section>
 
-        <section className={`${card} flex flex-col gap-[18px] min-h-[400px] p-[24px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Devices" note="Page views by screen size" />
-          <div className="flex flex-col flex-1 gap-[16px] items-center justify-center">
-            <Donut label="views" parts={devices} />
-            <Legend series={devices} />
+          <div className="flex flex-1 flex-col gap-[20px] items-center justify-center">
+            <Donut label="page views" parts={devices} size={176} />
+            <ul className="flex flex-col gap-[10px] w-full">
+              {devices.map((d) => (
+                <li key={d.name} className="flex font-['Inter:Regular'] gap-[10px] items-center text-[#3e3e3e] text-[13px]">
+                  <span className="rounded-[3px] shrink-0 size-[10px]" style={{ background: d.color }} />
+                  {d.name}
+                  <span className="font-['Inter:Semi_Bold'] font-semibold ml-auto text-[#191919]">{d.value.toLocaleString("en-US")}</span>
+                  <span className="text-[#8a8a8a] text-right w-[40px]">{deviceTotal ? Math.round((d.value / deviceTotal) * 100) : 0}%</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       </div>
 
-      {/* Pages + sources */}
-      <div className="gap-[24px] grid grid-cols-1 lg:grid-cols-2">
-        <section className={`${card} flex flex-col gap-[18px] p-[24px]`}>
-          <CardHeader title="Top pages" note="Most viewed pages" />
-          <BarList rows={top(traffic.pages, 7, pageName)} color={C.views} empty="No page views in this period." />
+      <div className="gap-[16px] grid grid-cols-1 lg:grid-cols-2">
+        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+          <CardHeader title="Top pages" note="Most opened pages · share of all page views" />
+          <BarList rows={pageRows} total={totalViews} color={SERIES[0]} empty="No page views in this period yet." />
         </section>
-        <section className={`${card} flex flex-col gap-[18px] p-[24px]`}>
-          <CardHeader title="Traffic sources" note="Where visits came from (Direct = typed or bookmarked)" />
-          <BarList rows={top(traffic.sources, 7)} color={C.services} empty="No visits in this period." />
+        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+          <CardHeader title="Traffic sources" note="Where visits came from · Direct = typed or bookmarked" />
+          <BarList rows={sourceRows} total={sessions} color={SERIES[2]} empty="No visits in this period yet." />
         </section>
       </div>
 
-      {/* Activity + inbox */}
-      <div className="gap-[24px] grid grid-cols-1 xl:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-        <section className={`${card} flex flex-col gap-[18px] min-h-[400px] p-[24px]`}>
-          <CardHeader title="Messages & reviews" note={`Contact form messages and reviews received · ${period}`}>
+      {/* ---------------- Messages & content */}
+      <SectionTitle>Messages & content</SectionTitle>
+
+      <div className="gap-[16px] grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4">
+        <ContentCard label="Services" value={content.services.length} note={note(content.services)} icon={ServicesIcon} onClick={() => navigate("/admin/services")} />
+        <ContentCard label="Work" value={content.projects.length} note={note(content.projects)} icon={WorkIcon} onClick={() => navigate("/admin/work")} />
+        <ContentCard label="Blog posts" value={content.posts.length} note={note(content.posts)} icon={BlogIcon} onClick={() => navigate("/admin/blog")} />
+        <ContentCard label="FAQ" value={content.faqs.length} note="Questions on the Contact page" icon={FaqIcon} onClick={() => navigate("/admin/faq")} />
+      </div>
+
+      <div className="gap-[16px] grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
+          <CardHeader title="Messages & reviews" note="Received through the website">
             <Legend
               series={[
-                { name: "Messages", color: C.messages, value: sum(messageCounts) },
-                { name: "Reviews", color: C.reviews, value: sum(reviewCounts) },
+                { name: "Messages", color: SERIES[0], value: sum(messageCounts) },
+                { name: "Reviews", color: SERIES[1], value: sum(reviewCounts) },
               ]}
             />
           </CardHeader>
@@ -364,43 +491,40 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
             labels={buckets.labels}
             titles={buckets.titles}
             series={[
-              { name: "Messages", color: C.messages, values: messageCounts },
-              { name: "Reviews", color: C.reviews, values: reviewCounts },
+              { name: "Messages", color: SERIES[0], values: messageCounts },
+              { name: "Reviews", color: SERIES[1], values: reviewCounts },
             ]}
           />
         </section>
 
-        <section className={`${card} flex flex-col gap-[18px] min-h-[400px] p-[24px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Inbox">
             <button type="button" className={linkButton} onClick={() => navigate("/admin/messages")}>
               Open <ArrowRightIcon size={14} />
             </button>
           </CardHeader>
-          <div className="flex flex-col gap-[16px] items-center">
+          <div className="flex flex-col gap-[14px] items-center">
             <Donut
               label="messages"
+              size={150}
               parts={[
-                { name: "Unread", color: C.messages, value: unread },
-                { name: "Read", color: C.read, value: messages.length - unread },
+                { name: "Unread", color: SERIES[0], value: unread },
+                { name: "Read", color: NEUTRAL, value: messages.length - unread },
               ]}
             />
             <Legend
               series={[
-                { name: "Unread", color: C.messages, value: unread },
-                { name: "Read", color: C.read, value: messages.length - unread },
+                { name: "Unread", color: SERIES[0], value: unread },
+                { name: "Read", color: NEUTRAL, value: messages.length - unread },
               ]}
             />
           </div>
-          <button
-            type="button"
-            onClick={() => navigate("/admin/reviews")}
-            className="bg-[#fff6ef] cursor-pointer flex gap-[12px] items-center mt-auto p-[14px] rounded-[8px] text-left transition-colors hover:bg-[#ffeedf]"
-          >
-            <span className="bg-white flex items-center justify-center rounded-full shrink-0 size-[38px] text-[#eb6834]">
+          <button type="button" onClick={() => navigate("/admin/reviews")} className="bg-[#fff6ef] cursor-pointer flex gap-[12px] items-center mt-auto p-[14px] rounded-[10px] text-left transition-colors hover:bg-[#ffeedf]">
+            <span className="bg-white flex items-center justify-center rounded-full shrink-0 size-[36px] text-[#eb6834]">
               <StarIcon size={18} />
             </span>
             <span className="flex flex-col min-w-0">
-              <span className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[15px]">
+              <span className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[14px]">
                 {pendingReviews.length} review{pendingReviews.length === 1 ? "" : "s"} waiting
               </span>
               <span className={`${sub} !text-[12px]`}>{pendingReviews.length ? "Approve them to show on the website" : "Nothing to approve"}</span>
@@ -410,39 +534,37 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
         </section>
       </div>
 
-      {/* Content published */}
-      <section className={`${card} flex flex-col gap-[18px] min-h-[400px] p-[24px]`}>
-        <CardHeader title="Content added" note={`New blog posts, projects, services and reviews · ${contentTotal} in the ${period}`}>
+      <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
+        <CardHeader title="Content added" note={`New blog posts, projects, services and reviews · ${contentTotal} in the last ${period}`}>
           <Legend series={contentSeries.map((s) => ({ name: s.name, color: s.color, value: sum(s.values) }))} />
         </CardHeader>
-        <StackedBars labels={buckets.labels} titles={buckets.titles} series={contentSeries} height={300} />
+        <StackedBars labels={buckets.labels} titles={buckets.titles} series={contentSeries} height={280} />
       </section>
 
-      {/* Reports */}
-      <div className="gap-[24px] grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
-        <section className={`${card} flex flex-col gap-[18px] p-[24px]`}>
+      <div className="gap-[16px] grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
+        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
           <CardHeader title="Review ratings" note={`${content.reviews.length} published reviews`}>
             <span className="flex font-['Inter:Semi_Bold'] font-semibold gap-[4px] items-center text-[#191919] text-[20px]">
               <StarIcon size={18} className="text-[#eda100]" />
               {average ? average.toFixed(1) : "–"}
             </span>
           </CardHeader>
-          <BarList rows={ratings} color="#eda100" empty="No reviews yet." />
+          <BarList rows={ratings} total={content.reviews.length} color={SERIES[3]} empty="No reviews yet." />
         </section>
 
-        <section className={`${card} flex flex-col gap-[18px] p-[24px]`}>
+        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
           <CardHeader title="Blog topics" note="Posts per category (top 5)">
             <button type="button" className={linkButton} onClick={() => navigate("/admin/blog")}>
               Blog <ArrowRightIcon size={14} />
             </button>
           </CardHeader>
-          <BarList rows={categories} color={C.blog} empty="No categories yet." />
+          <BarList rows={categories} color={SERIES[0]} empty="No categories yet." />
         </section>
 
-        <section className={`${card} flex flex-col gap-[14px] p-[24px] lg:col-span-2 2xl:col-span-1`}>
+        <section className={`${panel} flex flex-col gap-[14px] p-[22px] lg:col-span-2 2xl:col-span-1`}>
           <CardHeader title="Website checklist" note={`${doneCount} of ${checklist.length} done`} />
           <span className="bg-[#f1f1f1] block h-[6px] overflow-hidden rounded-full">
-            <span className="bg-[#1baf7a] block h-full rounded-full transition-[width] duration-500" style={{ width: `${(doneCount / checklist.length) * 100}%` }} />
+            <span className="bg-[#1a7f45] block h-full rounded-full transition-[width] duration-500" style={{ width: `${(doneCount / checklist.length) * 100}%` }} />
           </span>
           <ul className="flex flex-col">
             {checklist.map((item) => (
@@ -458,16 +580,15 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
         </section>
       </div>
 
-      {/* Latest */}
-      <div className="gap-[24px] grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-        <section className={`${card} flex flex-col gap-[12px] p-[24px]`}>
+      <div className="gap-[16px] grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <section className={`${panel} flex flex-col gap-[12px] p-[22px]`}>
           <CardHeader title="Recent messages">
             <button type="button" className={linkButton} onClick={() => navigate("/admin/messages")}>
               View all <ArrowRightIcon size={14} />
             </button>
           </CardHeader>
           {recentMessages.map((m) => (
-            <button key={m.id} type="button" onClick={() => navigate(`/admin/messages?item=${m.id}`)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[6px] text-left hover:bg-[#f6f6f6]">
+            <button key={m.id} type="button" onClick={() => navigate(`/admin/messages?item=${m.id}`)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[8px] text-left hover:bg-[#f6f6f6]">
               <span className="bg-[#e9f9fb] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-full shrink-0 size-[36px] text-[#00a0b2] text-[13px] uppercase">
                 {(m.first_name[0] ?? "") + (m.last_name[0] ?? "")}
               </span>
@@ -486,7 +607,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
           {!recentMessages.length && <p className="font-['Inter:Regular'] text-[#8a8a8a] text-[14px]">No messages yet.</p>}
         </section>
 
-        <section className={`${card} flex flex-col gap-[18px] p-[24px]`}>
+        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
           <CardHeader title="Latest content">
             <div className="flex flex-wrap gap-[8px]">
               <button type="button" className={`${secondaryButton} !py-[7px] !text-[13px]`} onClick={() => navigate("/admin/blog")}>
@@ -505,8 +626,8 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
               <div key={list.title} className="flex flex-col gap-[8px]">
                 <h3 className="font-['Inter:Medium'] font-medium text-[#8a8a8a] text-[12px] tracking-[0.4px] uppercase">{list.title}</h3>
                 {list.items.map((item) => (
-                  <button key={item.id} type="button" onClick={() => navigate(item.to)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[6px] text-left hover:bg-[#f6f6f6]">
-                    <span className="bg-[#f0f0f0] block h-[48px] overflow-hidden rounded-[4px] shrink-0 w-[72px]">{item.image && <img src={item.image} alt="" className="block object-cover size-full" />}</span>
+                  <button key={item.id} type="button" onClick={() => navigate(item.to)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[8px] text-left hover:bg-[#f6f6f6]">
+                    <span className="bg-[#f0f0f0] block h-[48px] overflow-hidden rounded-[6px] shrink-0 w-[72px]">{item.image && <img src={item.image} alt="" className="block object-cover size-full" />}</span>
                     <span className="flex flex-col min-w-0">
                       <span className="font-['Inter:Medium'] font-medium text-[#222] text-[14px] truncate">{item.name}</span>
                       <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">

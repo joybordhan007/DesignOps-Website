@@ -17,6 +17,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express from "express";
 import multer from "multer";
+import { DEFAULT_MAIL, mailReady, parseRecipients, publicMail, sendContactMail, sendTestMail } from "./mail.js";
 import { migrate } from "./migrate.js";
 import { trackingBody, trackingHead } from "./tracking.js";
 
@@ -42,6 +43,7 @@ const files = {
   messages: path.join(DATA_DIR, "messages.json"),
   pendingReviews: path.join(DATA_DIR, "pending-reviews.json"),
   visits: path.join(DATA_DIR, "visits.json"),
+  mail: path.join(DATA_DIR, "mail.json"),
   admin: path.join(DATA_DIR, "admin.json"),
   secret: path.join(DATA_DIR, "session-secret"),
 };
@@ -207,6 +209,59 @@ app.post("/api/contact", (req, res) => {
   messages.unshift(message);
   writeJson(files.messages, messages);
   res.json({ ok: true });
+  // Emailed after answering, so a slow mail server never holds up the visitor.
+  const mail = readJson(files.mail, DEFAULT_MAIL);
+  if (!mailReady(mail, content.settings?.contact?.email)) return;
+  sendContactMail(mail, content.settings?.contact?.email, message, siteName())
+    .then(() => (lastMailResult = { ok: true, at: new Date().toISOString() }))
+    .catch((error) => {
+      lastMailResult = { ok: false, at: new Date().toISOString(), error: String(error.message || error) };
+      console.error("Contact email failed:", lastMailResult.error);
+    });
+});
+
+// Email notifications for the contact form (see mail.js).
+let lastMailResult = null;
+const siteName = () => content.settings?.seo?.title || "the website";
+
+app.get("/api/admin/mail", requireAdmin, (req, res) => res.json(publicMail(readJson(files.mail, DEFAULT_MAIL), lastMailResult)));
+
+app.put("/api/admin/mail", requireAdmin, (req, res) => {
+  const body = req.body || {};
+  const old = { ...DEFAULT_MAIL, ...readJson(files.mail, DEFAULT_MAIL) };
+  const to = String(body.to ?? "").trim().slice(0, 500);
+  if (to && parseRecipients(to).length !== to.split(/[,;\s]+/).filter(Boolean).length) return res.status(400).json({ error: "One of the email addresses isn't valid." });
+  const port = Number(body.port) || 465;
+  if (port < 1 || port > 65535) return res.status(400).json({ error: "The port should be a number like 465 or 587." });
+  const mail = {
+    enabled: Boolean(body.enabled),
+    to,
+    host: String(body.host ?? "").trim().slice(0, 200),
+    port,
+    secure: Boolean(body.secure),
+    user: String(body.user ?? "").trim().slice(0, 200),
+    // Left empty = keep the saved password.
+    pass: typeof body.pass === "string" && body.pass !== "" ? body.pass.slice(0, 500) : old.pass,
+    from: String(body.from ?? "").trim().slice(0, 200),
+  };
+  if (mail.enabled && !mail.host) return res.status(400).json({ error: "Enter the SMTP server (host) to send emails." });
+  writeJson(files.mail, mail);
+  res.json(publicMail(mail, lastMailResult));
+});
+
+app.post("/api/admin/mail/test", requireAdmin, async (req, res) => {
+  const mail = { ...DEFAULT_MAIL, ...readJson(files.mail, DEFAULT_MAIL) };
+  const fallback = content.settings?.contact?.email;
+  if (!mail.host) return res.status(400).json({ error: "Save the SMTP settings first." });
+  if (!parseRecipients(mail.to || fallback).length) return res.status(400).json({ error: "Add an email address to send to." });
+  try {
+    await sendTestMail(mail, fallback, siteName());
+    lastMailResult = { ok: true, at: new Date().toISOString() };
+    res.json({ ok: true, to: parseRecipients(mail.to || fallback) });
+  } catch (error) {
+    lastMailResult = { ok: false, at: new Date().toISOString(), error: String(error.message || error) };
+    res.status(400).json({ error: `Couldn't send: ${lastMailResult.error}` });
+  }
 });
 
 // Visit counts for the dashboard reports: per day, the page views, new visitors
@@ -239,11 +294,16 @@ app.post("/api/visit", (req, res) => {
   if (body.newVisitor) today.visitors++;
   if (body.newSession) {
     let source = "Direct";
-    try {
-      const host = new URL(String(body.referrer || "")).hostname.replace(/^www\./, "");
-      if (host && host !== req.hostname) source = host.slice(0, 80);
-    } catch {
-      /* no referrer */
+    const utm = String(body.utmSource || "").toLowerCase().replace(/[^a-z0-9._-]/g, "").slice(0, 40);
+    if (utm) {
+      source = utm;
+    } else {
+      try {
+        const host = new URL(String(body.referrer || "")).hostname.replace(/^www\./, "");
+        if (host && host !== req.hostname) source = host.slice(0, 80);
+      } catch {
+        /* no referrer */
+      }
     }
     bump(today.sources, source);
   }

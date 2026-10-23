@@ -6,7 +6,8 @@ import type { PageProps } from "../AdminApp";
 import { api } from "../api";
 import { card, CollectionEditor, confirmLeave, ObjectEditor, PageHeader } from "../editor";
 import { inputClass, newId, smallButton, type Field } from "../fields";
-import { ClientIcon, ContactIcon, DashboardIcon, DownIcon, EditIcon, EyeIcon, MailIcon, PlusIcon, ProcessIcon, ReviewIcon, SearchIcon, TrashIcon, UpIcon } from "../icons";
+import MailSettingsEditor from "./MailSettings";
+import { BlogIcon, ClientIcon, ContactIcon, DashboardIcon, DownIcon, EditIcon, EyeIcon, MailIcon, MessageIcon, PlusIcon, ProcessIcon, ReviewIcon, SearchIcon, TrashIcon, UpIcon } from "../icons";
 
 // Website Settings: everything that isn't a list — SEO, contact details, page
 // heroes and their videos, section headings and other page texts, the Home
@@ -167,6 +168,11 @@ const labelFields: Field[] = [
     ["blogDetails.ctaTitle", "Black card title"],
     ["blogDetails.toc", "Table of contents heading"],
   ]),
+  texts("Privacy & Terms pages", [
+    ["legal.badge", "Badge above the title"],
+    ["legal.updated", "“Last updated” label"],
+    ["legal.alsoRead", "“Also read” label"],
+  ]),
   texts("Footer", [
     ["footer.quickLinks", "Page links heading"],
     ["footer.support", "Support heading"],
@@ -245,6 +251,7 @@ const GROUPS: { title: string; sections: Section[] }[] = [
       { key: "seo", label: "Search & sharing", note: "Site title and description", icon: SearchIcon },
       { key: "contact", label: "Contact details", note: "Phone, email, address", icon: ContactIcon },
       { key: "footer", label: "Footer & social", note: "Footer text and social links", icon: MailIcon },
+      { key: "email", label: "Email notifications", note: "Where contact messages go", icon: MessageIcon },
     ],
   },
   {
@@ -255,6 +262,13 @@ const GROUPS: { title: string; sections: Section[] }[] = [
       { key: "process", label: "Home working process", note: "Steps on the Home page", icon: ProcessIcon },
       { key: "company", label: "Company page", note: "Quote and mission", icon: ClientIcon },
       { key: "reviews", label: "Reviews page", note: "Page heading", icon: ReviewIcon },
+    ],
+  },
+  {
+    title: "Legal",
+    sections: [
+      { key: "privacy", label: "Privacy Policy", note: "/privacy page", icon: BlogIcon },
+      { key: "terms", label: "Terms of Service", note: "/terms page", icon: BlogIcon },
     ],
   },
   {
@@ -384,6 +398,24 @@ export default function SettingsPage({ focusId }: PageProps) {
                 },
               ]}
               onSave={(footer) => saveSettings({ footer })}
+            />
+          )}
+
+          {section === "email" && <MailSettingsEditor />}
+
+          {(section === "privacy" || section === "terms") && (
+            <ObjectEditor
+              embedded
+              title={section === "privacy" ? "Privacy Policy" : "Terms of Service"}
+              description={`The ${section === "privacy" ? "/privacy" : "/terms"} page, linked from the footer of every page.`}
+              value={settings.legal[section]}
+              fields={[
+                { type: "text", path: "title", label: "Page title", required: true },
+                { type: "date", path: "updated", label: "Last updated", hint: "Change it whenever you edit the text." },
+                { type: "textarea", path: "intro", label: "Introduction", rows: 3 },
+                { type: "markdown", path: "body", label: "Text", hint: "\"## \" starts a section (listed in the table of contents); \"- \" starts a list item." },
+              ]}
+              onSave={(page) => saveSettings({ legal: { ...getContent().settings.legal, [section]: page } })}
             />
           )}
 
