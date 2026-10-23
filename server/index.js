@@ -32,6 +32,8 @@ const UPLOAD_DIR = path.resolve(root, process.env.UPLOAD_DIR || "server/uploads"
 const DIST_DIR = path.resolve(root, process.env.DIST_DIR || "dist");
 const DEFAULT_CONTENT = path.join(root, "src/content/defaultContent.json");
 const COOKIE = "do_admin";
+/** Optional: the dashboard's own address, e.g. admin.designops.agency (see server/README.md). */
+const ADMIN_HOST = (process.env.ADMIN_HOST || "").trim().toLowerCase();
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -61,6 +63,26 @@ function writeJson(file, value) {
   const tmp = `${file}.${process.pid}.tmp`;
   fs.writeFileSync(tmp, JSON.stringify(value, null, 2));
   fs.renameSync(tmp, file);
+  seen[file] = modified(file);
+}
+
+// Hosting can run several copies of this server (e.g. one for the website and
+// one for the admin subdomain). Each keeps the content and admin account in
+// memory, so before every request it re-reads a file another copy has changed.
+const seen = {};
+const modified = (file) => {
+  try {
+    return fs.statSync(file).mtimeMs;
+  } catch {
+    return 0;
+  }
+};
+/** `current` again, or the file's new value when it changed on disk since this copy last read or wrote it. */
+function fresh(file, current) {
+  const time = modified(file);
+  if (!time || time === seen[file]) return current;
+  seen[file] = time;
+  return readJson(file, current);
 }
 
 if (!fs.existsSync(files.content)) {
@@ -68,7 +90,7 @@ if (!fs.existsSync(files.content)) {
   console.log("Created", files.content, "from the default site content.");
 }
 
-let content = readJson(files.content, null);
+let content = fresh(files.content, null);
 if (!content) throw new Error(`Could not read ${files.content}`);
 {
   const migrated = migrate(content, readJson(DEFAULT_CONTENT, {}));
@@ -105,7 +127,7 @@ function passwordMatches(password, { salt, hash }) {
   return candidate.length === expected.length && crypto.timingSafeEqual(candidate, expected);
 }
 
-let admin = readJson(files.admin, null);
+let admin = fresh(files.admin, null);
 if (!admin && process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) {
   admin = { email: process.env.ADMIN_EMAIL.trim().toLowerCase(), name: process.env.ADMIN_NAME || "Admin", ...hashPassword(process.env.ADMIN_PASSWORD) };
   writeJson(files.admin, admin);
@@ -189,7 +211,40 @@ app.use((req, res, next) => {
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
+app.use((req, res, next) => {
+  content = fresh(files.content, content);
+  admin = fresh(files.admin, admin);
+  const adminPage = /^\/admin(\/|$)/.test(req.path);
+  const onAdminHost = Boolean(ADMIN_HOST) && req.hostname === ADMIN_HOST;
+  if (adminPage || onAdminHost) res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  // With ADMIN_HOST set, the dashboard lives on its own address and the website on the other;
+  // files and API calls work on both (the dashboard shows uploaded images from /uploads).
+  if (!ADMIN_HOST || req.method !== "GET" || /^\/(api|uploads|assets|videos)\//.test(req.path) || /\.[a-z0-9]+$/i.test(req.path)) return next();
+  if (onAdminHost && !adminPage) return res.redirect(302, "/admin");
+  if (!onAdminHost && adminPage) return res.redirect(302, `${req.protocol}://${ADMIN_HOST}${req.originalUrl}`);
+  next();
+});
 app.use(express.json({ limit: "8mb" }));
+
+// Search engines: the website is listed, the dashboard and API are not.
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  if (ADMIN_HOST && req.hostname === ADMIN_HOST) return res.send("User-agent: *\nDisallow: /\n");
+  res.send(`User-agent: *\nDisallow: /admin\nDisallow: /api/\n\nSitemap: ${req.protocol}://${req.get("host")}/sitemap.xml\n`);
+});
+
+app.get("/sitemap.xml", (req, res) => {
+  const site = `${req.protocol}://${req.get("host")}`;
+  const shown = publicContent();
+  const pages = [
+    ...["/", "/services", "/work", "/blog", "/company", "/reviews", "/contact", "/privacy", "/terms"].map((loc) => ({ loc })),
+    ...shown.services.map((s) => ({ loc: `/services/${s.slug}` })),
+    ...shown.projects.map((p) => ({ loc: `/work/${p.slug}` })),
+    ...shown.posts.map((p) => ({ loc: `/blog/${p.slug}`, lastmod: p.date })),
+  ];
+  const urls = pages.map(({ loc, lastmod }) => `  <url><loc>${escapeHtml(site + loc)}</loc>${lastmod ? `<lastmod>${escapeHtml(lastmod)}</lastmod>` : ""}</url>`);
+  res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`);
+});
 
 // Public content (everything the site renders).
 app.get("/api/content", (req, res) => {
@@ -267,17 +322,30 @@ app.post("/api/admin/mail/test", requireAdmin, async (req, res) => {
 // Visit counts for the dashboard reports: per day, the page views, new visitors
 // (counted once a day by the browser), pages, traffic sources and device types.
 // No cookies, IPs or other personal data are stored.
-const visits = readJson(files.visits, {});
+// Counts not written yet; merged into the file (not replacing it), so several copies of the server add up.
+let unsaved = {};
 const visitLimit = limiter(120, 60 * 1000);
 let visitsTimer = null;
 const KEEP_DAYS = 400;
 // Pages and sources come from the browser, so each day keeps at most this many
 // different ones; the rest are counted as "Other" (keeps the file small).
 const MAX_KEYS = 200;
-const bump = (counts, key) => {
+const bump = (counts, key, by = 1) => {
   const name = key in counts || Object.keys(counts).length < MAX_KEYS ? key : "Other";
-  counts[name] = (counts[name] || 0) + 1;
+  counts[name] = (counts[name] || 0) + by;
 };
+const emptyDay = () => ({ views: 0, visitors: 0, pages: {}, sources: {}, devices: {} });
+
+/** Adds the counts of `from` into `into` (both day → counts). */
+function addVisits(into, from) {
+  for (const [day, counts] of Object.entries(from)) {
+    const target = (into[day] ||= emptyDay());
+    target.views += counts.views;
+    target.visitors += counts.visitors;
+    for (const key of ["pages", "sources", "devices"]) for (const [name, n] of Object.entries(counts[key])) bump(target[key], name, n);
+  }
+  return into;
+}
 
 app.post("/api/visit", (req, res) => {
   res.status(204).end();
@@ -287,7 +355,7 @@ app.post("/api/visit", (req, res) => {
   if (!page.startsWith("/") || page.startsWith("/admin")) return;
   const device = ["mobile", "tablet", "desktop"].includes(body.device) ? body.device : "desktop";
   const day = new Date().toISOString().slice(0, 10);
-  const today = (visits[day] ||= { views: 0, visitors: 0, pages: {}, sources: {}, devices: {} });
+  const today = (unsaved[day] ||= emptyDay());
   today.views++;
   bump(today.pages, page);
   bump(today.devices, device);
@@ -310,13 +378,15 @@ app.post("/api/visit", (req, res) => {
   // Written at most every 10 seconds; old days are dropped.
   visitsTimer ||= setTimeout(() => {
     visitsTimer = null;
+    const visits = addVisits(readJson(files.visits, {}), unsaved);
+    unsaved = {};
     const oldest = new Date(Date.now() - KEEP_DAYS * 86_400_000).toISOString().slice(0, 10);
     for (const key of Object.keys(visits)) if (key < oldest) delete visits[key];
     writeJson(files.visits, visits);
   }, 10_000);
 });
 
-app.get("/api/admin/visits", requireAdmin, (req, res) => res.json(visits));
+app.get("/api/admin/visits", requireAdmin, (req, res) => res.json(addVisits(readJson(files.visits, {}), unsaved)));
 
 // Auth.
 app.post("/api/auth/login", (req, res) => {

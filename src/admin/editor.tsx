@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { siteUrl } from "./api";
 import { Fields, missingFields, newId, type Field } from "./fields";
 import { DownIcon, ExternalIcon, PlusIcon, SearchIcon, TrashIcon, UpIcon } from "./icons";
 
@@ -255,7 +256,7 @@ export function CollectionEditor<T extends { id: string }>({
                 <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[18px]">{config.itemTitle(selected) || `New ${config.singular.toLowerCase()}`}</h2>
                 <div className="flex gap-[8px]">
                   {config.viewUrl && !isDirty && (
-                    <a className={secondaryButton} href={config.viewUrl(selected)} target="_blank" rel="noreferrer">
+                    <a className={secondaryButton} href={siteUrl(config.viewUrl(selected))} target="_blank" rel="noreferrer">
                       <ExternalIcon size={16} /> View
                     </a>
                   )}

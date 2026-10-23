@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "server": "node server/index.js",
     "start": "node server/index.js",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "deploy": "node scripts/make-deploy.mjs"
   },
   "dependencies": {
     "express": "4.21.2",

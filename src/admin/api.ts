@@ -3,6 +3,15 @@ import type { Content, Message, PendingReview } from "@/content/types";
 
 // Calls to the admin API (server/index.js).
 
+/**
+ * A page of the public website. When the dashboard runs on its own address
+ * (admin.example.com), the website is on example.com.
+ */
+export function siteUrl(path: string) {
+  const { protocol, hostname, port } = window.location;
+  return hostname.startsWith("admin.") ? `${protocol}//${hostname.slice(6)}${port ? `:${port}` : ""}${path}` : path;
+}
+
 export class ApiError extends Error {
   constructor(message: string, readonly status: number) {
     super(message);

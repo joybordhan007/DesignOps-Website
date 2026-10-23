@@ -45,10 +45,12 @@ While developing, `npm run dev` (Vite, port 8443) forwards `/api` and
 
 ## Put it on cPanel hosting (Node.js)
 
-1. On your computer run `npm run build`.
-2. Upload these to a folder on the hosting, e.g. `designops` (File Manager or FTP):
-   `dist/`, `server/` (without `data/`, `uploads/`, `.env`), `src/content/defaultContent.json`,
-   `package.json`.
+Step-by-step guide (Bangla), including the admin subdomain: **[DEPLOY.md](../DEPLOY.md)**.
+
+1. On your computer run `npm run deploy`. It builds the site and writes
+   `deploy/designops-app.zip` (the program) and `deploy/designops-data.zip`
+   (your local content and uploads — upload that one only the first time).
+2. Upload and extract them in a folder outside `public_html`, e.g. `designops-app`.
 3. cPanel → **Setup Node.js App** → **Create Application**
    - Node.js version: **20** or newer
    - Application mode: Production
@@ -60,6 +62,8 @@ While developing, `npm run dev` (Vite, port 8443) forwards `/api` and
    - `ADMIN_PASSWORD` = your login password
    - `ADMIN_NAME` = the name shown in the dashboard
    - `SESSION_SECRET` = any long random text (optional but recommended)
+   - `ADMIN_HOST` = the dashboard's own address, e.g. `admin.designops.agency` (optional;
+     point that subdomain at the same app, see DEPLOY.md step 7)
 5. Click **Run NPM Install**, then **Restart**.
 6. Open `https://your-domain/admin` and sign in.
 
@@ -71,12 +75,12 @@ recreated from the environment variables.
 
 ### Updating the site later
 
-Run `npm run build` again and upload the new `dist/` folder (and `server/` if it
-changed), then click **Restart** in Setup Node.js App. Your content, messages and
-uploads stay as they are.
+Run `npm run deploy` again, upload and extract only `designops-app.zip`, then
+click **Restart** in Setup Node.js App. Your content, messages and uploads stay
+as they are.
 
-### Before going live
+### Search engines
 
-`.figma/make/site.json` has `"robots": { "index": false }`, which tells search
-engines not to list the site. Set it to `true` and rebuild when you want Google
-to index it.
+The server answers `/robots.txt` (dashboard and API excluded) and builds
+`/sitemap.xml` from the content. `.figma/make/site.json` → `robots.index` must
+stay `true`, or the built pages tell search engines not to list the site.

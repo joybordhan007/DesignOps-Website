@@ -24,3 +24,6 @@ logs/
 server/.env
 server/data/
 server/uploads/
+
+# Upload packages made by npm run deploy
+/deploy/

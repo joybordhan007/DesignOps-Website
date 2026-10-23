@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type FormEvent } from "react";
 import type { Message, PendingReview } from "@/content/types";
-import { api, ApiError, type AdminUser } from "./api";
+import { api, ApiError, siteUrl, type AdminUser } from "./api";
 import { confirmLeave, ToastHost, toast } from "./editor";
 import { inputClass as inputClassName } from "./fields";
 import AdminSearch from "./search";
@@ -291,7 +291,7 @@ function Sidebar({ section, navigate, open, onClose, counts }: { section: string
 
         <div className="border-[rgba(255,255,255,0.08)] border-t px-[24px] py-[18px] max-lg:px-[16px]">
           <a
-            href="/"
+            href={siteUrl("/")}
             target="_blank"
             rel="noreferrer"
             className="bg-[rgba(255,255,255,0.05)] flex font-['Inter:Medium'] font-medium gap-[12px] items-center px-[12px] py-[10px] rounded-[8px] text-[#e5e5e5] text-[14px] transition-colors hover:bg-[rgba(0,182,202,0.15)]"

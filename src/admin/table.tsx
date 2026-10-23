@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ComponentType } from "react"
 import { createPortal } from "react-dom";
 import { formatDate } from "@/content/helpers";
 import type { Listed } from "@/content/types";
+import { siteUrl } from "./api";
 import { card, PageHeader, primaryButton, same, SaveButtons, secondaryButton, toast, useDirtyFlag } from "./editor";
 import { Fields, missingFields, Switch, type Field } from "./fields";
 import { BackIcon, DownIcon, EditIcon, ExternalIcon, MoreIcon, PlusIcon, SearchIcon, TrashIcon, UpIcon } from "./icons";
@@ -168,7 +169,7 @@ function ItemTable<T extends Item>({ config, items, onSave, navigate }: { config
                         label={item.title}
                         actions={[
                           { label: "Edit", icon: EditIcon, run: () => open(item) },
-                          ...(item.active ? [{ label: "View on website", icon: ExternalIcon, run: () => window.open(config.viewUrl(item), "_blank", "noopener") }] : []),
+                          ...(item.active ? [{ label: "View on website", icon: ExternalIcon, run: () => window.open(siteUrl(config.viewUrl(item)), "_blank", "noopener") }] : []),
                           ...(!query && index > 0 ? [{ label: "Move up", icon: UpIcon, run: () => move(index, -1) }] : []),
                           ...(!query && index < items.length - 1 ? [{ label: "Move down", icon: DownIcon, run: () => move(index, 1) }] : []),
                           { label: "Delete", icon: TrashIcon, run: () => remove(item), danger: true },
@@ -333,7 +334,7 @@ function ItemEditor<T extends Item>({ config, item, items, onSave, navigate }: {
         </div>
         <div className="flex flex-wrap gap-[10px]">
           {item.active && !isDirty && (
-            <a className={secondaryButton} href={config.viewUrl(item)} target="_blank" rel="noreferrer">
+            <a className={secondaryButton} href={siteUrl(config.viewUrl(item))} target="_blank" rel="noreferrer">
               <ExternalIcon size={16} /> View on website
             </a>
           )}
