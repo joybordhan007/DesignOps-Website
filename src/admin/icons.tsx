@@ -41,7 +41,6 @@ export const SearchIcon = (p: IconProps) => (
   </Svg>
 );
 export const MessageIcon = solid("M5 3h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4V5a2 2 0 0 1 1-2zm2.5 4.5v1.8h9V7.5h-9zm0 3.6v1.8h6v-1.8h-6z");
-export const BellIcon = solid("M12 2a6 6 0 0 1 6 6v4l2 3v1H4v-1l2-3V8a6 6 0 0 1 6-6zm-2.5 16h5a2.5 2.5 0 0 1-5 0z");
 export const ChevronDown = (p: IconProps) => (
   <Svg {...p}>
     <path d="m6 9 6 6 6-6" />

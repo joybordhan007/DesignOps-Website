@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Rich from "@/components/Rich";
 import { ReviewAvatar, Stars } from "@/components/ReviewBits";
 import ReviewForm from "@/components/ReviewForm";
+import { ratingSummary } from "@/content/helpers";
 import { useContent } from "@/content/store";
 import type { Review } from "@/content/types";
 import CtaSection from "./sections/CtaSection";
@@ -50,7 +51,7 @@ function ReviewCard({ review }: { review: Review }) {
 export default function Reviews() {
   const { settings, reviews } = useContent();
   const [writing, setWriting] = useState(false);
-  const { score, count } = settings.rating;
+  const { value, score, count } = ratingSummary(reviews, settings.labels.reviews.countText);
 
   return (
     <Page name="Reviews">
@@ -65,7 +66,7 @@ export default function Reviews() {
         <div className="flex gap-[40px] items-center">
           <p className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#424242] text-[100px] tracking-[2px]">{score}</p>
           <div className="flex flex-col gap-[14px]">
-            <Stars rating={Math.round(Number(score) || 5)} className="size-[36px]" />
+            <Stars rating={Math.round(value)} className="size-[36px]" />
             <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#424242] text-[28px]">{count}</p>
           </div>
           <div className="bg-[rgba(0,0,0,0.1)] h-[100px] mx-[16px] w-px" aria-hidden="true" />

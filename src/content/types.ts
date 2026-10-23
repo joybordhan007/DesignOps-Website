@@ -194,6 +194,8 @@ export type Labels = {
   };
   reviews: {
     empty: string;
+    /** Under the rating card stars; {n} = number of published reviews. */
+    countText: string;
     formTitle: string;
     formText: string;
     formSubmit: string;
@@ -265,7 +267,6 @@ export type Settings = {
     /** Social profile icons, in this order. */
     socials: SocialLink[];
   };
-  rating: { score: string; count: string };
   /** rich: Reviews page heading. */
   reviewsPage: { title: string; subtitle: string };
   labels: Labels;

@@ -168,6 +168,8 @@ function limiter(limit, windowMs) {
     const recent = (hits.get(key) || []).filter((t) => now - t < windowMs);
     recent.push(now);
     hits.set(key, recent);
+    // Forget visitors whose window has passed, so the map can't grow forever.
+    if (hits.size > 5000) for (const [k, times] of hits) if (now - times[times.length - 1] >= windowMs) hits.delete(k);
     return recent.length <= limit;
   };
 }
@@ -214,7 +216,13 @@ const visits = readJson(files.visits, {});
 const visitLimit = limiter(120, 60 * 1000);
 let visitsTimer = null;
 const KEEP_DAYS = 400;
-const bump = (counts, key) => (counts[key] = (counts[key] || 0) + 1);
+// Pages and sources come from the browser, so each day keeps at most this many
+// different ones; the rest are counted as "Other" (keeps the file small).
+const MAX_KEYS = 200;
+const bump = (counts, key) => {
+  const name = key in counts || Object.keys(counts).length < MAX_KEYS ? key : "Other";
+  counts[name] = (counts[name] || 0) + 1;
+};
 
 app.post("/api/visit", (req, res) => {
   res.status(204).end();
@@ -295,7 +303,8 @@ app.put("/api/admin/content/:section", requireAdmin, (req, res) => {
   } else {
     return res.status(404).json({ error: "Unknown section." });
   }
-  content = { ...content, [section]: value };
+  // Saved in the current shape even if an older dashboard tab sent it.
+  content = migrate({ ...content, [section]: value }, readJson(DEFAULT_CONTENT, {}));
   writeJson(files.content, content);
   res.json(content);
 });

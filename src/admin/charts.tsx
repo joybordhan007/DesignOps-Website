@@ -169,7 +169,7 @@ export function StackedBars({ labels, titles, series, height = 280 }: { labels: 
   return (
     <div ref={ref} className="relative w-full" style={{ height }}>
       {width > 0 && (
-        <svg width={width} height={height} className="block" role="img" aria-label={labels.map((l, i) => `${titles[i]}: ${totals[i]}`).join(", ")}>
+        <svg width={width} height={height} className="block" role="img" aria-label={labels.map((_, i) => `${titles[i]}: ${totals[i]}`).join(", ")}>
           <Axes width={width} height={height} max={max} labels={labels} x={x} />
           {labels.map((_, i) => {
             let top = base;

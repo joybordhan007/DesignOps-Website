@@ -102,10 +102,6 @@
         }
       ]
     },
-    "rating": {
-      "score": "4.9",
-      "count": "200+ reviews"
-    },
     "reviewsPage": {
       "title": "What Our *Clients* Say",
       "subtitle": "Real words from the teams we've designed and built for. Worked with us? We'd love to hear from you."
@@ -180,6 +176,7 @@
         "formTitle": "Write a review",
         "formText": "Tell others what it was like to work with us. Your email isn't shown on the website.",
         "formSubmit": "SUBMIT REVIEW",
+        "countText": "{n} reviews",
         "thanksTitle": "Thank you for your review!",
         "thanksText": "We'll check it shortly. Once it's approved it will appear on this page.",
         "rating": "Your rating",

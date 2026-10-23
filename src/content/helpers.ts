@@ -1,5 +1,5 @@
 import { getContent } from "./store";
-import type { Labels, Post, Project, Service } from "./types";
+import type { Labels, Post, Project, Review, Service } from "./types";
 
 // Lookups and URLs for the editable content.
 
@@ -26,6 +26,16 @@ export function formatDate(date: string) {
 /** Video poster: the first-frame still saved next to bundled hero videos. */
 export function posterFor(video: string) {
   return video.startsWith("/videos/") ? video.replace(/\.(mp4|webm)$/i, ".webp") : undefined;
+}
+
+/**
+ * The rating card, worked out from the published reviews: the average stars
+ * (e.g. "4.8") and the count text with {n} replaced, e.g. "12 reviews".
+ */
+export function ratingSummary(reviews: Review[], countText: string) {
+  const shown = reviews.filter((review) => review.active);
+  const value = shown.length ? shown.reduce((sum, review) => sum + review.rating, 0) / shown.length : 0;
+  return { value, score: value.toFixed(1), count: countText.replace("{n}", String(shown.length)) };
 }
 
 /** Years like 2019 read better without a thousands separator. */

@@ -1,3 +1,4 @@
+import { ratingSummary } from "@/content/helpers";
 import { useContent } from "@/content/store";
 import ArrowButton from "@/components/ArrowButton";
 import { ReviewAvatar } from "@/components/ReviewBits";
@@ -25,7 +26,9 @@ function ReviewCard({ review }: { review: Review }) {
 
 export default function Reviews() {
   const { settings, reviews } = useContent();
-  const full = Math.floor(Number(settings.rating.score) || 5);
+  const rating = ratingSummary(reviews, settings.labels.reviews.countText);
+  const full = Math.floor(rating.value);
+  const half = rating.value - full >= 0.25;
   return (
     <section className="flex flex-col gap-[28px] py-[48px]" data-name="Reviews">
       <div className="mx-auto px-[20px] w-full max-w-[760px]">
@@ -35,15 +38,15 @@ export default function Reviews() {
       <div className="mx-auto px-[20px] w-full max-w-[760px]">
         <div className="bg-white flex flex-col gap-[20px] items-center px-[24px] py-[28px] rounded-[12px] shadow-[0px_1px_6px_rgba(0,0,0,0.1)]">
           <div className="flex gap-[20px] items-center">
-            <p className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#424242] text-[20px]">{settings.rating.score}</p>
+            <p className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#424242] text-[20px]">{rating.score}</p>
             <div className="flex flex-col gap-[8px]">
-              <div className="flex gap-[2px]" aria-label={`${settings.rating.score} out of 5 stars`}>
+              <div className="flex gap-[2px]" aria-label={`${rating.score} out of 5 stars`}>
                 {Array.from({ length: Math.min(full, 5) }, (_, i) => (
                   <img key={i} alt="" className="block size-[24px]" src="/assets/shared/icons/star.svg" />
                 ))}
-                {full < 5 && <img alt="" className="block size-[24px]" src="/assets/shared/icons/star-half.svg" />}
+                {half && full < 5 && <img alt="" className="block size-[24px]" src="/assets/shared/icons/star-half.svg" />}
               </div>
-              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#424242] text-[16px]">{settings.rating.count}</p>
+              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#424242] text-[16px]">{rating.count}</p>
             </div>
           </div>
           <div className="border-[rgba(0,0,0,0.08)] border-t flex gap-[32px] items-center justify-center pt-[18px] w-full">

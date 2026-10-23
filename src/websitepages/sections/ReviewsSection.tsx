@@ -1,4 +1,5 @@
 import ArrowButton from "@/components/ArrowButton";
+import { ratingSummary } from "@/content/helpers";
 import { useContent } from "@/content/store";
 import { ReviewAvatar } from "@/components/ReviewBits";
 import type { Review } from "@/content/types";
@@ -59,6 +60,7 @@ function ReviewCard({ review }: { review: Review }) {
 
 export default function ReviewsSection({ className = "mt-[160px]" }: { className?: string }) {
   const { settings, reviews } = useContent();
+  const rating = ratingSummary(reviews, settings.labels.reviews.countText);
   // Each looping set must be at least as wide as the visible area to loop seamlessly.
   const repeats = reviews.length ? Math.ceil(MARQUEE_WIDTH / (reviews.length * CARD_WIDTH)) : 0;
   const set = Array.from({ length: repeats }, () => reviews).flat();
@@ -73,10 +75,10 @@ export default function ReviewsSection({ className = "mt-[160px]" }: { className
         <div className="bg-white border-[rgba(0,0,0,0.1)] border-r border-solid flex flex-col h-full items-center justify-between px-[24px] py-[40px] relative shrink-0 w-[390px] z-[1]">
           <Logos hidden />
           <div className="flex flex-col gap-[24px] items-center shrink-0 w-[200px]">
-            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#424242] text-[100px] text-center tracking-[2px] w-full">{settings.rating.score}</p>
+            <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#424242] text-[100px] text-center tracking-[2px] w-full">{rating.score}</p>
             <div className="flex flex-col gap-[16px] items-center w-full">
-              <Stars score={Number(settings.rating.score) || 5} />
-              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#424242] text-[28px] text-center w-full">{settings.rating.count}</p>
+              <Stars score={rating.value} />
+              <p className="font-['Inter:Medium'] font-medium leading-[1.2] text-[#424242] text-[28px] text-center w-full">{rating.count}</p>
             </div>
           </div>
           <Logos />

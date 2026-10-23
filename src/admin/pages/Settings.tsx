@@ -194,6 +194,7 @@ const labelFields: Field[] = [
     label: "Reviews page & “Write a review” popup",
     fields: [
       { type: "text", path: "reviews.empty", label: "Text when there are no reviews", wide: true },
+      { type: "text", path: "reviews.countText", label: "Rating card count", hint: "{n} becomes the number of published reviews." },
       { type: "text", path: "reviews.formTitle", label: "Popup title" },
       { type: "text", path: "reviews.formSubmit", label: "Submit button" },
       { type: "textarea", path: "reviews.formText", label: "Popup text", rows: 2 },

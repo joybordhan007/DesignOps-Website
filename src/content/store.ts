@@ -5,8 +5,9 @@ import type { Content } from "./types";
 // The site's editable content. On the real server it is embedded in the page
 // (window.__SITE_CONTENT__); otherwise it is fetched from /api/content, and if
 // there is no server at all (e.g. a static preview) the bundled defaults are used.
-// Content from the server is brought up to the current shape first (see
-// server/migrate.js), so an older saved file can't leave a page without a field.
+// Fetched content is brought up to the current shape first (see
+// server/migrate.js), so an older saved file can't leave a page without a field;
+// the server does the same before embedding it.
 //
 // The website only sees active services, projects, posts and reviews; the admin
 // dashboard loads and edits everything.
@@ -26,9 +27,13 @@ const upToDate = (content: Content) => (defaults ? migrate(content, defaults) : 
 
 export async function loadContent(): Promise<Content> {
   if (current) return current;
+  // The server keeps its content in the current shape and embeds it in the page,
+  // so the bundled defaults are only downloaded when there is no server.
+  const embedded = typeof window !== "undefined" ? window.__SITE_CONTENT__ ?? null : null;
+  if (embedded) return (current = embedded);
   const loadDefaults = import("./defaultContent.json").then((module) => (defaults = module.default as unknown as Content));
-  let loaded = typeof window !== "undefined" ? window.__SITE_CONTENT__ ?? null : null;
-  if (!loaded) {
+  let loaded: Content | null = null;
+  {
     try {
       const response = await fetch("/api/content", { headers: { Accept: "application/json" } });
       if (!response.ok || !response.headers.get("content-type")?.includes("json")) throw new Error("no api");

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { formatDate, postUrl, projectUrl, serviceUrl } from "@/content/helpers";
+import { formatDate, postUrl, projectUrl, ratingSummary, serviceUrl } from "@/content/helpers";
 import { getContent, useContent } from "@/content/store";
 import type { Client, Faq, PendingReview, Post, Project, Review, Service, Stat } from "@/content/types";
 import type { PageProps } from "../AdminApp";
@@ -338,6 +338,26 @@ const reviewsConfig: CollectionConfig<Review> = {
   validate: (items) => (items.some((r) => !(r.rating >= 1 && r.rating <= 5)) ? "Ratings must be between 1 and 5." : null),
 };
 
+/** The website's rating card, worked out from the published reviews (nothing to type in). */
+function RatingSummary({ reviews, countText }: { reviews: Review[]; countText: string }) {
+  const { value, score, count } = ratingSummary(reviews, countText);
+  return (
+    <section className={`${card} flex flex-wrap gap-[20px] items-center p-[20px]`}>
+      <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[40px]">{score}</span>
+      <span className="flex flex-col gap-[4px]">
+        <span className="text-[#f5a623] text-[20px] tracking-[2px]" aria-label={`${score} out of 5 stars`}>
+          {"★".repeat(Math.round(value))}
+          <span className="text-[#dcdcdc]">{"★".repeat(5 - Math.round(value))}</span>
+        </span>
+        <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[14px]">{count}</span>
+      </span>
+      <p className="font-['Inter:Regular'] leading-[1.5] max-w-[440px] ml-auto text-[#707070] text-[13px]">
+        The rating card on the website updates by itself: the average of the published reviews and how many there are. Hidden reviews aren't counted.
+      </p>
+    </section>
+  );
+}
+
 function PendingCard({ review, onDone }: { review: PendingReview; onDone: () => void }) {
   const [busy, setBusy] = useState(false);
   const act = async (approve: boolean) => {
@@ -444,17 +464,7 @@ export function ReviewsPage({ focusId, pendingReviews, reloadPendingReviews }: P
       ) : (
         <CollectionEditor config={reviewsConfig} items={reviews} onSave={(items) => api.save("reviews", items)} focusId={focusId} />
       )}
-      <ObjectEditor
-        embedded
-        title="Rating card"
-        description="The big score next to the reviews."
-        value={settings.rating}
-        fields={[
-          { type: "text", path: "score", label: "Score", placeholder: "4.9", hint: "Stars are drawn from this number." },
-          { type: "text", path: "count", label: "Text under the stars", placeholder: "200+ reviews" },
-        ]}
-        onSave={(rating) => api.save("settings", { ...getContent().settings, rating })}
-      />
+      <RatingSummary reviews={reviews} countText={settings.labels.reviews.countText} />
     </div>
   );
 }

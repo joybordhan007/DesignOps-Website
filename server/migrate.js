@@ -50,7 +50,10 @@ export function migrate(content, defaults) {
       meta: { enabled: on, pixelId: tracking.metaPixelId || "", domainVerification: tracking.verification?.meta || "" },
     };
   }
-  const settings = withDefaults({ ...old, heroes, heroVideos, ...(footer && { footer }), ...(tracking && { tracking }) }, defaults?.settings || {});
+  // The rating card is now worked out from the reviews themselves.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { rating, ...current } = old;
+  const settings = withDefaults({ ...current, heroes, heroVideos, ...(footer && { footer }), ...(tracking && { tracking }) }, defaults?.settings || {});
 
   // Services used to share the Home page working process; each now starts with a copy of it.
   const services = fill(content.services, (item) => ({ ...listed(item), showOnHome: true })).map(({ description, ...service }) => ({
