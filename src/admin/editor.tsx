@@ -50,7 +50,7 @@ export function ToastHost() {
   }, [current]);
   if (!current) return null;
   return (
-    <div role="status" className={`bottom-[24px] fixed font-['Inter:Medium'] font-medium px-[18px] py-[12px] right-[24px] rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.18)] text-[14px] text-white z-[100] ${current.error ? "bg-[#d93a3f]" : "bg-[#191919]"}`}>
+    <div role="status" className={`bottom-[24px] fixed font-['Inter:Medium'] font-medium px-[18px] py-[12px] right-[24px] rounded-[6px] shadow-[0px_8px_24px_rgba(0,0,0,0.18)] text-[14px] text-white z-[100] ${current.error ? "bg-[#d93a3f]" : "bg-[#191919]"}`}>
       {current.text}
     </div>
   );
@@ -74,7 +74,7 @@ export const primaryButton =
   "bg-[#00b6ca] cursor-pointer flex font-['Inter:Semi_Bold'] font-semibold gap-[8px] items-center px-[18px] py-[10px] rounded-[6px] text-[14px] text-white transition-colors hover:bg-[#009fb0] disabled:cursor-not-allowed disabled:opacity-40";
 export const secondaryButton =
   "bg-white border border-[#e3e3e3] cursor-pointer flex font-['Inter:Medium'] font-medium gap-[8px] items-center px-[16px] py-[10px] rounded-[6px] text-[#3e3e3e] text-[14px] transition-colors hover:border-[#00b6ca] hover:text-[#00b6ca] disabled:cursor-not-allowed disabled:opacity-40";
-export const card = "bg-white rounded-[8px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]";
+export const card = "bg-white rounded-[6px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]";
 
 export function SaveButtons({ isDirty, saving, onSave, onDiscard }: { isDirty: boolean; saving: boolean; onSave: () => void; onDiscard: () => void }) {
   return (
@@ -197,7 +197,7 @@ export function CollectionEditor<T extends { id: string }>({
   }, [items]);
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title={config.title} description={config.description}>
         <button type="button" className={secondaryButton} onClick={add}>
           <PlusIcon size={18} /> Add {config.singular.toLowerCase()}
@@ -205,7 +205,7 @@ export function CollectionEditor<T extends { id: string }>({
         <SaveButtons isDirty={isDirty} saving={saving} onSave={save} onDiscard={() => setDraft(items)} />
       </PageHeader>
 
-      <div className="gap-[20px] grid grid-cols-1 items-start lg:grid-cols-[320px_1fr]">
+      <div className="gap-[16px] grid grid-cols-1 items-start lg:grid-cols-[320px_1fr]">
         <div className={`${card} flex flex-col lg:max-h-[calc(100vh-220px)] lg:sticky lg:top-[112px]`}>
           <div className="border-[#f0f0f0] border-b flex gap-[8px] items-center px-[14px] py-[10px]">
             <SearchIcon size={16} className="shrink-0 text-[#9a9a9a]" />
@@ -251,7 +251,7 @@ export function CollectionEditor<T extends { id: string }>({
 
         <div className={`${card} p-[20px]`}>
           {selected ? (
-            <div className="flex flex-col gap-[18px]">
+            <div className="flex flex-col gap-[16px]">
               <div className="border-[#f0f0f0] border-b flex flex-wrap gap-[10px] items-center justify-between pb-[14px]">
                 <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[18px]">{config.itemTitle(selected) || `New ${config.singular.toLowerCase()}`}</h2>
                 <div className="flex gap-[8px]">
@@ -347,7 +347,7 @@ export function ObjectEditor<T>({
         {form}
         {/* Long forms: keep Save in reach while there are changes. */}
         {isDirty && (
-          <div className="bg-[#191919] bottom-[16px] flex flex-wrap gap-[10px] items-center justify-between px-[16px] py-[10px] rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.2)] sticky z-[20]">
+          <div className="bg-[#191919] bottom-[16px] flex flex-wrap gap-[10px] items-center justify-between px-[16px] py-[10px] rounded-[6px] shadow-[0px_8px_24px_rgba(0,0,0,0.2)] sticky z-[20]">
             <span className="font-['Inter:Medium'] font-medium text-[14px] text-white">You have unsaved changes</span>
             <div className="flex gap-[8px]">
               <SaveButtons isDirty={isDirty} saving={saving} onSave={save} onDiscard={() => setDraft(value)} />
@@ -359,7 +359,7 @@ export function ObjectEditor<T>({
   }
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title={title} description={description}>
         <SaveButtons isDirty={isDirty} saving={saving} onSave={save} onDiscard={() => setDraft(value)} />
       </PageHeader>

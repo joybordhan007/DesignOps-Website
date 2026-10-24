@@ -103,10 +103,10 @@ function buildIndex(content: Content, messages: Message[], pending: PendingRevie
   const hidden = (active: boolean) => (active ? undefined : "Hidden");
 
   for (const s of content.services)
-    entries.push({ group: "Services", title: s.title, detail: plain(s.summary), tag: hidden(s.active), to: `/admin/services?item=${s.id}`, fields: [s.title, s.summary, s.eyebrow, s.name, s.slug, s.detail.tagline, s.detail.intro, s.detail.body, ...s.detail.features, ...s.detail.deliverables.flatMap((d) => [d.title, d.text]), ...s.detail.process.flatMap((p) => [p.title, p.text])] });
+    entries.push({ group: "Services", title: s.title, detail: plain(s.summary), tag: hidden(s.active), to: `/admin/services?item=${s.id}`, fields: [s.title, s.summary, s.eyebrow, s.name, s.slug, s.detail.tagline, ...s.detail.intros.flatMap((x) => [x.heading, x.text, ...x.features]), ...s.detail.deliverableSections.flatMap((x) => [x.heading, ...x.items.flatMap((d) => [d.title, d.text])]), ...s.detail.processSections.flatMap((x) => [x.title.lead, x.title.muted, ...x.steps.flatMap((p) => [p.title, p.text])])] });
   for (const p of content.projects)
-    entries.push({ group: "Work", title: p.title, detail: p.category, tag: hidden(p.active), to: `/admin/work?item=${p.id}`, fields: [p.title, p.category, p.summary, p.slug, p.website, p.detail.heading, p.detail.overview, p.detail.goals, ...p.detail.goalPoints, p.detail.challenge.title, p.detail.challenge.text, p.detail.solution.title, p.detail.solution.text, ...p.detail.tags] });
-  for (const p of content.posts) entries.push({ group: "Blog", title: p.title, detail: p.categories.join(", "), tag: hidden(p.active), to: `/admin/blog?item=${p.id}`, fields: [p.title, p.excerpt, p.slug, ...p.categories, p.body] });
+    entries.push({ group: "Work", title: p.title, detail: p.category, tag: hidden(p.active), to: `/admin/work?item=${p.id}`, fields: [p.title, p.category, p.summary, p.slug, p.website, p.detail.overview, p.detail.goals, ...p.detail.goalPoints, ...p.detail.challenges.flatMap((c) => [c.title, c.text, ...c.points]), ...p.detail.solutions.flatMap((x) => [x.title, x.text, x.imageTitle, x.imageText, ...x.features.flatMap((ft) => [ft.title, ft.text])]), ...p.detail.toolSets.flatMap((t) => [t.title, ...t.items])] });
+  for (const p of content.posts) entries.push({ group: "Blog", title: p.title, detail: p.categories.join(", "), tag: hidden(p.active), to: `/admin/blog?item=${p.id}`, fields: [p.title, p.excerpt, p.slug, ...p.categories, ...p.sections.flatMap((x) => [x.heading, x.subheading, x.html.replace(/<[^>]+>/g, " ")])] });
   for (const m of messages)
     entries.push({ group: "Messages", title: `${m.first_name} ${m.last_name}`.trim() || m.email, detail: [m.email, m.company].filter(Boolean).join(" · "), tag: m.read ? undefined : "Unread", to: `/admin/messages?item=${m.id}`, fields: [m.first_name, m.last_name, m.email, m.phone, m.company, m.message] });
   for (const r of pending) entries.push({ group: "Reviews", title: r.name, detail: [r.role, r.company].filter(Boolean).join(" · "), tag: "Waiting", to: "/admin/reviews", fields: [r.name, r.email, r.role, r.company, r.quote] });
@@ -271,7 +271,7 @@ export default function AdminSearch({ navigate, messages, pendingReviews }: { na
 
   return (
     <div ref={box} className="flex-1 max-w-[1000px] relative">
-      <label className={`bg-white border flex gap-[10px] h-[56px] items-center px-[16px] rounded-[10px] transition-colors ${showing ? "border-[#00b6ca]" : "border-transparent"}`}>
+      <label className={`bg-white border flex gap-[10px] h-[56px] items-center px-[16px] rounded-[6px] transition-colors ${showing ? "border-[#00b6ca]" : "border-transparent"}`}>
         <SearchIcon size={22} className="shrink-0 text-[#3e3e3e]" />
         <input
           ref={input}
@@ -296,7 +296,7 @@ export default function AdminSearch({ navigate, messages, pendingReviews }: { na
       </label>
 
       {showing && (
-        <div ref={list} id="admin-search-results" className="absolute bg-white border border-[#ebebeb] left-0 max-h-[min(70vh,560px)] mt-[6px] overflow-y-auto py-[6px] right-0 rounded-[12px] shadow-[0px_12px_32px_rgba(0,0,0,0.14)] z-[40]">
+        <div ref={list} id="admin-search-results" className="absolute bg-white border border-[#ebebeb] left-0 max-h-[min(70vh,560px)] mt-[6px] overflow-y-auto py-[6px] right-0 rounded-[6px] shadow-[0px_12px_32px_rgba(0,0,0,0.14)] z-[40]">
           {groups.map((g) => (
             <section key={g.group} className="py-[4px]">
               <h3 className="font-['Inter:Semi_Bold'] font-semibold px-[16px] py-[6px] text-[#9a9a9a] text-[11px] tracking-[1px] uppercase">{g.group}</h3>

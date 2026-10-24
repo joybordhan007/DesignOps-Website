@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from "react";
 import { uploadFile } from "./api";
-import { DownIcon, PlusIcon, TrashIcon, UpIcon, UploadIcon } from "./icons";
+import RichTextEditor from "./RichTextEditor";
+import { CopyIcon, DownIcon, PlusIcon, TrashIcon, UpIcon, UploadIcon } from "./icons";
 
 // Form fields for the admin editors. A form is described by a list of `Field`s
 // whose `path` points into the item being edited (e.g. "detail.challenge.title").
@@ -13,6 +14,8 @@ export type Field =
   | (Base & { type: "text" | "url" | "date"; path: string; placeholder?: string })
   | (Base & { type: "textarea" | "rich"; path: string; rows?: number })
   | (Base & { type: "markdown"; path: string })
+  /** Formatted text (bold, lists, links, images…) edited in place; stored as clean HTML. */
+  | (Base & { type: "html"; path: string; placeholder?: string })
   | (Base & { type: "number"; path: string })
   | (Base & { type: "slug"; path: string; from: string })
   | (Base & { type: "lines"; path: string; rows?: number })
@@ -21,9 +24,19 @@ export type Field =
   | (Base & { type: "choice"; path: string; options: { value: string; label: string; preview?: ReactNode }[] })
   | (Base & { type: "image" | "video"; path: string })
   | (Base & { type: "group"; fields: Field[]; /** Folded away until clicked (for long lists of small texts). */ collapsible?: boolean })
-  /** A one-off editor written for one setting; it gets the value at `path` and a setter. */
-  | (Base & { type: "custom"; path: string; render: (value: Value, onChange: (next: Value) => void) => ReactNode })
-  | (Base & { type: "objects"; path: string; fields: Field[]; newItem: () => Value; itemLabel: (item: Value, index: number) => string });
+  /** A one-off editor written for one setting; it gets the value at `path` and a setter, plus the whole item. */
+  | (Base & { type: "custom"; path: string; render: (value: Value, onChange: (next: Value) => void, item: Value, onItemChange: (next: Value) => void) => ReactNode })
+  | (Base & {
+      type: "objects";
+      path: string;
+      fields: Field[];
+      newItem: () => Value;
+      itemLabel: (item: Value, index: number) => string;
+      /** Show each item as its own card (for repeatable page sections). */
+      cards?: boolean;
+      /** What one item is called, e.g. "Intro section" (cards) or "deliverable". */
+      itemName?: string;
+    });
 
 export function getPath(obj: Value, path: string): Value {
   return path.split(".").reduce((value, key) => (value == null ? undefined : value[key]), obj);
@@ -228,6 +241,20 @@ function ColorsField({ field, value, onChange }: { field: Base; value: string[];
   );
 }
 
+/** A copy of a list item with fresh ids (its own and its sub-items'), so the copy is independent. */
+function duplicate(item: Value): Value {
+  const copy = structuredClone(item);
+  const renew = (value: Value) => {
+    if (Array.isArray(value)) value.forEach(renew);
+    else if (value && typeof value === "object") {
+      if (typeof value.id === "string") value.id = newId(value.id.split("-")[0] || "item");
+      Object.values(value).forEach(renew);
+    }
+  };
+  renew(copy);
+  return copy;
+}
+
 function ObjectsField({ field, value, onChange }: { field: Extract<Field, { type: "objects" }>; value: Value[]; onChange: (v: Value[]) => void }) {
   const items = value ?? [];
   const move = (i: number, d: number) => {
@@ -235,12 +262,67 @@ function ObjectsField({ field, value, onChange }: { field: Extract<Field, { type
     [next[i], next[i + d]] = [next[i + d], next[i]];
     onChange(next);
   };
+  const add = () => onChange([...items, field.newItem()]);
+
+  if (field.cards) {
+    const name = field.itemName ?? "Section";
+    const remove = (i: number) => window.confirm(`Delete ${name.toLowerCase()} ${i + 1}? Click Save afterwards to keep the change.`) && onChange(items.filter((_, j) => j !== i));
+    const iconButton = "cursor-pointer p-[6px] rounded-[6px] disabled:opacity-30 hover:bg-[#f2f2f2] hover:text-[#00b6ca]";
+    return (
+      <div className="col-span-full flex flex-col gap-[16px]">
+        <div className="flex flex-wrap gap-[12px] items-end justify-between">
+          <div className="flex flex-col gap-[2px]">
+            <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[16px]">
+              {field.label} <span className="font-['Inter:Regular'] font-normal text-[#9a9a9a] text-[13px]">({items.length})</span>
+            </h2>
+            {field.hint && <p className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</p>}
+          </div>
+          <button type="button" className={smallButton} onClick={add}>
+            <PlusIcon size={16} /> Add {name.toLowerCase()}
+          </button>
+        </div>
+        {!items.length && (
+          <button type="button" onClick={add} className="border-2 border-[#e3e3e3] border-dashed cursor-pointer font-['Inter:Regular'] p-[20px] rounded-[6px] text-[#8a8a8a] text-[14px] hover:border-[#9adfe7] hover:text-[#00a0b2]">
+            No {name.toLowerCase()} yet, so this part of the page is hidden. Click to add one.
+          </button>
+        )}
+        {items.map((item, i) => (
+          <section key={item?.id ?? i} className="bg-white border border-[#e6e6e6] rounded-[6px]">
+            <header className="border-[#efefef] border-b flex gap-[10px] items-center px-[16px] py-[10px]">
+              <span className="bg-[#e9f9fb] font-['Inter:Semi_Bold'] font-semibold px-[8px] py-[2px] rounded-[6px] shrink-0 text-[#00a0b2] text-[12px]">
+                {name} {i + 1}
+              </span>
+              <span className="font-['Inter:Medium'] font-medium min-w-0 text-[#3e3e3e] text-[14px] truncate">{field.itemLabel(item, i)}</span>
+              <div className="flex gap-[2px] ml-auto shrink-0 text-[#8a8a8a]">
+                <button type="button" title="Move up" aria-label="Move up" disabled={i === 0} className={iconButton} onClick={() => move(i, -1)}>
+                  <UpIcon size={16} />
+                </button>
+                <button type="button" title="Move down" aria-label="Move down" disabled={i === items.length - 1} className={iconButton} onClick={() => move(i, 1)}>
+                  <DownIcon size={16} />
+                </button>
+                <button type="button" title="Duplicate" aria-label="Duplicate" className={iconButton} onClick={() => onChange([...items.slice(0, i + 1), duplicate(item), ...items.slice(i + 1)])}>
+                  <CopyIcon size={16} />
+                </button>
+                <button type="button" title="Delete" aria-label="Delete" className="cursor-pointer p-[6px] rounded-[6px] hover:bg-[#fdecec] hover:text-[#e5484d]" onClick={() => remove(i)}>
+                  <TrashIcon size={16} />
+                </button>
+              </div>
+            </header>
+            <div className="gap-[16px] grid grid-cols-1 p-[16px] md:grid-cols-2">
+              <Fields fields={field.fields} value={item} onChange={(next) => onChange(items.map((it, j) => (j === i ? next : it)))} />
+            </div>
+          </section>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="col-span-full flex flex-col gap-[10px]">
       <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px]">{field.label}</span>
       {items.map((item, i) => (
-        <div key={i} className="border border-[#ececec] rounded-[8px]">
-          <div className="bg-[#fafafa] border-[#ececec] border-b flex items-center justify-between px-[12px] py-[8px] rounded-t-[8px]">
+        <div key={i} className="border border-[#ececec] rounded-[6px]">
+          <div className="bg-[#fafafa] border-[#ececec] border-b flex items-center justify-between px-[12px] py-[8px] rounded-t-[6px]">
             <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px] truncate">{field.itemLabel(item, i) || `Item ${i + 1}`}</span>
             <div className="flex gap-[2px] text-[#8a8a8a]">
               <button type="button" aria-label="Move up" disabled={i === 0} className="cursor-pointer p-[4px] disabled:opacity-30 hover:text-[#00b6ca]" onClick={() => move(i, -1)}>
@@ -259,8 +341,8 @@ function ObjectsField({ field, value, onChange }: { field: Extract<Field, { type
           </div>
         </div>
       ))}
-      <button type="button" className={`${smallButton} self-start`} onClick={() => onChange([...items, field.newItem()])}>
-        <PlusIcon size={16} /> Add
+      <button type="button" className={`${smallButton} self-start`} onClick={add}>
+        <PlusIcon size={16} /> Add {field.itemName ?? ""}
       </button>
     </div>
   );
@@ -273,8 +355,8 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
       {fields.map((field, index) => {
         if (field.type === "group" && field.collapsible) {
           return (
-            <details key={index} className="border border-[#ececec] col-span-full group/fold rounded-[8px] open:bg-[#fcfcfc]">
-              <summary className="cursor-pointer flex gap-[10px] items-center justify-between list-none px-[16px] py-[13px] rounded-[8px] select-none hover:bg-[#f7fbfc] [&::-webkit-details-marker]:hidden">
+            <details key={index} className="border border-[#ececec] col-span-full group/fold rounded-[6px] open:bg-[#fcfcfc]">
+              <summary className="cursor-pointer flex gap-[10px] items-center justify-between list-none px-[16px] py-[13px] rounded-[6px] select-none hover:bg-[#f7fbfc] [&::-webkit-details-marker]:hidden">
                 <span className="flex flex-col gap-[2px]">
                   <span className="font-['Inter:Semi_Bold'] font-semibold text-[#222] text-[14px]">{field.label}</span>
                   {field.hint && <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
@@ -306,6 +388,17 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
             return <MediaField key={field.path} field={field} value={current ?? ""} onChange={set} />;
           case "markdown":
             return <MarkdownField key={field.path} field={field} value={current ?? ""} onChange={set} />;
+          case "html":
+            return (
+              <div key={field.path} className="col-span-full flex flex-col gap-[6px]">
+                <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px]">
+                  {field.label}
+                  {field.required && <span className="text-[#e5484d]"> *</span>}
+                </span>
+                <RichTextEditor value={current ?? ""} onChange={set} placeholder={field.placeholder} />
+                {field.hint && <span className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+              </div>
+            );
           case "colors":
             return <ColorsField key={field.path} field={field} value={current} onChange={set} />;
           case "objects":
@@ -314,7 +407,7 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
             return (
               <div key={field.path} className={`flex flex-col gap-[6px] ${field.wide === false ? "" : "col-span-full"}`}>
                 <span className="font-['Inter:Medium'] font-medium text-[#3e3e3e] text-[13px]">{field.label}</span>
-                {field.render(current, set)}
+                {field.render(current, set, value, onChange)}
                 {field.hint && <span className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
               </div>
             );
@@ -342,7 +435,7 @@ export function Fields({ fields, value, onChange }: { fields: Field[]; value: Va
                         role="radio"
                         aria-checked={selected}
                         onClick={() => set(option.value)}
-                        className={`border-2 cursor-pointer flex flex-col gap-[8px] items-start p-[10px] rounded-[8px] transition-colors ${selected ? "bg-[#e9f9fb] border-[#00b6ca]" : "bg-white border-[#e3e3e3] hover:border-[#9adfe7]"}`}
+                        className={`border-2 cursor-pointer flex flex-col gap-[8px] items-start p-[10px] rounded-[6px] transition-colors ${selected ? "bg-[#e9f9fb] border-[#00b6ca]" : "bg-white border-[#e3e3e3] hover:border-[#9adfe7]"}`}
                       >
                         {option.preview}
                         <span className={`font-['Inter:Medium'] font-medium text-[13px] ${selected ? "text-[#00a0b2]" : "text-[#3e3e3e]"}`}>{option.label}</span>

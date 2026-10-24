@@ -38,25 +38,41 @@ export type Service = Listed & {
   summary: string;
   /** Shown in the Home page "Our Services" section. */
   showOnHome: boolean;
-  /** Services page row image. */
+  /** The service picture: Services page row and the big picture on the details page. */
   image: string;
   /** Big outlined number artwork on the Home card (optional). */
   numberImage: string;
   detail: {
     /** rich */
     tagline: string;
-    image: string;
-    /** rich */
-    intro: string;
-    body: string;
-    features: string[];
-    /** rich */
-    deliverablesTitle: string;
-    deliverables: { title: string; text: string }[];
-    /** This service's own "Our Working Process" section (the Home page has its own). */
-    processTitle: SectionTitle;
-    process: ProcessStep[];
+    /** Heading + text + "what's included" blocks, in order. */
+    intros: ServiceIntro[];
+    /** Numbered deliverables blocks, in order. */
+    deliverableSections: ServiceDeliverables[];
+    /** This service's own "Our Working Process" blocks (the Home page has its own). */
+    processSections: ServiceProcess[];
   };
+};
+
+export type ServiceIntro = {
+  id: string;
+  /** rich */
+  heading: string;
+  text: string;
+  features: string[];
+};
+
+export type ServiceDeliverables = {
+  id: string;
+  /** rich */
+  heading: string;
+  items: { title: string; text: string }[];
+};
+
+export type ServiceProcess = {
+  id: string;
+  title: SectionTitle;
+  steps: ProcessStep[];
 };
 
 /** Work page card style: wide image-beside-text card, or image-on-top grid card. */
@@ -64,37 +80,66 @@ export type CardLayout = "horizontal" | "vertical";
 
 export type Project = Listed & {
   id: string;
+  /** Page address. */
   slug: string;
+  /** Project name: card title and the details page heading. */
   title: string;
   category: string;
   summary: string;
   pages: string;
   duration: string;
   website: string;
-  /** Card image on Home / Work. */
+  /** Project image: the card on Home / Work and the big image on the details page. */
   cover: string;
   /** Shown on the Home page "Turn your ideas" section. */
   featured: boolean;
   layout: CardLayout;
   detail: {
-    heading: string;
-    heroImage: string;
     overview: string;
     goals: string;
     goalPoints: string[];
-    challenge: { title: string; text: string; points: string[]; image: string };
-    solution: {
-      title: string;
-      text: string;
-      image: string;
-      imageTitle: string;
-      imageText: string;
-      features: { icon: string; title: string; text: string }[];
-      stat: { value: string; title: string; text: string };
-    };
-    palette: string[];
-    tags: string[];
+    challenges: ProjectChallenge[];
+    solutions: ProjectSolution[];
+    palettes: ProjectPalette[];
+    toolSets: ProjectTools[];
   };
+};
+
+export type ProjectChallenge = {
+  id: string;
+  title: string;
+  text: string;
+  points: string[];
+  image: string;
+  /** Which side the picture sits on (desktop); the text takes the other side. */
+  imageSide: "left" | "right";
+};
+
+export type ProjectSolution = {
+  id: string;
+  title: string;
+  text: string;
+  image: string;
+  imageTitle: string;
+  imageText: string;
+  features: { icon: string; title: string; text: string }[];
+  stat: { value: string; title: string; text: string };
+};
+
+export type ProjectPalette = {
+  id: string;
+  /** Empty = the "Colour palette" label from Buttons & labels. */
+  title: string;
+  /** Empty = the palette text label ("… {n} color palette"). */
+  text: string;
+  colors: string[];
+};
+
+export type ProjectTools = {
+  id: string;
+  /** Empty = the "Technologies & tools" label from Buttons & labels. */
+  title: string;
+  items: string[];
 };
 
 export type Post = Listed & {
@@ -103,20 +148,34 @@ export type Post = Listed & {
   title: string;
   excerpt: string;
   categories: string[];
-  /** YYYY-MM-DD */
+  /** YYYY-MM-DD, set automatically the first time the post is published (made active). Not shown on the website. */
   date: string;
   image: string;
   /** Shown in the "Growth Insights" section (Home and other pages). */
   showOnHome: boolean;
-  /**
-   * Article text. Blank lines separate paragraphs; "## " starts a heading (also
-   * listed in the table of contents), "### " a sub-heading, "- " a list item,
-   * and "![caption](url)" an image.
-   */
-  body: string;
+  /** The article, one block per section; the headings make the table of contents. */
+  sections: ArticleSection[];
 };
 
-export type Client = { id: string; name: string; logo: string };
+export type ArticleSection = {
+  id: string;
+  /** Listed in the table of contents. */
+  heading: string;
+  subheading: string;
+  /** Formatted text (HTML from the dashboard's text editor, cleaned before it is shown). */
+  html: string;
+  /** Optional picture under the text. */
+  image: string;
+};
+
+export type Client = {
+  id: string;
+  name: string;
+  /** The logo the website shows (fitted into 220 × 100 px). */
+  logo: string;
+  /** The logo as uploaded, kept when its background was removed so it can be switched back. */
+  logoOriginal?: string;
+};
 
 export type Review = Listed & {
   id: string;
@@ -182,7 +241,16 @@ export type Labels = {
   projectCard: { pages: string; duration: string };
   /** Home "Science · Technology · Design" animation. */
   science: { science: string; technology: string; design: string; research: string; digital: string; customer: string };
-  workDetails: { overview: string; goals: string; challenge: string; solution: string; palette: string; tools: string };
+  workDetails: {
+    overview: string;
+    goals: string;
+    challenge: string;
+    solution: string;
+    palette: string;
+    /** Under the colour palette heading; {n} = number of colours. */
+    paletteText: string;
+    tools: string;
+  };
   blogDetails: { newsletterTitle: string; newsletterText: string; newsletterLink: string; ctaTitle: string; toc: string };
   footer: { quickLinks: string; support: string; services: string; contactInfo: string; contactUs: string; faq: string; privacy: string; terms: string };
   notFound: {

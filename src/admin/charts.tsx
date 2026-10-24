@@ -49,7 +49,7 @@ export function Legend({ series }: { series: { name: string; color: string; valu
 function Tooltip({ x, width, title, rows }: { x: number; width: number; title: string; rows: { name: string; color: string; value: number }[] }) {
   const left = Math.min(Math.max(x, 80), width - 80);
   return (
-    <div className="-translate-x-1/2 absolute bg-[#191919] flex flex-col gap-[4px] min-w-[140px] pointer-events-none px-[12px] py-[10px] rounded-[8px] shadow-[0px_6px_18px_rgba(0,0,0,0.18)] top-0 z-[2]" style={{ left }}>
+    <div className="-translate-x-1/2 absolute bg-[#191919] flex flex-col gap-[4px] min-w-[140px] pointer-events-none px-[12px] py-[10px] rounded-[6px] shadow-[0px_6px_18px_rgba(0,0,0,0.18)] top-0 z-[2]" style={{ left }}>
       <span className="font-['Inter:Semi_Bold'] font-semibold text-[12px] text-white">{title}</span>
       {rows.map((row) => (
         <span key={row.name} className={`${font} flex gap-[8px] items-center text-[#dfdfdf] text-[12px]`}>

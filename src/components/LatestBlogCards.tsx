@@ -1,4 +1,4 @@
-import { formatDate, latestPosts, postUrl } from "@/content/helpers";
+import { latestPosts, postUrl } from "@/content/helpers";
 import { useContent } from "@/content/store";
 
 // "Growth Insights" row: the three newest posts switched on for it (admin "Show on the
@@ -36,7 +36,6 @@ export default function LatestBlogCards() {
             </div>
             <div className="flex flex-col gap-[8px] items-start not-italic w-full">
               <p className="font-['Aileron:Bold'] leading-[1.2] text-[20px] text-white">{post.title}</p>
-              <p className="font-['Aileron:Regular'] leading-[1.2] text-[#e8e8e8] text-[16px]">{formatDate(post.date)}</p>
             </div>
           </div>
         </a>

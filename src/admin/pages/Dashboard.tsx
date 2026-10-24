@@ -8,7 +8,7 @@ import type { PageProps } from "../AdminApp";
 import { api, type DayVisits } from "../api";
 import { BarList, Donut, Legend, LineChart, Sparkline, StackedBars } from "../charts";
 import { secondaryButton } from "../editor";
-import { AnalyticsIcon, ArrowRightIcon, BlogIcon, CheckIcon, ClientIcon, EyeIcon, FaqIcon, MessageIcon, PlusIcon, ServicesIcon, StarIcon, WorkIcon } from "../icons";
+import { AnalyticsIcon, ArrowRightIcon, BlogIcon, CheckIcon, ClientIcon, EyeIcon, FaqIcon, MessageIcon, PlusIcon, ReviewIcon, ServicesIcon, StarIcon, WorkIcon } from "../icons";
 
 // Dashboard: website traffic first (page views, visitors, pages, sources,
 // devices), then messages, content and setup. One time filter (7 days up to
@@ -19,7 +19,7 @@ const SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"] as const;
 const ACCENT = "#00a0b2";
 const NEUTRAL = "#d4d4d4";
 
-const panel = "bg-white border border-[#ebebeb] rounded-[14px]";
+const panel = "bg-white border border-[#ebebeb] rounded-[6px]";
 const heading = "font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[16px]";
 const sub = "font-['Inter:Regular'] text-[#8a8a8a] text-[13px]";
 const linkButton = "cursor-pointer flex font-['Inter:Medium'] font-medium gap-[4px] items-center shrink-0 text-[#00a0b2] text-[13px] hover:underline";
@@ -52,41 +52,68 @@ function Delta({ value, previous }: { value: number; previous: number }) {
   );
 }
 
-/** Headline number with its trend and change against the period before. */
+/** "+3 new" (or "No new") for totals, instead of a percentage change. */
+function NewBadge({ count }: { count: number }) {
+  return (
+    <span className={`font-['Inter:Semi_Bold'] font-semibold px-[8px] py-[2px] rounded-full text-[12px] ${count ? "bg-[#e7f7ee] text-[#1a7f45]" : "bg-[#f3f3f3] text-[#8a8a8a]"}`}>
+      {count ? `+${count} new` : "No new"}
+    </span>
+  );
+}
+
+/** Headline card (150px): label, the number with its change, and a small trend line. Clickable when `onClick` is given. */
 function KpiCard({
   label,
   value,
-  previous,
   trend,
   icon: Icon,
+  tint,
+  badge,
+  note,
   format = (n) => n.toLocaleString("en-US"),
-  period,
+  onClick,
 }: {
   label: string;
   value: number;
-  previous: number;
   trend: number[];
   icon: ComponentType<{ size?: number }>;
+  /** Icon colour (background is a light tint of it). */
+  tint: string;
+  badge: ReactNode;
+  note: string;
   format?: (n: number) => string;
-  period: string;
+  onClick?: () => void;
 }) {
-  return (
-    <div className={`${panel} flex flex-col gap-[10px] overflow-hidden pt-[18px] px-[20px]`}>
-      <div className="flex gap-[10px] items-center justify-between">
-        <span className="font-['Inter:Medium'] font-medium text-[#505050] text-[14px]">{label}</span>
-        <span className="bg-[#e9f9fb] flex items-center justify-center rounded-[8px] size-[32px] text-[#00a0b2]">
+  const body = (
+    <>
+      <span className="flex gap-[10px] items-center">
+        <span className="flex items-center justify-center rounded-[6px] shrink-0 size-[32px]" style={{ background: `${tint}1a`, color: tint }}>
           <Icon size={17} />
         </span>
-      </div>
-      <div className="flex flex-wrap gap-x-[10px] gap-y-[4px] items-center">
-        <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[30px]">{format(value)}</span>
-        <Delta value={value} previous={previous} />
-      </div>
-      <span className={`${sub} !text-[12px]`}>vs previous {period}</span>
-      <div className="-mx-[20px]">
-        <Sparkline values={trend} color={ACCENT} height={44} />
-      </div>
-    </div>
+        <span className="font-['Inter:Medium'] font-medium min-w-0 text-[#505050] text-[14px] truncate">{label}</span>
+        {onClick && <ArrowRightIcon size={15} className="ml-auto shrink-0 text-[#c4c4c4] transition-colors group-hover:text-[#00a0b2]" />}
+      </span>
+      <span className="flex gap-[12px] items-end justify-between">
+        <span className="flex flex-col gap-[8px] min-w-0">
+          <span className="font-['Inter:Semi_Bold'] font-semibold leading-none text-[#191919] text-[28px] tracking-[-0.3px]">{format(value)}</span>
+          <span className="flex flex-wrap gap-[6px] items-center">
+            {badge}
+            <span className={`${sub} !text-[12px] truncate`}>{note}</span>
+          </span>
+        </span>
+        <span className="shrink-0 w-[42%] max-w-[120px]">
+          <Sparkline values={trend} color={tint} height={40} />
+        </span>
+      </span>
+    </>
+  );
+  const box = `${panel} flex flex-col group h-[150px] justify-between overflow-hidden p-[16px] text-left`;
+  return onClick ? (
+    <button type="button" onClick={onClick} className={`${box} cursor-pointer transition-[border-color,box-shadow] hover:border-[#bfe9ee] hover:shadow-[0px_4px_14px_rgba(0,0,0,0.06)]`}>
+      {body}
+    </button>
+  ) : (
+    <div className={box}>{body}</div>
   );
 }
 
@@ -94,7 +121,7 @@ function KpiCard({
 function ContentCard({ label, value, note, icon: Icon, onClick }: { label: string; value: number; note: string; icon: ComponentType<{ size?: number }>; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className={`${panel} cursor-pointer flex gap-[14px] group items-center p-[16px] text-left transition-colors hover:border-[#bfe9ee]`}>
-      <span className="bg-[#f4f4f4] flex items-center justify-center rounded-[10px] shrink-0 size-[44px] text-[#3e3e3e] transition-colors group-hover:bg-[#e9f9fb] group-hover:text-[#00a0b2]">
+      <span className="bg-[#f4f4f4] flex items-center justify-center rounded-[6px] shrink-0 size-[44px] text-[#3e3e3e] transition-colors group-hover:bg-[#e9f9fb] group-hover:text-[#00a0b2]">
         <Icon size={22} />
       </span>
       <span className="flex flex-col gap-[2px] min-w-0">
@@ -217,8 +244,6 @@ function sumVisits(visits: Record<string, DayVisits>, buckets: ReturnType<typeof
 
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
 
-const daysAgo = (date: string, days: number) => Boolean(date) && Date.now() - parseDate(date).getTime() <= days * 86_400_000;
-
 // ---------------------------------------------------------------- names for pages and sources
 
 /** "/services/ui-ux-design" → "UI/UX Design" (falls back to the address). */
@@ -271,7 +296,7 @@ function sourceInfo(key: string) {
 
 function SourceIcon({ name, platform }: { name: string; platform?: SocialPlatform }) {
   return (
-    <span className="bg-[#f4f4f4] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-[8px] shrink-0 size-[32px] text-[#3e3e3e] text-[13px]">
+    <span className="bg-[#f4f4f4] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-[6px] shrink-0 size-[32px] text-[#3e3e3e] text-[13px]">
       {platform ? <SocialIcon platform={platform} size={16} /> : name === "Direct" ? <ArrowRightIcon size={15} /> : name.slice(0, 1).toUpperCase()}
     </span>
   );
@@ -361,10 +386,15 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
     .slice(0, 5)
     .map(([label, value]) => ({ key: label, label, value }));
 
+  /** How many items existed at the end of each bucket in the range. */
+  const growth = (items: { createdAt: string }[]) => {
+    const added = buckets.countBy(items.map((item) => item.createdAt));
+    let running = items.length - sum(added);
+    return added.map((n) => (running += n));
+  };
   const hidden = (items: { active: boolean }[]) => items.filter((item) => !item.active).length;
-  const newThisMonth = (items: { createdAt: string }[]) => items.filter((item) => daysAgo(item.createdAt, 30)).length;
   const note = (items: { active: boolean; createdAt: string }[]) => {
-    const parts = [hidden(items) ? `${hidden(items)} hidden` : "All visible", newThisMonth(items) ? `+${newThisMonth(items)} in 30 days` : ""];
+    const parts = [hidden(items) ? `${hidden(items)} hidden` : "All visible"];
     return parts.filter(Boolean).join(" · ");
   };
 
@@ -381,7 +411,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
   const doneCount = checklist.filter((c) => c.done).length;
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       {/* Title + time filter */}
       <div className="flex flex-wrap gap-[16px] items-end justify-between">
         <div className="flex flex-col gap-[4px]">
@@ -397,24 +427,27 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
       <SectionTitle>Website traffic</SectionTitle>
 
       {noVisitsYet && (
-        <p className="bg-[#e9f9fb] border border-[#bfe9ee] font-['Inter:Regular'] leading-[1.5] px-[16px] py-[12px] rounded-[10px] text-[#00687a] text-[14px]">
+        <p className="bg-[#e9f9fb] border border-[#bfe9ee] font-['Inter:Regular'] leading-[1.5] px-[16px] py-[12px] rounded-[6px] text-[#00687a] text-[14px]">
           Visit counting is on. Page views, visitors, pages, sources and devices appear here as soon as people open the website.
         </p>
       )}
 
-      <div className="gap-[16px] grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4">
-        <KpiCard label="Page views" value={totalViews} previous={traffic.previous.views} trend={traffic.views} icon={EyeIcon} period={period} />
-        <KpiCard label="Visitors" value={totalVisitors} previous={traffic.previous.visitors} trend={traffic.visitors} icon={ClientIcon} period={period} />
+      <div className="gap-[16px] grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 min-[1760px]:grid-cols-6">
+        <KpiCard label="Page views" value={totalViews} trend={traffic.views} icon={EyeIcon} tint={SERIES[0]} badge={<Delta value={totalViews} previous={traffic.previous.views} />} note={`vs previous ${period}`} />
+        <KpiCard label="Visitors" value={totalVisitors} trend={traffic.visitors} icon={ClientIcon} tint={SERIES[1]} badge={<Delta value={totalVisitors} previous={traffic.previous.visitors} />} note={`vs previous ${period}`} />
         <KpiCard
           label="Pages per visitor"
           value={perVisitor(totalViews, totalVisitors)}
-          previous={perVisitor(traffic.previous.views, traffic.previous.visitors)}
           trend={traffic.views.map((v, i) => perVisitor(v, traffic.visitors[i]))}
           icon={AnalyticsIcon}
+          tint={SERIES[2]}
+          badge={<Delta value={perVisitor(totalViews, totalVisitors)} previous={perVisitor(traffic.previous.views, traffic.previous.visitors)} />}
+          note={`vs previous ${period}`}
           format={(n) => n.toFixed(1)}
-          period={period}
         />
-        <KpiCard label="Messages" value={sum(messageCounts)} previous={buckets.countPrevious(messageDates)} trend={messageCounts} icon={MessageIcon} period={period} />
+        <KpiCard label="Messages" value={sum(messageCounts)} trend={messageCounts} icon={MessageIcon} tint={ACCENT} badge={<Delta value={sum(messageCounts)} previous={buckets.countPrevious(messageDates)} />} note={`vs previous ${period}`} onClick={() => navigate("/admin/messages")} />
+        <KpiCard label="Total Services" value={content.services.length} trend={growth(content.services)} icon={ServicesIcon} tint="#6250d6" badge={<NewBadge count={sum(buckets.countBy(content.services.map((x) => x.createdAt)))} />} note={note(content.services)} onClick={() => navigate("/admin/services")} />
+        <KpiCard label="Total Work" value={content.projects.length} trend={growth(content.projects)} icon={WorkIcon} tint="#d63aa8" badge={<NewBadge count={sum(buckets.countBy(content.projects.map((x) => x.createdAt)))} />} note={note(content.projects)} onClick={() => navigate("/admin/work")} />
       </div>
 
       <div className="gap-[16px] grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -440,7 +473,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
 
         <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Devices" note="Page views by screen size" />
-          <div className="flex flex-1 flex-col gap-[20px] items-center justify-center">
+          <div className="flex flex-1 flex-col gap-[16px] items-center justify-center">
             <Donut label="page views" parts={devices} size={176} />
             <ul className="flex flex-col gap-[10px] w-full">
               {devices.map((d) => (
@@ -457,11 +490,11 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
       </div>
 
       <div className="gap-[16px] grid grid-cols-1 lg:grid-cols-2">
-        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Top pages" note="Most opened pages · share of all page views" />
           <BarList rows={pageRows} total={totalViews} color={SERIES[0]} empty="No page views in this period yet." />
         </section>
-        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Traffic sources" note="Where visits came from · Direct = typed or bookmarked" />
           <BarList rows={sourceRows} total={sessions} color={SERIES[2]} empty="No visits in this period yet." />
         </section>
@@ -471,9 +504,9 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
       <SectionTitle>Messages & content</SectionTitle>
 
       <div className="gap-[16px] grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4">
-        <ContentCard label="Services" value={content.services.length} note={note(content.services)} icon={ServicesIcon} onClick={() => navigate("/admin/services")} />
-        <ContentCard label="Work" value={content.projects.length} note={note(content.projects)} icon={WorkIcon} onClick={() => navigate("/admin/work")} />
         <ContentCard label="Blog posts" value={content.posts.length} note={note(content.posts)} icon={BlogIcon} onClick={() => navigate("/admin/blog")} />
+        <ContentCard label="Clients" value={content.clients.length} note="Logos on the Home page" icon={ClientIcon} onClick={() => navigate("/admin/clients")} />
+        <ContentCard label="Reviews" value={content.reviews.length} note={pendingReviews.length ? `${pendingReviews.length} waiting for approval` : "None waiting"} icon={ReviewIcon} onClick={() => navigate("/admin/reviews")} />
         <ContentCard label="FAQ" value={content.faqs.length} note="Questions on the Contact page" icon={FaqIcon} onClick={() => navigate("/admin/faq")} />
       </div>
 
@@ -519,7 +552,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
               ]}
             />
           </div>
-          <button type="button" onClick={() => navigate("/admin/reviews")} className="bg-[#fff6ef] cursor-pointer flex gap-[12px] items-center mt-auto p-[14px] rounded-[10px] text-left transition-colors hover:bg-[#ffeedf]">
+          <button type="button" onClick={() => navigate("/admin/reviews")} className="bg-[#fff6ef] cursor-pointer flex gap-[12px] items-center mt-auto p-[14px] rounded-[6px] text-left transition-colors hover:bg-[#ffeedf]">
             <span className="bg-white flex items-center justify-center rounded-full shrink-0 size-[36px] text-[#eb6834]">
               <StarIcon size={18} />
             </span>
@@ -542,7 +575,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
       </section>
 
       <div className="gap-[16px] grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3">
-        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Review ratings" note={`${content.reviews.length} published reviews`}>
             <span className="flex font-['Inter:Semi_Bold'] font-semibold gap-[4px] items-center text-[#191919] text-[20px]">
               <StarIcon size={18} className="text-[#eda100]" />
@@ -552,7 +585,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
           <BarList rows={ratings} total={content.reviews.length} color={SERIES[3]} empty="No reviews yet." />
         </section>
 
-        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Blog topics" note="Posts per category (top 5)">
             <button type="button" className={linkButton} onClick={() => navigate("/admin/blog")}>
               Blog <ArrowRightIcon size={14} />
@@ -588,7 +621,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
             </button>
           </CardHeader>
           {recentMessages.map((m) => (
-            <button key={m.id} type="button" onClick={() => navigate(`/admin/messages?item=${m.id}`)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[8px] text-left hover:bg-[#f6f6f6]">
+            <button key={m.id} type="button" onClick={() => navigate(`/admin/messages?item=${m.id}`)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[6px] text-left hover:bg-[#f6f6f6]">
               <span className="bg-[#e9f9fb] flex font-['Inter:Semi_Bold'] font-semibold items-center justify-center rounded-full shrink-0 size-[36px] text-[#00a0b2] text-[13px] uppercase">
                 {(m.first_name[0] ?? "") + (m.last_name[0] ?? "")}
               </span>
@@ -607,7 +640,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
           {!recentMessages.length && <p className="font-['Inter:Regular'] text-[#8a8a8a] text-[14px]">No messages yet.</p>}
         </section>
 
-        <section className={`${panel} flex flex-col gap-[18px] p-[22px]`}>
+        <section className={`${panel} flex flex-col gap-[16px] p-[22px]`}>
           <CardHeader title="Latest content">
             <div className="flex flex-wrap gap-[8px]">
               <button type="button" className={`${secondaryButton} !py-[7px] !text-[13px]`} onClick={() => navigate("/admin/blog")}>
@@ -618,7 +651,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
               </button>
             </div>
           </CardHeader>
-          <div className="gap-[24px] grid grid-cols-1 md:grid-cols-2">
+          <div className="gap-[16px] grid grid-cols-1 md:grid-cols-2">
             {[
               { title: "Blog posts", items: recentPosts.map((p) => ({ id: p.id, image: p.image, name: p.title, meta: formatDate(p.date), active: p.active, to: `/admin/blog?item=${p.id}` })) },
               { title: "Projects", items: recentProjects.map((p) => ({ id: p.id, image: p.cover, name: p.title, meta: p.category, active: p.active, to: `/admin/work?item=${p.id}` })) },
@@ -626,7 +659,7 @@ export default function Dashboard({ messages, pendingReviews, navigate }: PagePr
               <div key={list.title} className="flex flex-col gap-[8px]">
                 <h3 className="font-['Inter:Medium'] font-medium text-[#8a8a8a] text-[12px] tracking-[0.4px] uppercase">{list.title}</h3>
                 {list.items.map((item) => (
-                  <button key={item.id} type="button" onClick={() => navigate(item.to)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[8px] text-left hover:bg-[#f6f6f6]">
+                  <button key={item.id} type="button" onClick={() => navigate(item.to)} className="cursor-pointer flex gap-[12px] items-center p-[6px] rounded-[6px] text-left hover:bg-[#f6f6f6]">
                     <span className="bg-[#f0f0f0] block h-[48px] overflow-hidden rounded-[6px] shrink-0 w-[72px]">{item.image && <img src={item.image} alt="" className="block object-cover size-full" />}</span>
                     <span className="flex flex-col min-w-0">
                       <span className="font-['Inter:Medium'] font-medium text-[#222] text-[14px] truncate">{item.name}</span>

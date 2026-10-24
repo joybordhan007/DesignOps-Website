@@ -65,10 +65,10 @@ function ProfileCard({ user, onChange }: { user: AdminUser; onChange: (user: Adm
   };
 
   return (
-    <form onSubmit={save} className={`${card} flex flex-col gap-[24px] p-[24px]`}>
+    <form onSubmit={save} className={`${card} flex flex-col gap-[16px] p-[24px]`}>
       <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[18px]">Profile</h2>
 
-      <div className="flex flex-wrap gap-[20px] items-center">
+      <div className="flex flex-wrap gap-[16px] items-center">
         <AdminAvatar user={{ name: name || user.name, avatar }} size={88} />
         <div className="flex flex-col gap-[10px]">
           <div className="flex flex-wrap gap-[10px]">
@@ -195,7 +195,7 @@ function PasswordCard() {
   };
 
   return (
-    <form onSubmit={submit} noValidate className={`${card} flex flex-col gap-[20px] p-[24px]`}>
+    <form onSubmit={submit} noValidate className={`${card} flex flex-col gap-[16px] p-[24px]`}>
       <div className="flex flex-col gap-[4px]">
         <h2 className="flex font-['Inter:Semi_Bold'] font-semibold gap-[8px] items-center text-[#191919] text-[18px]">
           <KeyIcon size={18} /> Password
@@ -237,7 +237,7 @@ function PasswordCard() {
 
 export default function ProfilePage({ user, onChange }: { user: AdminUser; onChange: (user: AdminUser) => void }) {
   return (
-    <div className="flex flex-col gap-[20px] max-w-[900px]">
+    <div className="flex flex-col gap-[16px] max-w-[900px]">
       <PageHeader title="My profile" description="Your name and photo are shown at the top of the dashboard." />
       <ProfileCard user={user} onChange={onChange} />
       <PasswordCard />

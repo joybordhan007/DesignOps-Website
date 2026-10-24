@@ -106,7 +106,7 @@ function ItemTable<T extends Item>({ config, items, onSave, navigate }: { config
   };
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title={config.title} description={config.description}>
         <button type="button" className={primaryButton} onClick={add} disabled={busy}>
           <PlusIcon size={18} /> Add {singular}
@@ -249,7 +249,7 @@ function RowMenu({ label, actions }: { label: string; actions: Action[] }) {
       </button>
       {at &&
         createPortal(
-          <div ref={menu} role="menu" className="bg-white fixed overflow-hidden py-[6px] rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.16)] w-[190px] z-[80]" style={at}>
+          <div ref={menu} role="menu" className="bg-white fixed overflow-hidden py-[6px] rounded-[6px] shadow-[0px_8px_24px_rgba(0,0,0,0.16)] w-[190px] z-[80]" style={at}>
             {actions.map((action) => {
               const Icon = action.icon;
               return (
@@ -319,7 +319,7 @@ function ItemEditor<T extends Item>({ config, item, items, onSave, navigate }: {
   const settings: Field[] = [{ type: "toggle", path: "active", label: "Active", hint: "Off: hidden from the website, kept here." }, ...(config.settings ?? [])];
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <div className="flex flex-wrap gap-[16px] items-center justify-between">
         <div className="flex gap-[14px] items-center min-w-0">
           <button type="button" aria-label={`Back to ${config.title}`} className={`${secondaryButton} !px-[10px]`} onClick={back}>
@@ -350,12 +350,27 @@ function ItemEditor<T extends Item>({ config, item, items, onSave, navigate }: {
         <Fields fields={settings} value={draft} onChange={setDraft} />
       </div>
 
-      <div className={`${card} flex flex-col gap-[16px] p-[20px]`}>
-        <p className="font-['Inter:Regular'] text-[#707070] text-[13px]">Each section below fills one part of the page design, from top to bottom.</p>
-        <div className="gap-[16px] grid grid-cols-1 md:grid-cols-2">
-          <Fields fields={config.fields} value={draft} onChange={setDraft} />
-        </div>
-      </div>
+      <p className="font-['Inter:Regular'] -mb-[4px] text-[#707070] text-[13px]">Each card below fills one part of the page, from top to bottom.</p>
+      {/* One card per group of fields; repeatable sections bring their own cards. */}
+      {config.fields.map((field, index) =>
+        field.type === "group" ? (
+          <section key={index} className={`${card} flex flex-col gap-[16px] p-[20px]`}>
+            <div className="flex flex-col gap-[2px]">
+              <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[16px]">{field.label}</h2>
+              {field.hint && <p className="font-['Inter:Regular'] leading-[1.4] text-[#8a8a8a] text-[12px]">{field.hint}</p>}
+            </div>
+            <div className="gap-[16px] grid grid-cols-1 md:grid-cols-2">
+              <Fields fields={field.fields} value={draft} onChange={setDraft} />
+            </div>
+          </section>
+        ) : field.type === "objects" && field.cards ? (
+          <Fields key={index} fields={[field]} value={draft} onChange={setDraft} />
+        ) : (
+          <div key={index} className={`${card} gap-[16px] grid grid-cols-1 p-[20px] md:grid-cols-2`}>
+            <Fields fields={[field]} value={draft} onChange={setDraft} />
+          </div>
+        ),
+      )}
 
       <div className="flex gap-[10px] justify-end">
         <SaveButtons isDirty={isDirty} saving={saving} onSave={save} onDiscard={() => setDraft(item)} />

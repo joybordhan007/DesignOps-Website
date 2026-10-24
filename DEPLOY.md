@@ -293,9 +293,13 @@ Google Tag Manager বা Meta Pixel ব্যবহার করলে ড্�
 
 ## পরে সাইট update করা (কোড বদলালে)
 
-1. নিজের কম্পিউটারে `npm run deploy` চালান।
-2. File Manager → `designops-app` এ শুধু **`designops-app.zip`** upload করে Extract করুন। পুরনো ফাইলের উপর লেখার অনুমতি চাইলে হ্যাঁ দিন।
-3. zip মুছে দিন → Setup Node.js App → **Restart**।
+1. **আগে backup নিন:** File Manager → `designops-app/server` এ যান। `data` আর `uploads` select করুন → **Compress** → Zip → zip টা **Download** করুন। কিছু ভুল হলে এই backup দিয়েই সব ফেরত আনা যাবে।
+2. নিজের কম্পিউটারে `npm run deploy` চালান।
+3. File Manager → `designops-app` এ শুধু **`designops-app.zip`** upload করে Extract করুন। পুরনো ফাইলের উপর লেখার অনুমতি চাইলে হ্যাঁ দিন।
+4. zip মুছে দিন → Setup Node.js App → **Restart**।
+5. Dashboard আর ওয়েবসাইটে কয়েকটা page খুলে দেখে নিন সব ঠিক আছে কিনা।
+
+নতুন version এ data এর গঠন বদলালে (যেমন নতুন section), server চালু হওয়ার সময় আপনার লাইভ data নিজে থেকেই নতুন গঠনে বদলে নেয় (`server/migrate.js`)। কিছু মোছে না, শুধু নতুন জায়গায় সরায়। তাই আপনার লেখা, ছবি, message আর account সব থেকে যায়।
 
 ⚠️ **`designops-data.zip` আর কখনো upload করবেন না।** করলে লাইভ সাইটের content আপনার কম্পিউটারের পুরনো content দিয়ে বদলে যাবে।
 

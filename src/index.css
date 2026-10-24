@@ -227,9 +227,10 @@ img {
   cursor: pointer;
 }
 
+/* Every client logo sits in the same 220 × 100 box, scaled to fit without stretching. */
 .client-logo-carousel {
   width: 1560px;
-  height: 140px;
+  height: 100px;
   overflow: hidden;
 }
 
@@ -251,16 +252,16 @@ img {
 .client-logo-item {
   display: flex;
   flex: none;
-  width: 240px;
-  height: 140px;
+  width: 220px;
+  height: 100px;
   align-items: center;
   justify-content: center;
-  padding: 10px;
 }
 
 .client-logo-item img {
-  max-width: 100%;
-  max-height: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -383,7 +384,7 @@ img {
 @media (max-width: 1023.98px) {
   .client-logo-carousel {
     width: 100%;
-    height: 88px;
+    height: 100px;
     mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   }
 
@@ -392,10 +393,7 @@ img {
     padding-right: 12px;
   }
 
-  .client-logo-item {
-    width: 140px;
-    height: 88px;
-  }
+
 }
 
 /* Desktop navbar layer: fixed to the screen, scaled like the page artboard. */

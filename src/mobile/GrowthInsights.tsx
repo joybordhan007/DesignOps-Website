@@ -1,5 +1,5 @@
 import ArrowButton from "@/components/ArrowButton";
-import { formatDate, latestPosts, postUrl } from "@/content/helpers";
+import { latestPosts, postUrl } from "@/content/helpers";
 import { useContent } from "@/content/store";
 import SectionTitle from "./SectionTitle";
 
@@ -40,7 +40,6 @@ export default function GrowthInsights({ showButton = true }: { showButton?: boo
             </span>
             <span className="flex flex-col gap-[8px]">
               <span className="font-['Inter:Semi_Bold'] font-semibold leading-[1.25] text-[16px] text-white">{post.title}</span>
-              <span className="font-['Inter:Regular'] leading-[1.2] text-[#e8e8e8] text-[14px]">{formatDate(post.date)}</span>
             </span>
           </a>
         ))}

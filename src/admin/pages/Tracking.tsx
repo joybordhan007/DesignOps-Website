@@ -81,7 +81,7 @@ function ToolCard<K extends Tool>({
   return (
     <section className={`${card} flex flex-col`}>
       <header className="border-[#efefef] border-b flex flex-wrap gap-[14px] items-center p-[20px]">
-        <span className="flex items-center justify-center rounded-[10px] shrink-0 size-[44px]">{logo}</span>
+        <span className="flex items-center justify-center rounded-[6px] shrink-0 size-[44px]">{logo}</span>
         <div className="flex flex-[1_1_180px] flex-col gap-[2px] min-w-0">
           <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[17px]">{name}</h2>
           <p className="font-['Inter:Regular'] leading-[1.4] text-[#707070] text-[13px]">{intro}</p>
@@ -118,7 +118,7 @@ function ToolCard<K extends Tool>({
 }
 
 const GtmLogo = (
-  <span className="bg-[#e8f0fe] flex items-center justify-center rounded-[10px] size-[44px]">
+  <span className="bg-[#e8f0fe] flex items-center justify-center rounded-[6px] size-[44px]">
     <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
       <path fill="#4285f4" d="M12 2.5 21.5 12 12 21.5 2.5 12z" />
       <path fill="#fff" d="M12 8 16 12 12 16 8 12z" />
@@ -127,7 +127,7 @@ const GtmLogo = (
 );
 
 const MetaLogo = (
-  <span className="bg-[#e7f0ff] flex items-center justify-center rounded-[10px] size-[44px]">
+  <span className="bg-[#e7f0ff] flex items-center justify-center rounded-[6px] size-[44px]">
     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#0866ff" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
       <path d="M3 12c0-2.8 1.5-5 3.6-5 3.4 0 7.4 10 10.8 10 2.1 0 3.6-2.2 3.6-5s-1.5-5-3.6-5c-3.4 0-7.4 10-10.8 10C4.5 17 3 14.8 3 12z" />
     </svg>
@@ -153,10 +153,10 @@ const metaFields: Field[] = [
 
 export default function TrackingPage(_: PageProps) {
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title="Tracking & Analytics" description="Connect Google Tag Manager and the Meta Pixel. Tags are added to the public website only, never to this dashboard." />
 
-      <div className="gap-[20px] grid grid-cols-1 items-stretch xl:grid-cols-2">
+      <div className="gap-[16px] grid grid-cols-1 items-stretch xl:grid-cols-2">
         <ToolCard
           tool="gtm"
           name="Google Tag Manager"

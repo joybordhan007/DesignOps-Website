@@ -33,7 +33,7 @@ function MessageView({ message, onChanged }: { message: Message; onChanged: () =
   };
 
   return (
-    <div className="flex flex-col gap-[18px]">
+    <div className="flex flex-col gap-[16px]">
       <div className="border-[#f0f0f0] border-b flex flex-wrap gap-[10px] items-start justify-between pb-[14px]">
         <div>
           <h2 className="font-['Inter:Semi_Bold'] font-semibold text-[#191919] text-[18px]">
@@ -83,7 +83,7 @@ function Inbox({ messages, reloadMessages, focusId }: PageProps) {
   }
 
   return (
-    <div className="gap-[20px] grid grid-cols-1 items-start lg:grid-cols-[340px_1fr]">
+    <div className="gap-[16px] grid grid-cols-1 items-start lg:grid-cols-[340px_1fr]">
       <ul className={`${card} flex flex-col lg:max-h-[calc(100vh-260px)] overflow-y-auto p-[8px]`}>
         {messages.map((m) => (
           <li key={m.id}>
@@ -112,7 +112,7 @@ function Inbox({ messages, reloadMessages, focusId }: PageProps) {
 export default function MessagesPage(props: PageProps) {
   const unread = props.messages.filter((m) => !m.read).length;
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title="Messages" description={`Inquiries sent through the website's contact form${unread ? ` · ${unread} unread` : ""}.`}>
         <button type="button" className={secondaryButton} onClick={() => props.navigate("/admin/settings#email")}>
           <MailIcon size={16} /> Email notifications

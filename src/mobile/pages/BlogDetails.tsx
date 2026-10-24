@@ -1,6 +1,4 @@
-import { useMemo } from "react";
-import ArticleBody, { parseArticle } from "@/components/ArticleBody";
-import { formatDate } from "@/content/helpers";
+import ArticleSections, { useArticle } from "@/components/ArticleSections";
 import { currentPost } from "@/content/route";
 import { useContent } from "@/content/store";
 import TalkButton from "../TalkButton";
@@ -8,11 +6,11 @@ import GrowthInsights from "../GrowthInsights";
 import MobileFooter from "../MobileFooter";
 
 const articleStyles = {
-  gap: "gap-[20px]",
-  p: "font-['Inter:Regular'] leading-[1.7] text-[#3e3e3e] text-[14px]",
-  h2: "font-['Inter:Semi_Bold'] font-semibold leading-[1.3] mt-[8px] scroll-mt-[90px] text-[#d68c13] text-[16px]",
-  h3: "font-['Inter:Semi_Bold'] font-semibold leading-[1.3] -mb-[12px] text-[#2f2f2f] text-[14px]",
-  list: "flex flex-col font-['Inter:Regular'] gap-[6px] leading-[1.6] list-disc pl-[20px] text-[#3e3e3e] text-[14px]",
+  gap: "gap-[32px]",
+  section: "flex flex-col gap-[14px] scroll-mt-[90px]",
+  h2: "font-['Inter:Semi_Bold'] font-semibold leading-[1.3] text-[#2f2f2f] text-[18px]",
+  subheading: "font-['Inter:Medium'] font-medium leading-[1.4] -mt-[4px] text-[#4e4e4e] text-[15px]",
+  body: "flex flex-col font-['Inter:Regular'] gap-[12px] leading-[1.7] text-[#3e3e3e] text-[14px] [&_a]:text-[#00a0b2] [&_a]:underline [&_b]:font-semibold [&_b]:text-[#2f2f2f] [&_blockquote]:border-[#00b6ca] [&_blockquote]:border-l-4 [&_blockquote]:italic [&_blockquote]:pl-[12px] [&_h3]:font-['Inter:Semi_Bold'] [&_h3]:font-semibold [&_h3]:mt-[4px] [&_h3]:text-[#2f2f2f] [&_h3]:text-[15px] [&_h4]:font-semibold [&_h4]:text-[#2f2f2f] [&_img]:block [&_img]:rounded-[10px] [&_img]:w-full [&_li]:mb-[4px] [&_ol]:list-decimal [&_ol]:pl-[20px] [&_strong]:font-semibold [&_strong]:text-[#2f2f2f] [&_ul]:list-disc [&_ul]:pl-[20px]",
   image: "aspect-[16/10] block object-cover rounded-[10px] w-full",
 };
 
@@ -20,16 +18,11 @@ const articleStyles = {
 export default function BlogDetails() {
   const labels = useContent().settings.labels.blogDetails;
   const post = currentPost();
-  const blocks = useMemo(() => parseArticle(post.body), [post.body]);
-  const headings = blocks.flatMap((block) => (block.type === "h2" ? [block] : []));
+  const { items, toc: headings } = useArticle(post.sections);
 
   return (
     <>
       <article className="flex flex-col gap-[20px] mx-auto px-[20px] pb-[32px] pt-[36px] w-full max-w-[760px]">
-        <p className="flex font-['Inter:Regular'] gap-[10px] items-center leading-[1.2] text-[#4e4e4e] text-[14px]">
-          <span className="bg-[#4e4e4e] h-px w-[32px]" aria-hidden="true" />
-          {formatDate(post.date)}
-        </p>
         <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.25] text-[#2f2f2f] text-[20px]">{post.title}</h1>
         <img alt="" className="aspect-[16/10] block object-cover rounded-[10px] w-full" src={post.image} />
 
@@ -53,7 +46,7 @@ export default function BlogDetails() {
           </details>
         )}
 
-        <ArticleBody blocks={blocks} styles={articleStyles} />
+        <ArticleSections items={items} styles={articleStyles} />
       </article>
 
       <aside className="gap-[16px] grid mx-auto px-[20px] pb-[16px] w-full max-w-[760px] md:grid-cols-2">

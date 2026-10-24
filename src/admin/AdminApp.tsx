@@ -195,7 +195,7 @@ function TopBar({
   const menuRef = useOutsideClose(menu, closeMenu);
 
   return (
-    <header className="bg-[#f5f5f5] flex gap-[20px] items-center px-[50px] py-[32px] sticky top-0 z-[30] max-lg:px-[16px] max-lg:py-[16px]">
+    <header className="bg-[#f5f5f5] flex gap-[20px] items-center px-[24px] py-[32px] sticky top-0 z-[30] max-lg:py-[16px]">
       <button type="button" aria-label="Open menu" className="cursor-pointer lg:hidden p-[6px]" onClick={onMenu}>
         <MenuIcon size={24} />
       </button>
@@ -215,7 +215,7 @@ function TopBar({
             <ChevronDown size={20} className="max-sm:hidden" />
           </button>
           {menu && (
-            <div className="absolute bg-white mt-[10px] overflow-hidden py-[6px] right-0 rounded-[8px] shadow-[0px_8px_24px_rgba(0,0,0,0.14)] w-[220px] z-[40]">
+            <div className="absolute bg-white mt-[10px] overflow-hidden py-[6px] right-0 rounded-[6px] shadow-[0px_8px_24px_rgba(0,0,0,0.14)] w-[220px] z-[40]">
               <p className="border-[#f0f0f0] border-b font-['Inter:Regular'] mb-[6px] px-[16px] pb-[10px] pt-[4px] text-[#8a8a8a] text-[12px] truncate">{user.email}</p>
               <button type="button" className="cursor-pointer flex font-['Inter:Medium'] font-medium gap-[10px] items-center px-[16px] py-[10px] text-[#222] text-[14px] w-full hover:bg-[#f4fbfc]" onClick={() => (setMenu(false), navigate("/admin/profile"))}>
                 <ClientIcon size={18} /> Profile
@@ -265,12 +265,12 @@ function Sidebar({ section, navigate, open, onClose, counts }: { section: string
                     href={href}
                     onClick={(e) => (e.preventDefault(), navigate(href))}
                     aria-current={active ? "page" : undefined}
-                    className={`flex font-['Inter:Medium'] font-medium gap-[12px] group h-[50px] items-center pl-[10px] pr-[14px] rounded-[8px] text-[15px] transition-colors whitespace-nowrap ${
+                    className={`flex font-['Inter:Medium'] font-medium gap-[12px] group h-[50px] items-center pl-[10px] pr-[14px] rounded-[6px] text-[15px] transition-colors whitespace-nowrap ${
                       active ? "bg-[#00b6ca] shadow-[0px_6px_18px_rgba(0,182,202,0.28)] text-white" : "text-[#cfcfcf] hover:bg-[rgba(255,255,255,0.06)] hover:text-white"
                     }`}
                   >
                     <span
-                      className={`flex items-center justify-center rounded-[8px] shrink-0 size-[34px] transition-colors ${
+                      className={`flex items-center justify-center rounded-[6px] shrink-0 size-[34px] transition-colors ${
                         active ? "bg-[rgba(255,255,255,0.2)] text-white" : "bg-[rgba(255,255,255,0.05)] text-[#9a9a9a] group-hover:text-[#00b6ca]"
                       }`}
                     >
@@ -294,9 +294,9 @@ function Sidebar({ section, navigate, open, onClose, counts }: { section: string
             href={siteUrl("/")}
             target="_blank"
             rel="noreferrer"
-            className="bg-[rgba(255,255,255,0.05)] flex font-['Inter:Medium'] font-medium gap-[12px] items-center px-[12px] py-[10px] rounded-[8px] text-[#e5e5e5] text-[14px] transition-colors hover:bg-[rgba(0,182,202,0.15)]"
+            className="bg-[rgba(255,255,255,0.05)] flex font-['Inter:Medium'] font-medium gap-[12px] items-center px-[12px] py-[10px] rounded-[6px] text-[#e5e5e5] text-[14px] transition-colors hover:bg-[rgba(0,182,202,0.15)]"
           >
-            <span className="bg-[rgba(0,182,202,0.15)] flex items-center justify-center rounded-[8px] shrink-0 size-[34px] text-[#00b6ca]">
+            <span className="bg-[rgba(0,182,202,0.15)] flex items-center justify-center rounded-[6px] shrink-0 size-[34px] text-[#00b6ca]">
               <ExternalIcon size={17} />
             </span>
             <span className="flex flex-col">
@@ -404,7 +404,7 @@ export default function AdminApp() {
       <Sidebar section={section === "profile" ? "profile" : entry.path} navigate={navigate} open={menuOpen} onClose={() => setMenuOpen(false)} counts={{ messages: unread, reviews: pendingReviews.length }} />
       <div className="lg:pl-[350px]">
         <TopBar user={user} unread={unread} messages={messages} pendingReviews={pendingReviews} navigate={navigate} onMenu={() => setMenuOpen(true)} onSignOut={signOut} />
-        <main className="pb-[60px] px-[50px] max-lg:px-[16px]">
+        <main className="pb-[60px] px-[24px]">
           {/* The profile page is opened from the account menu, not the sidebar. */}
           {section === "profile" ? (
             <ProfilePage user={user} onChange={setUser} />

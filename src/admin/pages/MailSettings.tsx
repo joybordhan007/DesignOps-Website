@@ -102,8 +102,8 @@ export default function MailSettingsEditor() {
           <input className={inputClass} type="text" inputMode="email" placeholder={contactEmail} value={draft.to} onChange={(e) => set({ to: e.target.value })} />
         </Field>
 
-        <details className="border border-[#ececec] col-span-full group/fold rounded-[8px] open:bg-[#fcfcfc]" open={!saved.host}>
-          <summary className="cursor-pointer flex flex-col gap-[2px] list-none px-[16px] py-[13px] rounded-[8px] select-none hover:bg-[#f7fbfc] [&::-webkit-details-marker]:hidden">
+        <details className="border border-[#ececec] col-span-full group/fold rounded-[6px] open:bg-[#fcfcfc]" open={!saved.host}>
+          <summary className="cursor-pointer flex flex-col gap-[2px] list-none px-[16px] py-[13px] rounded-[6px] select-none hover:bg-[#f7fbfc] [&::-webkit-details-marker]:hidden">
             <span className="font-['Inter:Semi_Bold'] font-semibold text-[#222] text-[14px]">Sending account (SMTP)</span>
             <span className={hint}>{saved.host ? `${saved.user || "No login"} via ${saved.host}:${saved.port}` : "The email account the messages are sent from, e.g. your hosting email (cPanel → Email Accounts → Connect Devices)."}</span>
           </summary>

@@ -60,7 +60,7 @@ function SocialLinksEditor({ value, onChange }: { value: SocialLink[] | undefine
       {links.map((link, i) => {
         const badUrl = link.url.trim() !== "" && !/^(https?:\/\/|mailto:|tel:)/i.test(link.url.trim());
         return (
-          <div key={link.id} className="bg-[#fafafa] border border-[#ececec] flex flex-wrap gap-[10px] items-center p-[10px] rounded-[8px]">
+          <div key={link.id} className="bg-[#fafafa] border border-[#ececec] flex flex-wrap gap-[10px] items-center p-[10px] rounded-[6px]">
             <span className="bg-[#191919] flex items-center justify-center rounded-full shrink-0 size-[40px] text-[#00b6ca]">
               <SocialIcon platform={link.platform} size={18} />
             </span>
@@ -106,7 +106,7 @@ function SocialLinksEditor({ value, onChange }: { value: SocialLink[] | undefine
           </div>
         );
       })}
-      {!links.length && <p className="border border-[#e3e3e3] border-dashed font-['Inter:Regular'] px-[14px] py-[16px] rounded-[8px] text-[#8a8a8a] text-[14px]">No social links yet. The footer shows no icons until you add one.</p>}
+      {!links.length && <p className="border border-[#e3e3e3] border-dashed font-['Inter:Regular'] px-[14px] py-[16px] rounded-[6px] text-[#8a8a8a] text-[14px]">No social links yet. The footer shows no icons until you add one.</p>}
       <button type="button" className={`${smallButton} self-start`} onClick={() => onChange([...links, { id: newId("social"), platform: unused, url: "" }])}>
         <PlusIcon size={16} /> Add social link
       </button>
@@ -159,6 +159,7 @@ const labelFields: Field[] = [
     ["workDetails.challenge", "Challenge tag"],
     ["workDetails.solution", "Solution tag"],
     ["workDetails.palette", "Colour palette heading"],
+    ["workDetails.paletteText", "Colour palette text ({n} = number of colours)"],
     ["workDetails.tools", "Tools heading"],
   ]),
   texts("Blog article page", [
@@ -292,10 +293,10 @@ export default function SettingsPage({ focusId }: PageProps) {
   };
 
   return (
-    <div className="flex flex-col gap-[20px]">
+    <div className="flex flex-col gap-[16px]">
       <PageHeader title="Website Settings" description="Texts, videos and details used across the website. Changes go live when you save." />
 
-      <div className="gap-[24px] grid grid-cols-1 items-start lg:grid-cols-[260px_minmax(0,1fr)]">
+      <div className="gap-[16px] grid grid-cols-1 items-start lg:grid-cols-[260px_minmax(0,1fr)]">
         {/* Phones: a simple dropdown. */}
         <select aria-label="Settings section" className={`${inputClass} cursor-pointer lg:hidden`} value={section} onChange={(e) => open(e.target.value)}>
           {GROUPS.map((group) => (
@@ -321,10 +322,10 @@ export default function SettingsPage({ focusId }: PageProps) {
                     key={item.key}
                     type="button"
                     aria-current={active ? "page" : undefined}
-                    className={`cursor-pointer flex gap-[12px] items-center px-[10px] py-[9px] rounded-[8px] text-left transition-colors ${active ? "bg-[#e9f9fb]" : "hover:bg-[#f6f6f6]"}`}
+                    className={`cursor-pointer flex gap-[12px] items-center px-[10px] py-[9px] rounded-[6px] text-left transition-colors ${active ? "bg-[#e9f9fb]" : "hover:bg-[#f6f6f6]"}`}
                     onClick={() => open(item.key)}
                   >
-                    <span className={`flex items-center justify-center rounded-[8px] shrink-0 size-[34px] ${active ? "bg-[#00b6ca] text-white" : "bg-[#f2f2f2] text-[#707070]"}`}>
+                    <span className={`flex items-center justify-center rounded-[6px] shrink-0 size-[34px] ${active ? "bg-[#00b6ca] text-white" : "bg-[#f2f2f2] text-[#707070]"}`}>
                       <Icon size={18} />
                     </span>
                     <span className="flex flex-col min-w-0">
