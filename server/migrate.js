@@ -5,6 +5,9 @@
 
 const today = () => new Date().toISOString().slice(0, 10);
 
+/** Per-page search-engine texts; empty = use the page's own title and summary. */
+const emptySeo = () => ({ title: "", description: "", image: "" });
+
 /** Fills in fields an item doesn't have yet; existing values always win. */
 const fill = (items, defaults) => (items || []).map((item, index) => ({ ...defaults(item, index), ...item }));
 
@@ -55,7 +58,7 @@ export function migrate(content, defaults) {
   const { rating, ...current } = old;
   const settings = withDefaults({ ...current, heroes, heroVideos, ...(footer && { footer }), ...(tracking && { tracking }) }, defaults?.settings || {});
 
-  const services = fill(content.services, (item) => ({ ...listed(item), showOnHome: true })).map(({ description, ...service }) => ({
+  const services = fill(content.services, (item) => ({ ...listed(item), showOnHome: true, seo: emptySeo() })).map(({ description, ...service }) => ({
     ...service,
     // Home card and Services page now share one short description.
     summary: service.summary || description || "",
@@ -65,14 +68,14 @@ export function migrate(content, defaults) {
   }));
 
   // The Work page used to show the first four projects as wide cards and the rest as a grid.
-  const projects = fill(content.projects, (item, index) => ({ ...listed(item), layout: index < 4 ? "horizontal" : "vertical" })).map((project) => ({
+  const projects = fill(content.projects, (item, index) => ({ ...listed(item), layout: index < 4 ? "horizontal" : "vertical", seo: emptySeo() })).map((project) => ({
     ...project,
     // The card image and the details page image are now one.
     cover: project.cover || project.detail?.heroImage || "",
     detail: projectDetail(project),
   }));
 
-  const posts = fill(content.posts, (item) => ({ ...listed(item), showOnHome: true })).map(({ body, ...post }) => ({
+  const posts = fill(content.posts, (item) => ({ ...listed(item), showOnHome: true, seo: emptySeo() })).map(({ body, ...post }) => ({
     ...post,
     sections: Array.isArray(post.sections) ? post.sections : articleSections(body || "", post.id),
   }));

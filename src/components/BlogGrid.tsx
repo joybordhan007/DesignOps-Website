@@ -12,7 +12,7 @@ export default function BlogGrid({ className }: { className?: string }) {
         <a key={post.id} href={postUrl(post)} className="bg-white flex flex-col gap-[24px] group items-center overflow-hidden rounded-[8px] w-[504px] max-lg:gap-[18px] max-lg:w-full">
           <div className="h-[300px] overflow-clip relative rounded-tl-[8px] rounded-tr-[8px] shrink-0 w-full max-lg:h-auto max-lg:aspect-[16/10]">
             <img
-              alt=""
+              alt={post.title}
               className="absolute inset-0 max-w-none object-cover pointer-events-none size-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
               src={post.image}
               loading="lazy"

@@ -26,6 +26,14 @@ export type Listed = {
   createdAt: string;
 };
 
+/** Optional search-engine texts for one page; empty fields fall back to the page's own title and summary. */
+export type PageSeo = {
+  title: string;
+  description: string;
+  /** Picture shown when the page is shared (Facebook, LinkedIn, WhatsApp…). */
+  image: string;
+};
+
 export type Service = Listed & {
   id: string;
   slug: string;
@@ -52,6 +60,7 @@ export type Service = Listed & {
     /** This service's own "Our Working Process" blocks (the Home page has its own). */
     processSections: ServiceProcess[];
   };
+  seo: PageSeo;
 };
 
 export type ServiceIntro = {
@@ -103,6 +112,7 @@ export type Project = Listed & {
     palettes: ProjectPalette[];
     toolSets: ProjectTools[];
   };
+  seo: PageSeo;
 };
 
 export type ProjectChallenge = {
@@ -155,6 +165,7 @@ export type Post = Listed & {
   showOnHome: boolean;
   /** The article, one block per section; the headings make the table of contents. */
   sections: ArticleSection[];
+  seo: PageSeo;
 };
 
 export type ArticleSection = {
@@ -175,6 +186,10 @@ export type Client = {
   logo: string;
   /** The logo as uploaded, kept when its background was removed so it can be switched back. */
   logoOriginal?: string;
+  /** Where in the original (in its own pixels) the edited logo was cut from, so edits can line up with it again. */
+  logoCrop?: { x: number; y: number; w: number; h: number };
+  /** Placement in the 220 × 100 box: offset in % of the box (0 = centred) and size (1 = fitted). */
+  logoFit?: { x: number; y: number; scale: number };
 };
 
 export type Review = Listed & {
@@ -298,7 +313,9 @@ export type Labels = {
 };
 
 export type Settings = {
-  seo: { title: string; description: string };
+  seo: SiteSeo;
+  /** Browser-tab icons for the website and for the dashboard. */
+  favicons: { site: string; admin: string };
   heroes: Record<"home" | "services" | "work" | "blog" | "company", Hero>;
   /**
    * Hero background videos: one for Home, one shared by every other page hero.
@@ -352,6 +369,28 @@ export type LegalPage = {
   intro: string;
   /** Same format as a blog article: "## " headings (listed in the contents), "- " list items. */
   body: string;
+};
+
+export type SeoPageKey = "home" | "services" | "work" | "blog" | "company" | "contact" | "reviews";
+
+/** Search-engine settings (see server/seo.js). */
+export type SiteSeo = {
+  /** The Home page title, also the fallback for any page without its own. */
+  title: string;
+  /** The fallback description. */
+  description: string;
+  /** How page titles are built: %s is the page's own title, e.g. "%s | DesignOps". */
+  titleTemplate: string;
+  /** Search terms the site should rank for (one per line); used as a guide in the dashboard and in the site's structured data. */
+  keywords: string[];
+  /** Default share picture (1200 × 630). */
+  image: string;
+  /** Title and description per main page. */
+  pages: Record<SeoPageKey, { title: string; description: string }>;
+  /** The business, for Google's knowledge panel and local results. */
+  business: { name: string; type: string; foundingYear: string; city: string; country: string; areaServed: string };
+  /** Site verification codes (content="…" value only). */
+  verification: { google: string; bing: string };
 };
 
 export type SocialPlatform =

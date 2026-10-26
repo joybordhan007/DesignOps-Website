@@ -256,6 +256,7 @@ img {
   height: 100px;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .client-logo-item img {

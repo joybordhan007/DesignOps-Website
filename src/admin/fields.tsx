@@ -107,6 +107,7 @@ function MediaField({ field, value, onChange }: { field: Base & { type: "image" 
   const input = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [note, setNote] = useState("");
   const isVideo = field.type === "video";
 
   const pick = async (file?: File) => {
@@ -114,7 +115,8 @@ function MediaField({ field, value, onChange }: { field: Base & { type: "image" 
     setError("");
     setProgress(0);
     try {
-      onChange(await uploadFile(file, setProgress));
+      setNote("");
+      onChange(await uploadFile(file, setProgress, setNote));
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -160,7 +162,9 @@ function MediaField({ field, value, onChange }: { field: Base & { type: "image" 
             </div>
           )}
           {error && <span className="font-['Inter:Regular'] text-[#e5484d] text-[12px]">{error}</span>}
+          {note && <span className="font-['Inter:Regular'] text-[#1a7f45] text-[12px]">{note}</span>}
           {field.hint && <span className="font-['Inter:Regular'] text-[#8a8a8a] text-[12px]">{field.hint}</span>}
+          {!isVideo && <span className="font-['Inter:Regular'] text-[#9a9a9a] text-[11px]">Images over 10 MB are made smaller automatically and stay HD.</span>}
         </div>
       </div>
       <input ref={input} type="file" hidden accept={isVideo ? "video/mp4,video/webm" : "image/*"} onChange={(e) => pick(e.target.files?.[0])} />

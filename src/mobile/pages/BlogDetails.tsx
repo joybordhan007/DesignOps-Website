@@ -24,7 +24,7 @@ export default function BlogDetails() {
     <>
       <article className="flex flex-col gap-[20px] mx-auto px-[20px] pb-[32px] pt-[36px] w-full max-w-[760px]">
         <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.25] text-[#2f2f2f] text-[20px]">{post.title}</h1>
-        <img alt="" className="aspect-[16/10] block object-cover rounded-[10px] w-full" src={post.image} />
+        <img alt={post.title} className="aspect-[16/10] block object-cover rounded-[10px] w-full" src={post.image} />
 
         {headings.length > 0 && (
           <details className="bg-white group p-[18px] rounded-[10px] shadow-[0px_1px_4px_rgba(0,0,0,0.06)]">

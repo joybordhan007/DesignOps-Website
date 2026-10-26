@@ -32,7 +32,7 @@ function ServiceRow({ service, flip }: { service: Service; flip: boolean }) {
   const picture = (
     <div className="h-[500px] overflow-hidden relative shrink-0 w-[780px]" aria-hidden="true">
       <div className="absolute bg-[#aaa] inset-0" />
-      <img alt="" loading="lazy" decoding="async" className="absolute max-w-none object-cover size-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" src={service.image} />
+      <img alt={service.title} loading="lazy" decoding="async" className="absolute max-w-none object-cover size-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105" src={service.image} />
     </div>
   );
   return (

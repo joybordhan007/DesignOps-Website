@@ -16,7 +16,7 @@ export default function Services() {
         {services.map((service) => (
           <a key={service.id} href={serviceUrl(service)} className="bg-[#171717] flex flex-col group overflow-hidden rounded-[12px]">
             <div className="aspect-[4/3] overflow-hidden">
-              <img alt="" className="block object-cover size-full transition-transform duration-700 group-hover:scale-105" src={service.image} loading="lazy" />
+              <img alt={service.title} className="block object-cover size-full transition-transform duration-700 group-hover:scale-105" src={service.image} loading="lazy" />
             </div>
             <div className="flex flex-1 flex-col gap-[16px] p-[22px]">
               <p className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[12px] text-white tracking-[1px] uppercase">{service.eyebrow}</p>

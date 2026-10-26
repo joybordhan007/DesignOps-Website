@@ -8,6 +8,7 @@ import { card, CollectionEditor, ObjectEditor, secondaryButton, toast, type Coll
 import { newId, type Field } from "../fields";
 import { CheckIcon, MailIcon, TrashIcon } from "../icons";
 import LogoEditor from "../LogoEditor";
+import SeoEditor from "../SeoEditor";
 import ListPage, { today, type ListConfig } from "../table";
 
 // Admin pages for the website's lists. Services, work and blog are tables with
@@ -17,8 +18,28 @@ import ListPage, { today, type ListConfig } from "../table";
 /** A new list item starts hidden, with a placeholder name and a unique page address. */
 const newListed = (prefix: string, title: string) => {
   const id = newId(prefix);
-  return { id, slug: id, title, active: false, createdAt: today() };
+  return { id, slug: id, title, active: false, createdAt: today(), seo: { title: "", description: "", image: "" } };
 };
+
+/** The "Google search & sharing" card of a service, project or post. */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const seoGroup = (section: string, summary: (item: any) => string): Field => ({
+  type: "group",
+  label: "Google search & sharing (SEO)",
+  hint: "How this page appears in Google and when its link is shared. Leave empty to use the name and short description above.",
+  fields: [
+    {
+      type: "custom",
+      path: "seo",
+      label: "Google search result",
+      render: (value, onChange, item) => (
+        <SeoEditor value={value} onChange={(next) => onChange({ image: "", ...value, ...next })} path={`/${section}/${item.slug}`} fallbackTitle={item.title} fallbackDescription={summary(item) ?? ""} />
+      ),
+    },
+    { type: "image", path: "seo.image", label: "Share picture (optional)", wide: true, hint: "Shown when the link is shared on Facebook, LinkedIn or WhatsApp. 1200 × 630 px is ideal. Empty = the main picture." },
+  ],
+});
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // ---------------------------------------------------------------- services
 
@@ -118,7 +139,7 @@ const servicesConfig: ListConfig<Service> = {
   description: "Shown on the Services page, the footer, each service's own details page and (if switched on) the Home page.",
   basePath: "/admin/services",
   settings: [{ type: "toggle", path: "showOnHome", label: "Show on the Home page", hint: "In the “Our Services” cards." }],
-  fields: serviceFields,
+  fields: [...serviceFields, seoGroup("services", (s) => s.summary)],
   newItem: () => ({
     ...newListed("service", "New service"),
     showOnHome: false,
@@ -303,7 +324,7 @@ const workConfig: ListConfig<Project> = {
       ],
     },
   ],
-  fields: projectFields,
+  fields: [...projectFields, seoGroup("work", (p) => p.summary)],
   newItem: () => ({
     ...newListed("work", "New work"),
     layout: "vertical",
@@ -365,6 +386,7 @@ const blogConfig: ListConfig<Post> = {
         { type: "image", path: "image", label: "Image (optional)", wide: true, hint: "Shown under the description." },
       ],
     },
+    seoGroup("blog", (p) => p.excerpt),
   ],
   newItem: () => ({ ...newListed("blog", "New blog post"), showOnHome: true, excerpt: "", categories: ["UI Design"], date: "", image: "", sections: [newArticleSection()] }),
   summary: (p) => p.excerpt,

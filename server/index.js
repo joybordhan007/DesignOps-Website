@@ -19,6 +19,7 @@ import express from "express";
 import multer from "multer";
 import { DEFAULT_MAIL, mailReady, parseRecipients, publicMail, sendContactMail, sendTestMail } from "./mail.js";
 import { migrate } from "./migrate.js";
+import { pageSeo, seoHead } from "./seo.js";
 import { trackingBody, trackingHead } from "./tracking.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -591,27 +592,41 @@ app.use(express.static(DIST_DIR, { index: false, maxAge: "1d" }));
 
 // Every other GET is a site page: send index.html with the content embedded.
 const escapeHtml = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+/** The address visitors use, e.g. https://designops.agency (the admin host maps to the website). */
+const siteOrigin = (req) => `${req.protocol}://${ADMIN_HOST && req.hostname === ADMIN_HOST ? req.get("host").replace(/^admin\./, "") : req.get("host")}`;
+
 app.get("*", (req, res) => {
   const indexFile = path.join(DIST_DIR, "index.html");
   if (!fs.existsSync(indexFile)) return res.status(503).send("Site not built yet. Run: npm run build");
-  const seo = content.settings?.seo || {};
-  const data = JSON.stringify(publicContent()).replace(/</g, "\\u003c");
+  const isAdmin = /^\/admin(\/|$)/.test(req.path);
+  const shown = publicContent();
+
+  // One address per page: no trailing slash, and the old single case-study URL points at the first project.
+  if (!isAdmin && req.path.length > 1 && req.path.endsWith("/")) return res.redirect(301, req.originalUrl.replace(/\/+(?=\?|$)/, ""));
+  if (req.path === "/work/case-study" && shown.projects[0]) return res.redirect(301, `/work/${shown.projects[0].slug}`);
+
+  const page = isAdmin ? null : pageSeo(shown, req.path, siteOrigin(req));
+  const title = page ? page.title : "Admin · DesignOps";
+  const description = page ? page.description : "";
+  const data = JSON.stringify(shown).replace(/</g, "\\u003c");
   let html = fs.readFileSync(indexFile, "utf8");
-  if (seo.title) {
-    html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(seo.title)}</title>`);
-    html = html.replace(/(<meta property="og:title" content=")[^"]*/, `$1${escapeHtml(seo.title)}`);
-  }
-  if (seo.description) html = html.replace(/(<meta (?:name="description"|property="og:description") content=")[^"]*/g, `$1${escapeHtml(seo.description)}`);
   // Replacer functions, so a "$" in the content or pasted code is kept as it is.
+  html = html.replace(/<title>[^<]*<\/title>/, () => `<title>${escapeHtml(title)}</title>`);
+  html = html.replace(/(<meta property="og:title" content=")[^"]*/, (_, start) => `${start}${escapeHtml(title)}`);
+  html = html.replace(/(<meta (?:name="description"|property="og:description") content=")[^"]*/g, (_, start) => `${start}${escapeHtml(description)}`);
+  // Browser-tab icon: the website's or the dashboard's (Website Settings → Favicons).
+  const favicon = (isAdmin ? content.settings?.favicons?.admin : content.settings?.favicons?.site) || "/favicon.svg";
+  html = html.replace(/<link rel="icon"[^>]*>/, () => `<link rel="icon" href="${escapeHtml(favicon)}" />\n<link rel="apple-touch-icon" href="${escapeHtml(favicon)}" />`);
   html = html.replace("</head>", () => `<script>window.__SITE_CONTENT__=${data}</script></head>`);
-  // Marketing tags (GTM, GA4, Meta Pixel) on the website only, never in the dashboard.
-  if (!/^\/admin(\/|$)/.test(req.path)) {
+  if (page) {
+    html = html.replace("</head>", () => `${seoHead(page, shown)}\n</head>`);
+    // Marketing tags (GTM, Meta Pixel) on the website only, never in the dashboard.
     const tracking = content.settings?.tracking;
     html = html.replace("</head>", () => `${trackingHead(tracking)}\n</head>`);
     html = html.replace(/<body([^>]*)>/, (body) => `${body}\n${trackingBody(tracking)}`);
   }
   res.setHeader("Cache-Control", "no-cache");
-  res.type("html").send(html);
+  res.status(page?.status || 200).type("html").send(html);
 });
 
 app.use((err, req, res, next) => {

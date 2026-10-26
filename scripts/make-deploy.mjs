@@ -24,7 +24,9 @@ execSync("npx vite build", { cwd: root, stdio: "inherit" });
 console.log("2/4 Collecting the program files…");
 fs.rmSync(out, { recursive: true, force: true });
 copy("dist", path.join(app, "dist"));
-for (const file of ["index.js", "mail.js", "migrate.js", "tracking.js", "README.md", ".env.example"]) copy(`server/${file}`, path.join(app, "server", file));
+// Every server module (so a newly added one is never left out), plus the docs and example settings.
+const serverFiles = fs.readdirSync(path.join(root, "server")).filter((file) => file.endsWith(".js"));
+for (const file of [...serverFiles, "README.md", ".env.example"]) copy(`server/${file}`, path.join(app, "server", file));
 copy("src/content/defaultContent.json", path.join(app, "src/content/defaultContent.json"));
 
 // Only what the server needs, so "Run NPM Install" on the hosting is quick and small.

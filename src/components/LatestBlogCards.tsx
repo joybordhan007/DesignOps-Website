@@ -16,7 +16,7 @@ export default function LatestBlogCards() {
         >
           <div aria-hidden="true" className="-z-10 absolute inset-0 overflow-clip pointer-events-none rounded-[24px]">
             <img
-              alt=""
+              alt={post.title}
               className="absolute max-w-none object-cover size-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110"
               src={post.image}
               loading="lazy"

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type FormEvent } from "react";
+import { useContent } from "@/content/store";
 import type { Message, PendingReview } from "@/content/types";
 import { api, ApiError, siteUrl, type AdminUser } from "./api";
 import { confirmLeave, ToastHost, toast } from "./editor";
@@ -310,7 +311,16 @@ function Sidebar({ section, navigate, open, onClose, counts }: { section: string
   );
 }
 
+/** The dashboard tab shows its own favicon (Website Settings → Favicons), updated as soon as it is saved. */
+function useAdminFavicon() {
+  const icon = useContent().settings.favicons?.admin;
+  useEffect(() => {
+    if (icon) document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]').forEach((link) => link.setAttribute("href", icon));
+  }, [icon]);
+}
+
 export default function AdminApp() {
+  useAdminFavicon();
   const [user, setUser] = useState<AdminUser | null>(null);
   const [checking, setChecking] = useState(true);
   const [serverDown, setServerDown] = useState(false);

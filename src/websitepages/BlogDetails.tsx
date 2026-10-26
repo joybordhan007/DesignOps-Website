@@ -48,7 +48,7 @@ export default function BlogDetails() {
               <h1 className="font-['Inter:Semi_Bold'] font-semibold leading-[1.2] text-[#222] text-[48px] w-full">{post.title}</h1>
             </div>
             <div className="h-[432px] overflow-hidden relative rounded-[8px] shrink-0 w-full">
-              <img alt="" className="absolute inset-0 max-w-none object-cover size-full" src={post.image} />
+              <img alt={post.title} className="absolute inset-0 max-w-none object-cover size-full" src={post.image} />
             </div>
           </div>
           <ArticleSections items={items} styles={articleStyles} />

@@ -37,7 +37,8 @@ const PAGES: [title: string, to: string, keywords: string][] = [
   ["Review Management", "/admin/reviews", "ratings approve testimonials"],
   ["Tracking & Analytics", "/admin/tracking", "gtm google tag manager meta facebook pixel"],
   ["My profile", "/admin/profile", "account name photo avatar password change password"],
-  ["Search & sharing", "/admin/settings#seo", "seo site title description google"],
+  ["SEO (Google)", "/admin/settings#seo", "seo search engine google ranking site title description keywords meta share picture business verification bing"],
+  ["Favicons", "/admin/settings#favicons", "favicon browser tab icon logo"],
   ["Contact details", "/admin/settings#contact", "phone email address contact page"],
   ["Footer & social", "/admin/settings#footer", "social media links copyright facebook linkedin instagram"],
   ["Email notifications", "/admin/settings#email", "smtp mail inbox recipients send test email"],
@@ -57,7 +58,9 @@ function settingsPlace(path: string[]): { to: string; section: string } | null {
   const settings = (key: string, section: string) => ({ to: `/admin/settings#${key}`, section });
   switch (top) {
     case "seo":
-      return settings("seo", "Search & sharing");
+      return settings("seo", "SEO (Google)");
+    case "favicons":
+      return settings("favicons", "Favicons");
     case "contact":
       return settings("contact", "Contact details");
     case "footer":

@@ -1,4 +1,5 @@
 import { setContent } from "@/content/store";
+import { compressImage } from "./compressImage";
 import type { Content, Message, PendingReview } from "@/content/types";
 
 // Calls to the admin API (server/index.js).
@@ -107,8 +108,17 @@ export const api = {
   rejectReview: (id: string) => request<{ ok: true }>(`/api/admin/reviews/pending/${id}`, { method: "DELETE" }),
 };
 
-/** Uploads an image or video and reports progress (0-1). Resolves to its public URL. */
-export function uploadFile(file: File, onProgress?: (fraction: number) => void): Promise<string> {
+/**
+ * Uploads an image or video and reports progress (0-1). Images over 10 MB are made
+ * smaller first (still HD, see compressImage.ts); `onNote` hears about it. Resolves to the public URL.
+ */
+export async function uploadFile(file: File, onProgress?: (fraction: number) => void, onNote?: (note: string) => void): Promise<string> {
+  const { file: ready, note } = await compressImage(file);
+  if (note) onNote?.(note);
+  return send(ready, onProgress);
+}
+
+function send(file: File, onProgress?: (fraction: number) => void): Promise<string> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/admin/upload");

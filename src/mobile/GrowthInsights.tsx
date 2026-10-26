@@ -21,7 +21,7 @@ export default function GrowthInsights({ showButton = true }: { showButton?: boo
           >
             <span aria-hidden="true" className="-z-10 absolute inset-0">
               <img
-                alt=""
+                alt={post.title}
                 className="absolute object-cover size-full transition-transform duration-700 group-hover:scale-110"
                 src={post.image}
                 loading="lazy"

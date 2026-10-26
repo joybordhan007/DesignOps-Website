@@ -93,7 +93,7 @@ export function StackedProjects({ projects, className = "mt-[160px]", heading = 
                     </div>
                   </div>
                   <div className="h-full overflow-hidden relative rounded-[8px] shrink-0 w-[756px]">
-                    <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={project.cover} />
+                    <img alt={`${project.title} project preview`} loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={project.cover} />
                   </div>
                 </div>
               </a>
@@ -118,7 +118,7 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
             className={`bg-[#f5f5f5] drop-shadow-[0px_1px_5px_rgba(0,0,0,0.1)] flex flex-col gap-[32px] items-start relative rounded-[24px] w-[768px] ${cardMotion}`}
           >
             <div className="h-[450px] overflow-hidden relative rounded-[24px] shrink-0 w-full">
-              <img alt="" loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={project.cover} />
+              <img alt={`${project.title} project preview`} loading="lazy" decoding="async" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={project.cover} />
             </div>
             <div className="flex flex-col gap-[56px] items-start pb-[32px] px-[32px] w-full">
               <Intro project={project} />

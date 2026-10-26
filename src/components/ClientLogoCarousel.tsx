@@ -8,7 +8,14 @@ function LogoSet({ clients, duplicate = false }: { clients: Client[]; duplicate?
     <div className="client-logo-set" aria-hidden={duplicate}>
       {clients.map((client) => (
         <div className="client-logo-item" key={client.id}>
-          <img src={client.logo} alt={duplicate ? "" : client.name} loading="lazy" decoding="async" />
+          <img
+            src={client.logo}
+            alt={duplicate ? "" : `${client.name} logo`}
+            loading="lazy"
+            decoding="async"
+            // Placement set in the dashboard (drag + size), relative to the 220 × 100 box.
+            style={client.logoFit ? { transform: `translate(${client.logoFit.x}%, ${client.logoFit.y}%) scale(${client.logoFit.scale})` } : undefined}
+          />
         </div>
       ))}
     </div>

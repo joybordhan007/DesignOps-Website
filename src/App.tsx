@@ -7,6 +7,8 @@ import DesktopNav from "./components/DesktopNav";
 import MobileNav from "./mobile/MobileNav";
 import { trackEvent, trackPageView } from "./lib/tracking";
 import { reportVisit } from "./lib/visits";
+import { pageSeo } from "../server/seo.js";
+import { getContent } from "./content/store";
 
 // Phones and tablets (below 1024px) get the responsive pages in src/mobile;
 // larger screens get the 1920px Figma artboards in src/websitepages, scaled to fit.
@@ -133,6 +135,17 @@ export default function App() {
   // Our own visit counts for the dashboard (every page, the first one included).
   useEffect(() => {
     reportVisit(path)
+  }, [path])
+
+  // Title, description and canonical address follow the page (the server sets them on the first load).
+  useEffect(() => {
+    const page = pageSeo(getContent(), path, window.location.origin)
+
+    document.title = page.title
+
+    document.querySelector('meta[name="description"]')?.setAttribute("content", page.description)
+
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", page.canonical)
   }, [path])
 
   useLayoutEffect(() => {

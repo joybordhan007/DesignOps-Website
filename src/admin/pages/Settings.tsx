@@ -1,11 +1,12 @@
 import { useState, type ComponentType } from "react";
 import SocialIcon, { SOCIAL_PLATFORMS, socialLabel } from "@/components/SocialIcon";
 import { getContent, useContent } from "@/content/store";
-import type { ProcessStep, Settings, SocialLink, SocialPlatform } from "@/content/types";
+import type { ProcessStep, SeoPageKey, Settings, SocialLink, SocialPlatform } from "@/content/types";
 import type { PageProps } from "../AdminApp";
 import { api } from "../api";
 import { card, CollectionEditor, confirmLeave, ObjectEditor, PageHeader } from "../editor";
 import { inputClass, newId, smallButton, type Field } from "../fields";
+import SeoEditor from "../SeoEditor";
 import MailSettingsEditor from "./MailSettings";
 import { BlogIcon, ClientIcon, ContactIcon, DashboardIcon, DownIcon, EditIcon, EyeIcon, MailIcon, MessageIcon, PlusIcon, ProcessIcon, ReviewIcon, SearchIcon, TrashIcon, UpIcon } from "../icons";
 
@@ -238,6 +239,86 @@ const labelFields: Field[] = [
   },
 ];
 
+const SEO_PAGES: [key: SeoPageKey, label: string, path: string][] = [
+  ["home", "Home page", "/"],
+  ["services", "Services page", "/services"],
+  ["work", "Work page", "/work"],
+  ["blog", "Blog page", "/blog"],
+  ["company", "Company page", "/company"],
+  ["contact", "Contact page", "/contact"],
+  ["reviews", "Reviews page", "/reviews"],
+];
+
+const seoFields: Field[] = [
+  {
+    type: "group",
+    label: "Search basics",
+    fields: [
+      { type: "text", path: "title", label: "Default title", required: true, wide: true, hint: "Used for any page without its own title (and the Home page if it has none)." },
+      { type: "text", path: "titleTemplate", label: "Title pattern", placeholder: "%s | DesignOps", hint: "%s is the page's own title, e.g. “UI/UX Design | DesignOps”." },
+      { type: "textarea", path: "description", label: "Default description", rows: 3, hint: "120–160 characters. Used for any page without its own." },
+      {
+        type: "lines",
+        path: "keywords",
+        label: "Target search terms (one per line)",
+        rows: 6,
+        hint: "What people type into Google to find you, e.g. “software development company in Bangladesh”. Use these words in page titles, headings and texts; they are also added to the site's business details for Google.",
+      },
+      { type: "image", path: "image", label: "Default share picture", wide: true, hint: "Shown when a page is shared on Facebook, LinkedIn or WhatsApp. 1200 × 630 px." },
+    ],
+  },
+  ...SEO_PAGES.map(
+    ([key, label, path]): Field => ({
+      type: "group",
+      collapsible: true,
+      label: `${label}: ${path}`,
+      hint: "Search title and description",
+      fields: [
+        {
+          type: "custom",
+          path: `pages.${key}`,
+          label: "Google search result",
+          render: (value, onChange, seo) => <SeoEditor value={value} onChange={onChange} path={path} fallbackTitle={key === "home" ? seo.title : label.replace(" page", "")} fallbackDescription={seo.description} useTemplate={key !== "home"} />,
+        },
+      ],
+    }),
+  ),
+  {
+    type: "group",
+    collapsible: true,
+    label: "Business details",
+    hint: "Helps Google show DesignOps in local and company results",
+    fields: [
+      { type: "text", path: "business.name", label: "Business name", required: true },
+      {
+        type: "choice",
+        path: "business.type",
+        label: "Business type",
+        wide: true,
+        options: [
+          { value: "ProfessionalService", label: "Agency / professional service" },
+          { value: "Organization", label: "Company" },
+          { value: "LocalBusiness", label: "Local business" },
+        ],
+      },
+      { type: "text", path: "business.foundingYear", label: "Founded (year)", placeholder: "2019" },
+      { type: "text", path: "business.areaServed", label: "Area served", placeholder: "Worldwide" },
+      { type: "text", path: "business.city", label: "City", placeholder: "Dhaka" },
+      { type: "text", path: "business.country", label: "Country", placeholder: "Bangladesh" },
+    ],
+  },
+  {
+    type: "group",
+    collapsible: true,
+    label: "Site verification",
+    hint: "Paste only the content=\"…\" value of the meta tag",
+    fields: [
+      { type: "text", path: "verification.google", label: "Google Search Console", hint: "Only needed for the “HTML tag” method; the DNS method is already done." },
+      { type: "text", path: "verification.bing", label: "Bing Webmaster Tools", hint: "Bing → Add site → HTML Meta Tag (msvalidate.01)." },
+    ],
+  },
+];
+
 type Section = {
   key: string;
   label: string;
@@ -249,7 +330,8 @@ const GROUPS: { title: string; sections: Section[] }[] = [
   {
     title: "General",
     sections: [
-      { key: "seo", label: "Search & sharing", note: "Site title and description", icon: SearchIcon },
+      { key: "seo", label: "SEO (Google)", note: "Titles, descriptions, keywords", icon: SearchIcon },
+      { key: "favicons", label: "Favicons", note: "Browser-tab icons", icon: EyeIcon },
       { key: "contact", label: "Contact details", note: "Phone, email, address", icon: ContactIcon },
       { key: "footer", label: "Footer & social", note: "Footer text and social links", icon: MailIcon },
       { key: "email", label: "Email notifications", note: "Where contact messages go", icon: MessageIcon },
@@ -343,14 +425,25 @@ export default function SettingsPage({ focusId }: PageProps) {
           {section === "seo" && (
             <ObjectEditor
               embedded
-              title="Search & sharing"
-              description="How the website appears on Google and when a link is shared."
+              title="SEO (Google)"
+              description="How the website appears in Google and when a link is shared. Services, work and blog posts have their own SEO card in their editors."
               value={settings.seo}
-              fields={[
-                { type: "text", path: "title", label: "Site title", required: true, wide: true },
-                { type: "textarea", path: "description", label: "Description", rows: 3, hint: "About 150 characters works best." },
-              ]}
+              fields={seoFields}
               onSave={(seo) => saveSettings({ seo })}
+            />
+          )}
+
+          {section === "favicons" && (
+            <ObjectEditor
+              embedded
+              title="Favicons"
+              description="The small icon in the browser tab and bookmarks."
+              value={settings.favicons}
+              fields={[
+                { type: "image", path: "site", label: "Website favicon", required: true, wide: true, hint: "Square PNG or SVG, at least 512 × 512 px. Also used as the icon when the site is added to a phone's home screen." },
+                { type: "image", path: "admin", label: "Dashboard favicon", required: true, wide: true, hint: "Use a different icon to tell the dashboard tab apart from the website." },
+              ]}
+              onSave={(favicons) => saveSettings({ favicons })}
             />
           )}
 

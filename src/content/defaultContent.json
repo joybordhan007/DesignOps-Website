@@ -1,8 +1,64 @@
 {
   "settings": {
     "seo": {
-      "title": "DesignOps | Software Development, UI/UX Design & AI Solutions",
-      "description": "DesignOps delivers full-stack development, UI/UX design, brand identity, digital marketing, custom ERP software, and AI solutions to help businesses grow."
+      "title": "Software Development & UI/UX Design Agency | DesignOps",
+      "description": "Software development & UI/UX design agency in Bangladesh. We build web & mobile apps, custom ERP and AI solutions, and run digital marketing that grows sales.",
+      "titleTemplate": "%s | DesignOps",
+      "keywords": [
+        "software development company in Bangladesh",
+        "UI/UX design agency",
+        "web development company",
+        "mobile app development",
+        "custom ERP software",
+        "SaaS product design",
+        "AI solutions for business",
+        "digital marketing agency in Bangladesh",
+        "SEO services",
+        "brand identity design"
+      ],
+      "image": "",
+      "pages": {
+        "home": {
+          "title": "Software Development & UI/UX Design Agency | DesignOps",
+          "description": "Software development & UI/UX design agency in Bangladesh. We build web & mobile apps, custom ERP and AI solutions, and run digital marketing that grows sales."
+        },
+        "services": {
+          "title": "Web, App, UI/UX, ERP & Digital Marketing Services",
+          "description": "Full-stack web and mobile app development, UI/UX design, custom ERP software, AI solutions, branding and digital marketing services from DesignOps, Bangladesh."
+        },
+        "work": {
+          "title": "Our Work: Software & UI/UX Design Case Studies",
+          "description": "See the websites, mobile apps, SaaS products and ERP systems DesignOps has designed and built for clients worldwide, and the results they delivered."
+        },
+        "blog": {
+          "title": "Software, UX Design & Digital Marketing Insights",
+          "description": "Practical guides on software development, UI/UX design, SaaS products, SEO and digital marketing from the DesignOps team."
+        },
+        "company": {
+          "title": "About Us: Software & Design Studio in Dhaka",
+          "description": "Meet DesignOps, a software development and UI/UX design studio in Dhaka, Bangladesh, helping startups and businesses build digital products since 2019."
+        },
+        "contact": {
+          "title": "Contact Us: Free Project Consultation",
+          "description": "Tell us about your website, app, ERP or digital marketing project. Get a free consultation and quote from DesignOps in Dhaka, Bangladesh."
+        },
+        "reviews": {
+          "title": "Client Reviews & Testimonials",
+          "description": "Read what clients say about working with DesignOps on software development, UI/UX design and digital marketing projects."
+        }
+      },
+      "business": {
+        "name": "DesignOps",
+        "type": "ProfessionalService",
+        "foundingYear": "2019",
+        "city": "Dhaka",
+        "country": "Bangladesh",
+        "areaServed": "Worldwide"
+      },
+      "verification": {
+        "google": "",
+        "bing": ""
+      }
     },
     "heroes": {
       "home": {
@@ -238,6 +294,10 @@
         "intro": "These terms apply to your use of the DesignOps website. By using the website you agree to them. Separate agreements cover any project we do for you.",
         "body": "## Using this website\n\nYou may browse this website and share links to it. Please don't misuse it — for example by trying to break into it, overload it, or send spam through its forms.\n\n## Our content\n\nThe text, designs, images, case studies and other material on this website belong to DesignOps or to the clients who allowed us to show them. You may not copy, sell or reuse them without our written permission.\n\n## Reviews and messages you send\n\nWhen you send a review, you confirm that it is honest and based on your own experience with us. We may edit it for length or remove it, and we may show it on our website together with the name, role and company you give us.\n\nPlease don't send anything unlawful, offensive or confidential through the contact form.\n\n## Projects and services\n\nInformation on this website about our services, prices and timelines is a general guide and not an offer. The details of any project — scope, price, delivery and ownership of the work — are set out in a separate written agreement between you and DesignOps.\n\n## Links to other websites\n\nThis website may link to other websites. We are not responsible for their content or how they handle your information.\n\n## Limitation of liability\n\nWe work to keep this website accurate and available, but we provide it \"as is\". As far as the law allows, DesignOps is not liable for any loss caused by using this website or relying on its content.\n\n## Changes to these terms\n\nWe may update these terms from time to time. The date at the top of this page shows when they last changed.\n\n## Governing law\n\nThese terms are governed by the laws of Bangladesh.\n\n## Contact\n\nQuestions about these terms? Reach us through the Contact page."
       }
+    },
+    "favicons": {
+      "site": "/favicon.svg?v=2",
+      "admin": "/favicon.svg?v=2"
     }
   },
   "services": [
@@ -329,6 +389,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -419,6 +484,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -509,6 +579,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -599,6 +674,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     }
   ],
@@ -705,6 +785,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -809,6 +894,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -913,6 +1003,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -1017,6 +1112,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -1121,6 +1221,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -1225,6 +1330,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -1329,6 +1439,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     },
     {
@@ -1433,6 +1548,11 @@
             ]
           }
         ]
+      },
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
       }
     }
   ],
@@ -1479,7 +1599,12 @@
           "html": "<h3>1. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.</p><h3>2. Lorem ipsum dolor sit amet, consectetur.</h3><p>Knowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.</p><h3>3. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.</p><h3>4. Lorem ipsum dolor sit amet, consectetur.</h3><p>Global finance is subject to rapid change—new instruments, digital currencies, cross‑border transactions, and environmental, social, and governance (ESG) mandates all demand fresh legal responses. A solid grounding in current financial law gives students the analytical tools to interpret novel regulations, adapt to shifting compliance requirements, and contribute to future policy developments.</p><p>In sum, teaching financial law cultivates a generation of professionals who understand the legal architecture underpinning economic activity, can safeguard the rights of individuals and markets alike, and are prepared to navigate—and even guide—the ever‑shifting terrain of global finance.</p>",
           "image": ""
         }
-      ]
+      ],
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
+      }
     },
     {
       "active": true,
@@ -1523,7 +1648,12 @@
           "html": "<h3>1. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.</p><h3>2. Lorem ipsum dolor sit amet, consectetur.</h3><p>Knowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.</p><h3>3. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.</p><h3>4. Lorem ipsum dolor sit amet, consectetur.</h3><p>Global finance is subject to rapid change—new instruments, digital currencies, cross‑border transactions, and environmental, social, and governance (ESG) mandates all demand fresh legal responses. A solid grounding in current financial law gives students the analytical tools to interpret novel regulations, adapt to shifting compliance requirements, and contribute to future policy developments.</p><p>In sum, teaching financial law cultivates a generation of professionals who understand the legal architecture underpinning economic activity, can safeguard the rights of individuals and markets alike, and are prepared to navigate—and even guide—the ever‑shifting terrain of global finance.</p>",
           "image": ""
         }
-      ]
+      ],
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
+      }
     },
     {
       "active": true,
@@ -1567,7 +1697,12 @@
           "html": "<h3>1. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law establishes the rules governing markets, institutions, and transactions. When future lawyers, policymakers, or business leaders understand these regulations, they’re better equipped to prevent systemic failures—such as banking crises or securities collapses—by spotting weak spots in compliance frameworks and advising on sound risk‑management practices.</p><h3>2. Lorem ipsum dolor sit amet, consectetur.</h3><p>Knowledge of consumer‑protection statutes, anti‑fraud measures, and disclosure requirements empowers students to champion transparency and fairness. Graduates who grasp these safeguards can advocate for vulnerable borrowers, ensure investors receive accurate information, and hold unscrupulous actors accountable, thereby fostering public trust in the financial system.</p><h3>3. Lorem ipsum dolor sit amet, consectetur.</h3><p>Financial law courses emphasize not only what the rules are, but why they exist: to minimize conflicts of interest, curb market abuse, and uphold fiduciary duties. By internalizing these ethical foundations, students cultivate the professional integrity needed to resist shortcuts and to advise organizations in ways that balance profit with public interest.</p><h3>4. Lorem ipsum dolor sit amet, consectetur.</h3><p>Global finance is subject to rapid change—new instruments, digital currencies, cross‑border transactions, and environmental, social, and governance (ESG) mandates all demand fresh legal responses. A solid grounding in current financial law gives students the analytical tools to interpret novel regulations, adapt to shifting compliance requirements, and contribute to future policy developments.</p><p>In sum, teaching financial law cultivates a generation of professionals who understand the legal architecture underpinning economic activity, can safeguard the rights of individuals and markets alike, and are prepared to navigate—and even guide—the ever‑shifting terrain of global finance.</p>",
           "image": ""
         }
-      ]
+      ],
+      "seo": {
+        "title": "",
+        "description": "",
+        "image": ""
+      }
     }
   ],
   "clients": [
